@@ -10,7 +10,8 @@ import time
 import subprocess
 
 
-def test_api_endpoint(title, description, customer_email=None):
+# Helper function (not a pytest test) to call API
+def call_api_endpoint(title, description, customer_email=None):
     """Test a single API endpoint"""
     data = {
         "title": title,
@@ -93,8 +94,7 @@ def main():
     for i, test_case in enumerate(test_cases, 1):
         print(f"\n📋 Test Case {i}: {test_case['title']}")
         print("-" * 40)
-        
-        response = test_api_endpoint(
+        response = call_api_endpoint(
             test_case['title'],
             test_case['description'],
             test_case.get('customer_email')
