@@ -1,0 +1,41 @@
+# Ignore Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Ignore virtual environment
+venv/
+env/
+.env
+
+# Ignore model files (they should be trained locally)
+models/
+*.pkl
+
+# Ignore data files
+data/*.csv
+!data/generate_dataset.py
+
+# Ignore logs
+*.log
+
+# Ignore IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Ignore OS files
+.DS_Store
+Thumbs.db
+
+# Ignore pytest cache
+.pytest_cache/
+
+# Ignore coverage reports
+htmlcov/
+.coverage
+
+# Ignore temporary files
+/tmp/
+*.tmp
