@@ -102,12 +102,87 @@ The second phase begins introducing runtime and operational modernization withou
 - The API `version` attribute now mirrors the configured `MODEL_VERSION`, aligning OpenAPI docs with deployed artifact expectations.
 - The `/version` endpoint enables simple readiness verification beyond mere liveness (e.g., confirm model + metadata presence in orchestration probes or smoke tests).
 
-## Next Recommended Steps
-1. Introduce CI workflow (build, test, security scan, artifact publish).
-2. Containerize (multi-stage Dockerfile + pinned runtime deps).
-3. Add centralized exception handling + error response models.
-4. Implement security pipeline steps (pip-audit, optional bandit) & rate limiting notes.
-5. Establish performance baseline (load testing script & initial metrics).
+## Phase 3 Operations Enablement
 
----
-This document will continue to evolve as subsequent hardening phases are completed.
+This phase focused on establishing reproducible deployment, automated quality gates, and release management scaffolding.
+
+### 1. Containerization
+- Added multi-stage `Dockerfile` (builder + slim runtime) for smaller production images.
+- Added `.dockerignore` to exclude development and cache artifacts.
+- Non-root `appuser` runtime user for improved security posture.
+- Rationale: Deterministic build artifacts, parity between local and CI builds, easier orchestration deployment.
+
+### 2. Continuous Integration Workflow (`.github/workflows/ci.yml`)
+- Triggers on pushes and PRs to `main` and `dev`.
+- Steps: dependency install, ruff lint, mypy type check, pip-audit security scan, pytest execution, Docker image build.
+- Tag-based publish job scaffolds pushing image to GHCR (`ghcr.io`).
+- Rationale: Prevents regressions, enforces a baseline security and style bar before merging.
+
+### 3. Developer Tooling
+- `ruff` + `ruff-format` + `black` + `mypy` integrated via `.pre-commit-config.yaml`.
+- `mypy.ini` with warnings tuned for progressive typing hardening.
+- `ruff.toml` (import sorting + line length 120) for consistent style.
+- Rationale: Reduces stylistic churn in PRs and surfaces structural issues early.
+
+### 4. Release Management Assets
+- `CHANGELOG.md` introduced with Unreleased section and initial tag baseline.
+- `RELEASE_CHECKLIST.md` enumerates pre/post release tasks (tests, audit, metadata validation, tagging, smoke tests).
+- Rationale: Formalizes release cadence and reduces human error in deployment steps.
+
+### 5. Version Bump Automation
+- Script `scripts/bump_version.py` to increment semantic version (major/minor/patch) in `app/config.py`.
+- Rationale: Minimizes manual edits & keeps version change atomic for tagging + image build.
+
+### 6. Artifact Versioning Alignment
+- CI + version bump support align with existing `models/v<MODEL_VERSION>/` artifact layout.
+- Rationale: Ensures traceable linkage between code version, Docker image tag, and model artifacts.
+
+### 7. Security Baseline (Initial)
+- Added pip-audit into CI (non-blocking for now) to surface vulnerable dependencies early.
+- Request size limits + body validation already enforced at runtime.
+- Rationale: Establish foundation before adding rate limiting & advanced threat mitigations in later phases.
+
+### 8. Remaining Gaps Before Phase 4
+- Evaluation pipeline enhancements (per-label F1 tracking persisted).
+- Expanded OpenAPI docs + standardized error schema.
+- Performance/load baseline scripts (Locust or k6) & initial benchmark record.
+- Optional: Make security scans blocking after triage cycle.
+
+## Updated File Inventory (Phase 3 Additions)
+| File | Type | Purpose |
+|------|------|---------|
+| `Dockerfile` | New | Multi-stage container build definition |
+| `.dockerignore` | New | Excludes non-essential files from image context |
+| `.github/workflows/ci.yml` | New | CI automation pipeline |
+| `.pre-commit-config.yaml` | New | Local lint/type hooks |
+| `mypy.ini` | New | Type checking configuration |
+| `ruff.toml` | New | Ruff lint/format configuration |
+| `CHANGELOG.md` | New | Change history log |
+| `RELEASE_CHECKLIST.md` | New | Release process guide |
+| `scripts/bump_version.py` | New | Semantic version bump automation |
+
+## Phase 3 Additions (Post Initial Documentation Update)
+
+After initial Phase 3 drafting, the following items were subsequently completed:
+
+1. Evaluation metrics summary fields added (macro/weighted F1 & accuracy) into `metrics.json` plus surfaced macro F1 in `model_metadata.json`.
+2. Standardized error response model (`ErrorResponse`) and global exception handlers for HTTP & unhandled exceptions.
+3. Basic IP-based in-memory rate limiting middleware (configurable via `RATE_LIMIT_REQUESTS` / `RATE_LIMIT_WINDOW_SEC`).
+4. Performance baseline scaffolding: `load_test.md` and `locustfile.py` for initial latency & throughput benchmarks.
+5. Security posture strengthened with non-root runtime user, request size limit, rate limiting, and CI `pip-audit` (advisory mode).
+
+## Updated File Inventory (Additional Additions)
+| File | Type | Purpose |
+|------|------|---------|
+| `app/models/schemas.py` | Modified | Added `ErrorResponse` model |
+| `app/main.py` | Modified | Global exception handlers + rate limiting middleware |
+| `train.py` | Modified | Metrics summary (macro/weighted F1, accuracy) persisted |
+| `load_test.md` | New | Performance baseline documentation |
+| `locustfile.py` | New | Load generation script for benchmarking |
+
+## Ready for Phase 4
+Foundation for advanced observability and metrics export is now in place. Phase 4 will focus on:
+- Prometheus-compatible metrics endpoint (request counts, latency histograms, model inference timing).
+- Enhanced structured error taxonomy (stable error codes & documentation).
+- Optional distributed rate limiting strategy (back-end store) if scaling beyond single instance.
+- Instrumentation of classifier inference path (timers + success/failure counters).
