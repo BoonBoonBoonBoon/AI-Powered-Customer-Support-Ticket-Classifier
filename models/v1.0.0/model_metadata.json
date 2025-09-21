@@ -1,0 +1,21 @@
+{
+  "model_version": "1.0.0",
+  "created_at": "2025-09-21T12:36:57.962946+00:00",
+  "data_path": "data/sample_tickets.csv",
+  "data_sha256": "7f071d77bac1b714e70afab27a4398ba20859d097bf2e1d38115b5e4fab9c988",
+  "n_samples_total": 1000,
+  "n_train_samples": 800,
+  "n_val_samples": 200,
+  "priority_distribution": {
+    "Medium": 324,
+    "High": 307,
+    "Low": 223,
+    "Urgent": 146
+  },
+  "department_distribution": {
+    "Sales": 357,
+    "Tech Support": 333,
+    "Billing": 310
+  },
+  "metrics_file": "metrics.json"
+}
