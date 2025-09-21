@@ -8,9 +8,15 @@ venv/
 env/
 .env
 
-# Ignore model files (they should be trained locally)
-models/
-*.pkl
+# Ignore trained model artifacts only (keep source under app/models)
+# Root models directory artifacts
+/models/*.pkl
+/models/**/*.pkl
+# Keep versioned metadata & metrics committed if desired (uncomment to ignore entirely)
+# /models/v*/metrics.json
+# /models/v*/model_metadata.json
+# Do not ignore package source code
+!app/models/
 
 # Ignore data files
 data/*.csv
