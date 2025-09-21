@@ -223,6 +223,55 @@ pytest --cov=app --cov-report=term-missing
 - Optional distributed rate limiting (Redis / sliding window)
 - Extended inference timing instrumentation
 
+## Deployment: Railway
+
+You can deploy directly to Railway using either the buildpack (Procfile) or Docker.
+
+### Option A: Buildpack (Zero-Config)
+Included files:
+- `Procfile` → `web: uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8000}`
+- `runtime.txt` → Pins Python version
+- Root `main.py` → Fallback export for FastAPI auto-detection
+
+Steps:
+1. Create a new Railway project and connect this repository.
+2. Select the `dev` or `main` branch.
+3. Railway auto-detects Python & installs `requirements.txt`.
+4. Startup command comes from `Procfile` (no manual override needed).
+5. After deploy, visit `https://<service>/health/ready`.
+
+Environment variables (set in Railway UI as needed):
+| Var | Suggested | Reason |
+|-----|-----------|-------|
+| `LOG_LEVEL` | `info` | Runtime log verbosity |
+| `STRUCTURED_LOGS` | `true` | JSON logs for aggregators |
+| `RATE_LIMIT_REQUESTS` | `100` | Adjust per expected RPS |
+| `RATE_LIMIT_WINDOW_SEC` | `60` | Align with rate policy |
+
+### Option B: Docker Deploy
+1. In Railway project settings choose Dockerfile deployment.
+2. Railway builds image using multi-stage `Dockerfile`.
+3. Exposes port 8000 (Railway maps to `$PORT`).
+
+### Post-Deploy Smoke Test
+```bash
+curl https://<service-domain>/health/live
+curl https://<service-domain>/health/ready
+curl -X POST https://<service-domain>/classify \
+  -H 'Content-Type: application/json' \
+  -d '{"title":"Server down","description":"Main server offline all users impacted"}'
+```
+
+If you see `503` for readiness: ensure training artifacts exist in `models/v<version>/` committed to repo (or mount storage & run `train.py`).
+
+### Common Railway Issues
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| "No start command was found" | Missing Procfile / app export | Already fixed by added `Procfile` & root `main.py` |
+| 503 on classify | Models not loaded | Run training locally, commit `models/vX.Y.Z/*.pkl` |
+| 429 errors | Rate limit triggered | Increase `RATE_LIMIT_REQUESTS` or widen window |
+| 413 errors | Large payload | Reduce body size or adjust middleware (code change) |
+
 ## Contributing
 
 PRs welcome. Please keep changes focused & include tests where practical.
@@ -233,3 +282,4 @@ MIT License. See `LICENSE`.
 
 ---
 For historical phased progress and detailed rationale see `README_PHASE1_UPDATES.md`.
+
