@@ -283,3 +283,57 @@ MIT License. See `LICENSE`.
 ---
 For historical phased progress and detailed rationale see `README_PHASE1_UPDATES.md`.
 
+## Hardening & Real-World Standards
+
+This project is being incrementally aligned with production-grade expectations. The following controls are implemented or planned:
+
+### Implemented
+- Deterministic training: seeded randomness + versioned artifacts (`models/v1.0.0/`).
+- Structured logging: JSON logs with `request_id` correlation.
+- Runtime safeguards: body size limit (64KB), basic in-memory rate limiting, standardized error schema.
+- CI quality gates: lint (ruff), formatting (black), types (mypy), unit tests (pytest), dependency audit (pip-audit advisory).
+- Container best practices: multi-stage build, non-root user, minimized base image.
+- Dependency locking: `requirements.lock` for reproducible builds.
+- Release hygiene: CHANGELOG, release checklist, semantic model versioning.
+- Performance baseline: Locust script + documented methodology.
+
+### In Progress / Phase 4 Targets
+- Observability metrics: Prometheus `/metrics` endpoint (request counts, latency histograms, inference timing).
+- Enhanced error taxonomy: central catalog of error codes and mapping to HTTP statuses.
+- Security upgrades: optional Bandit SAST stage (fail on high severity), SBOM generation (CycloneDX or Syft) in CI.
+- Rate limiting evolution: pluggable backend (Redis) + sliding window or token bucket algorithm.
+- Model monitoring hooks: log distribution drift indicators (placeholder for later integration).
+- Build provenance: container image signing (cosign) & attestation (future enhancement).
+
+### Planned CI Enhancements (Proposed Jobs)
+| Job | Purpose | Tooling |
+|-----|---------|---------|
+| `sast` | Static security analysis | Bandit |
+| `sbom` | Generate and upload SBOM | cyclonedx-bom or syft |
+| `metrics-test` | Validate metrics endpoint shape | curl + jq schema check |
+| `perf-smoke` | Quick latency sanity check | k6 or Locust headless |
+| `image-sign` | Sign built image | cosign |
+
+### Operational Recommendations
+- Configure log aggregation (ELK, Loki, or Cloud Logs) parsing JSON lines.
+- Set Kubernetes resource requests/limits informed by Locust baseline.
+- Add health/readiness probes using `/health/live` and `/health/ready`.
+- Enable horizontal autoscaling once metrics exported (RPS & latency triggers).
+- Periodically snapshot `metrics.json` into artifact storage for model performance tracking.
+
+### Security Posture Roadmap
+| Layer | Current | Next Step |
+|-------|---------|-----------|
+| Dependencies | pip-audit advisory | Enforce fail-on-high, add SBOM diff | 
+| Code | Type + lint checks | Bandit & secret scanning | 
+| Runtime | Non-root, size limit, rate limit | Add WAF / API key auth (if external) | 
+| Supply Chain | Multi-stage Docker | Image signing & provenance attestations | 
+
+### Contributing to Hardening
+When opening PRs for hardening tasks, prefix titles with `hardening:` or `security:` and include:
+1. Rationale / threat or reliability risk addressed.
+2. Success criteria & verification steps.
+3. Rollback considerations.
+
+---
+
