@@ -1,32 +1,71 @@
-from fastapi import FastAPI, HTTPException, Depends, Response
+from fastapi import FastAPI, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
+from contextlib import asynccontextmanager
 import os
+import json
 import logging
+from pathlib import Path
+from typing import Optional
 from app.models.schemas import TicketRequest, TicketResponse, HealthResponse, PriorityLevel, Department
 from app.models.classifier import TicketClassifier
+from app.config import settings
+from app.logging_utils import configure_logging, RequestIDMiddleware, MaxBodySizeMiddleware
 
-# Configure logging
-logging.basicConfig(level=logging.INFO)
+# Configure structured logging
+configure_logging()
 logger = logging.getLogger(__name__)
 
-# Initialize FastAPI app
+classifier: Optional[TicketClassifier] = None
+model_metadata: Optional[dict] = None
+
+
+def _find_latest_version_dir(base_dir: str) -> Optional[Path]:
+    p = Path(base_dir)
+    if not p.exists():
+        return None
+    dirs = [d for d in p.iterdir() if d.is_dir() and d.name.startswith('v')]
+    if not dirs:
+        return None
+    return sorted(dirs)[-1]
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    global classifier, model_metadata
+    logger.info("Lifespan startup: initializing classifier")
+    classifier = TicketClassifier()
+    version_dir = _find_latest_version_dir(settings.MODELS_BASE_DIR) or Path(settings.MODELS_BASE_DIR)
+    try:
+        if version_dir.exists():
+            classifier.load_models(str(version_dir))
+            meta_file = version_dir / 'model_metadata.json'
+            if meta_file.exists():
+                with open(meta_file, 'r', encoding='utf-8') as f:
+                    model_metadata = json.load(f)
+            logger.info("Models loaded from %s", version_dir)
+        else:
+            logger.warning("No model directory found; classifier not trained")
+    except Exception as e:
+        logger.error("Failed to load models: %s", e)
+        classifier = None
+    yield
+    logger.info("Lifespan shutdown complete")
+
+
 app = FastAPI(
     title="AI-Powered Customer Support Ticket Classifier",
     description="Automatically classify customer support tickets by priority and department",
-    version="1.0.0"
+    version=settings.MODEL_VERSION,
+    lifespan=lifespan
 )
 
 # Add CORS middleware
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
+app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_credentials=True, allow_methods=["*"], allow_headers=["*"])
+app.add_middleware(RequestIDMiddleware)
+app.add_middleware(MaxBodySizeMiddleware, max_bytes=64 * 1024)  # 64KB
 
-# Global classifier instance
-classifier = None
+ # (classifier and metadata handled in lifespan)
 
 
 def get_classifier() -> TicketClassifier:
@@ -37,25 +76,13 @@ def get_classifier() -> TicketClassifier:
     return classifier
 
 
-@app.on_event("startup")
-async def startup_event():
-    """Initialize the classifier on startup"""
-    global classifier
-    logger.info("Starting up the application...")
-    
-    classifier = TicketClassifier()
-    
-    # Try to load pre-trained models
-    models_dir = "models"
-    try:
-        if os.path.exists(models_dir):
-            classifier.load_models(models_dir)
-            logger.info("Pre-trained models loaded successfully")
-        else:
-            logger.warning("No pre-trained models found. Please train the model first.")
-    except Exception as e:
-        logger.error(f"Failed to load models: {e}")
-        classifier = None
+@app.get("/version")
+async def version():
+    return {
+        "api_version": settings.MODEL_VERSION,
+        "model_loaded": classifier is not None and classifier.is_trained,
+        "model_metadata": model_metadata
+    }
 
 
 @app.get("/", response_model=HealthResponse)
@@ -66,20 +93,28 @@ async def root():
         message="AI-Powered Customer Support Ticket Classifier API is running"
     )
     # Manually ensure header exists even without Origin (pytest TestClient)
-    from fastapi.responses import JSONResponse
     return JSONResponse(content=resp.model_dump(), headers={"access-control-allow-origin": "*"})
 
 
+@app.get("/health/live", response_model=HealthResponse, tags=["health"])
+async def liveness():
+    return HealthResponse(status="alive", message="Service process responsive")
+
+@app.get("/health/ready", response_model=HealthResponse, tags=["health"])
+async def readiness(classifier: TicketClassifier = Depends(get_classifier)):
+    ready = classifier.is_trained if classifier else False
+    return HealthResponse(status="ready" if ready else "not_ready", message="Classifier loaded" if ready else "Classifier not ready")
+
 @app.get("/health", response_model=HealthResponse)
-async def health_check(classifier: TicketClassifier = Depends(get_classifier)):
-    """Health check endpoint"""
+async def legacy_health(classifier: TicketClassifier = Depends(get_classifier)):
+    # Preserve backward compatibility for existing tests expecting /health semantics
     return HealthResponse(
         status="healthy" if classifier.is_trained else "not_ready",
         message="Classifier is ready" if classifier.is_trained else "Classifier not trained"
     )
 
 
-@app.post("/classify", response_model=TicketResponse)
+@app.post("/classify", response_model=TicketResponse, tags=["inference"])
 async def classify_ticket(
     ticket: TicketRequest,
     classifier: TicketClassifier = Depends(get_classifier)

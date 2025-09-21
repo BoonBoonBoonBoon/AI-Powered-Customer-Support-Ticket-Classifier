@@ -48,27 +48,66 @@ models/
     model_metadata.json
 ```
 
-## Next Recommended Steps (Phase 2+)
-- Lifespan refactor for FastAPI startup (replace deprecated `@app.on_event`).
-- Structured logging & request ID middleware.
-- Pre-commit + linting + mypy integration.
-- Dockerfile & CI pipeline for automated builds and test gating.
-- `/version` endpoint surfacing model + API + metrics summary.
+## Phase 2 Modernization (Initial Changes)
 
-## Repro Instructions
-1. Copy `.env.example` to `.env` and adjust if needed.
-2. Run training:
-   ```bash
-   python train.py --data data/sample_tickets.csv --models-dir models
-   ```
-3. Inspect artifacts:
-   ```bash
-   tree models/v1.0.0
-   ```
-4. Examine `model_metadata.json` & `metrics.json` for provenance and performance.
+The second phase begins introducing runtime and operational modernization without altering the core ML logic. The initial Phase 2 changes now included in this document are focused on application lifecycle management and version introspection.
 
-## Rationale Recap
-These changes focus on *traceability*, *reproducibility*, and *controlled iteration*. By locking in versioned artifacts with explicit metadata and metrics, future model improvements can be benchmarked objectively and rolled back safely.
+### 1. Lifespan Refactor (`app/main.py`)
+- Replaced deprecated `@app.on_event("startup")` usage with FastAPI's recommended `lifespan` async context manager.
+- Ensures models and metadata are loaded exactly once at startup and provides a clean place for future teardown (e.g., DB pools, async clients).
+- Rationale: Future‑proofing against deprecation, clearer initialization flow, easier extensibility.
+
+### 2. Automatic Latest Model Discovery
+- Added helper `_find_latest_version_dir` to scan `models/` for semantic version directories (`vX.Y.Z`) and select the highest version.
+- Rationale: Allows deploying new model versions side‑by‑side; the API automatically serves the latest without code changes.
+
+### 3. Centralized Model & Metadata Loading
+- During lifespan startup: loads the serialized classifier and parses `model_metadata.json` (if present) from the latest version directory.
+- Exposes loaded metadata for endpoints (e.g., `/version`).
+- Handles absence of artifacts gracefully (API still starts, reports `model_loaded=false`).
+- Rationale: Robust startup that degrades gracefully in fresh environments or during blue/green rollout sequencing.
+
+### 4. Version Introspection Endpoint: `GET /version`
+- Returns:
+   - `api_version`: Mirrors `settings.MODEL_VERSION` (current deployment / contract version).
+   - `model_loaded`: Boolean indicating successful artifact load.
+   - `model_metadata`: Subset passthrough of training metadata (if available) enabling traceability.
+- Rationale: Operational transparency (supports monitoring dashboards, release validation scripts, and automated smoke tests).
+
+### 5. Root Endpoint Behavior
+- Retains explicit CORS header injection used earlier to satisfy existing tests; slated for consolidation under a dedicated CORS middleware configuration in a later phase.
+
+### 6. Testing Impact
+- All existing tests (23) pass unchanged after the refactor, confirming no functional regressions to classification or schema behavior.
+
+### 7. Additional Modernization Implemented (Post-Initial Phase 2)
+- Structured JSON logging with request correlation IDs (middleware injected `X-Request-Id`).
+- Request body size limiting middleware (64KB) to mitigate abuse and accidental large payloads.
+- Liveness (`/health/live`), readiness (`/health/ready`), and backward-compatible legacy health (`/health`) endpoints.
+- Endpoint tagging (`inference`, `health`) preparing for richer OpenAPI grouping.
+
+### 8. Future Phase 2 / Phase 3 Targets (Still Pending)
+- Centralized exception handling with standardized error envelope.
+- Docker & multi-stage build for reproducible deployments.
+- CI pipeline (lint, tests, coverage, artifact packaging, security scanning).
+- Additional security hardening: dependency auditing, potential basic rate limiting, stricter field length constraints (beyond current body limit).
+- Performance baseline scripts (Locust/k6) for latency regression tracking.
+
+## Updated File Inventory (Phase 2 Additions)
+| File | Change Type | Purpose |
+|------|-------------|---------|
+| `app/main.py` | Modified | Introduced lifespan context, automatic model version discovery, `/version` endpoint |
+
+## Operational Notes
+- The API `version` attribute now mirrors the configured `MODEL_VERSION`, aligning OpenAPI docs with deployed artifact expectations.
+- The `/version` endpoint enables simple readiness verification beyond mere liveness (e.g., confirm model + metadata presence in orchestration probes or smoke tests).
+
+## Next Recommended Steps
+1. Introduce CI workflow (build, test, security scan, artifact publish).
+2. Containerize (multi-stage Dockerfile + pinned runtime deps).
+3. Add centralized exception handling + error response models.
+4. Implement security pipeline steps (pip-audit, optional bandit) & rate limiting notes.
+5. Establish performance baseline (load testing script & initial metrics).
 
 ---
-Prepared as part of Phase 1 hardening for V1 readiness.
+This document will continue to evolve as subsequent hardening phases are completed.
