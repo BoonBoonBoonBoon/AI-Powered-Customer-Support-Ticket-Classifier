@@ -107,11 +107,21 @@ def train_model(data_path: str, models_dir: str = "models"):
         metrics = {
             'priority': {
                 'report': pr_report,
-                'confusion_matrix': pr_cm
+                'confusion_matrix': pr_cm,
+                'summary': {
+                    'macro_f1': pr_report.get('macro avg', {}).get('f1-score'),
+                    'weighted_f1': pr_report.get('weighted avg', {}).get('f1-score'),
+                    'accuracy': pr_report.get('accuracy')
+                }
             },
             'department': {
                 'report': dep_report,
-                'confusion_matrix': dep_cm
+                'confusion_matrix': dep_cm,
+                'summary': {
+                    'macro_f1': dep_report.get('macro avg', {}).get('f1-score'),
+                    'weighted_f1': dep_report.get('weighted avg', {}).get('f1-score'),
+                    'accuracy': dep_report.get('accuracy')
+                }
             }
         }
         with open(os.path.join(version_dir, 'metrics.json'), 'w', encoding='utf-8') as f:
@@ -129,7 +139,9 @@ def train_model(data_path: str, models_dir: str = "models"):
         'n_val_samples': int(len(val_df) if val_df is not None else 0),
         'priority_distribution': df['priority'].value_counts().to_dict(),
         'department_distribution': df['department'].value_counts().to_dict(),
-        'metrics_file': 'metrics.json' if metrics else None
+    'metrics_file': 'metrics.json' if metrics else None,
+    'priority_macro_f1': metrics.get('priority', {}).get('summary', {}).get('macro_f1'),
+    'department_macro_f1': metrics.get('department', {}).get('summary', {}).get('macro_f1')
     }
     with open(os.path.join(version_dir, 'model_metadata.json'), 'w', encoding='utf-8') as f:
         json.dump(metadata, f, indent=2)

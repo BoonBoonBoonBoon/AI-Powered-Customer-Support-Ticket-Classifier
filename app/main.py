@@ -7,10 +7,14 @@ import json
 import logging
 from pathlib import Path
 from typing import Optional
-from app.models.schemas import TicketRequest, TicketResponse, HealthResponse, PriorityLevel, Department
+from app.models.schemas import TicketRequest, TicketResponse, HealthResponse, PriorityLevel, Department, ErrorResponse
 from app.models.classifier import TicketClassifier
 from app.config import settings
-from app.logging_utils import configure_logging, RequestIDMiddleware, MaxBodySizeMiddleware
+from app.logging_utils import configure_logging, RequestIDMiddleware, MaxBodySizeMiddleware, get_request_id
+from fastapi.requests import Request
+from fastapi.responses import JSONResponse
+import time
+from collections import deque, defaultdict
 
 # Configure structured logging
 configure_logging()
@@ -65,6 +69,30 @@ app.add_middleware(CORSMiddleware, allow_origins=["*"], allow_credentials=True, 
 app.add_middleware(RequestIDMiddleware)
 app.add_middleware(MaxBodySizeMiddleware, max_bytes=64 * 1024)  # 64KB
 
+# Simple in-memory rate limiting (best-effort, single-process only)
+RATE_LIMIT_REQUESTS = int(os.getenv("RATE_LIMIT_REQUESTS", "100"))
+RATE_LIMIT_WINDOW_SEC = int(os.getenv("RATE_LIMIT_WINDOW_SEC", "60"))
+_rate_buckets: dict[str, deque] = defaultdict(deque)
+
+def _rate_limit_exceeded(key: str) -> bool:
+    now = time.time()
+    window_start = now - RATE_LIMIT_WINDOW_SEC
+    bucket = _rate_buckets[key]
+    while bucket and bucket[0] < window_start:
+        bucket.popleft()
+    if len(bucket) >= RATE_LIMIT_REQUESTS:
+        return True
+    bucket.append(now)
+    return False
+
+@app.middleware("http")
+async def rate_limit_middleware(request: Request, call_next):
+    client_ip = request.client.host if request.client else "unknown"
+    key = f"ip:{client_ip}"
+    if _rate_limit_exceeded(key):
+        return JSONResponse(status_code=429, content={"detail": "Rate limit exceeded"})
+    return await call_next(request)
+
  # (classifier and metadata handled in lifespan)
 
 
@@ -114,7 +142,7 @@ async def legacy_health(classifier: TicketClassifier = Depends(get_classifier)):
     )
 
 
-@app.post("/classify", response_model=TicketResponse, tags=["inference"])
+@app.post("/classify", response_model=TicketResponse, responses={429: {"model": ErrorResponse}, 503: {"model": ErrorResponse}}, tags=["inference"])
 async def classify_ticket(
     ticket: TicketRequest,
     classifier: TicketClassifier = Depends(get_classifier)
@@ -161,3 +189,27 @@ async def model_status(classifier: TicketClassifier = Depends(get_classifier)):
 if __name__ == "__main__":
     import uvicorn
     uvicorn.run(app, host="0.0.0.0", port=8000)
+
+# Global exception handlers at end (after app definition)
+@app.exception_handler(HTTPException)
+async def http_exception_handler(request: Request, exc: HTTPException):
+    return JSONResponse(
+        status_code=exc.status_code,
+        content=ErrorResponse(
+            detail=exc.detail if isinstance(exc.detail, str) else str(exc.detail),
+            code=f"HTTP_{exc.status_code}",
+            request_id=get_request_id()
+        ).model_dump()
+    )
+
+@app.exception_handler(Exception)
+async def unhandled_exception_handler(request: Request, exc: Exception):
+    logger.exception("Unhandled exception")
+    return JSONResponse(
+        status_code=500,
+        content=ErrorResponse(
+            detail="Internal server error",
+            code="INTERNAL_ERROR",
+            request_id=get_request_id()
+        ).model_dump()
+    )
