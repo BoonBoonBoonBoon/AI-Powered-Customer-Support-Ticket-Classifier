@@ -30,7 +30,19 @@ def _hash_file(path: str) -> str:
     return h.hexdigest()
 
 
-def train_model(data_path: str, models_dir: str = "models"):
+def _make_stratify_labels(df: pd.DataFrame, mode: str):
+    if mode == 'none':
+        return None
+    if mode == 'priority' and 'priority' in df.columns:
+        return df['priority']
+    if mode == 'department' and 'department' in df.columns:
+        return df['department']
+    if mode == 'both' and 'priority' in df.columns and 'department' in df.columns:
+        return (df['priority'].astype(str) + '::' + df['department'].astype(str))
+    return None
+
+
+def train_model(data_path: str, models_dir: str = "models", stratify_mode: str = 'priority'):
     """Train the ticket classifier with the provided dataset and produce metrics/metadata"""
     print(f"Training model with data from: {data_path}")
     print(f"Model version: {settings.MODEL_VERSION}")
@@ -66,12 +78,17 @@ def train_model(data_path: str, models_dir: str = "models"):
     
     # Train/validation split
     if settings.ENABLE_EVAL:
+        strat_labels = _make_stratify_labels(df, stratify_mode)
+        if strat_labels is not None:
+            print(f"Using stratification mode: {stratify_mode}")
+        else:
+            print(f"Stratification disabled or unavailable for mode: {stratify_mode}")
         train_df, val_df = train_test_split(
             df,
             test_size=settings.VALIDATION_SPLIT,
             random_state=settings.RANDOM_SEED,
             shuffle=True,
-            stratify=df['priority'] if 'priority' in df else None
+            stratify=strat_labels
         )
     else:
         train_df, val_df = df, None
@@ -177,11 +194,17 @@ def main():
         default="models",
         help="Directory to save trained models"
     )
+    parser.add_argument(
+        "--stratify",
+        choices=['priority','department','both','none'],
+        default='priority',
+        help="Stratification mode for train/val split (improves class balance in validation)"
+    )
     
     args = parser.parse_args()
     
     try:
-        train_model(args.data, args.models_dir)
+    train_model(args.data, args.models_dir, stratify_mode=args.stratify)
     except Exception as e:
         print(f"Error during training: {e}")
         sys.exit(1)

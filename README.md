@@ -101,7 +101,14 @@ Expected columns: `title,description,priority,department`.
 
 ### Local (uvicorn)
 ```powershell
+# Standard (POSIX shells)
 uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+# Windows PowerShell (ensure project root on PYTHONPATH if having import issues)
+$env:PYTHONPATH=Get-Location; uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload
+
+# Alternate (stable foreground launch from virtualenv)
+python -m uvicorn app.main:app --host 0.0.0.0 --port 8000
 ```
 
 ### Docker
@@ -117,6 +124,12 @@ Sample request:
 ```powershell
 curl -X POST http://localhost:8000/classify -H 'Content-Type: application/json' -d '{"title":"Server is down","description":"Main server offline all users impacted"}'
 ```
+
+If you see `ModuleNotFoundError: No module named 'app'` on Windows, set:
+```powershell
+$env:PYTHONPATH=(Get-Location)
+```
+and re-run uvicorn.
 
 ## API Endpoints
 
@@ -282,4 +295,239 @@ MIT License. See `LICENSE`.
 
 ---
 For historical phased progress and detailed rationale see `README_PHASE1_UPDATES.md`.
+ 
+## Hardening & Real-World Standards
 
+This project is being incrementally aligned with production-grade expectations. The following controls are implemented or planned:
+
+### Implemented
+- Deterministic training: seeded randomness + versioned artifacts (`models/v1.0.0/`).
+- Structured logging: JSON logs with `request_id` correlation.
+- Runtime safeguards: body size limit (64KB), basic in-memory rate limiting, standardized error schema.
+- CI quality gates: lint (ruff), formatting (black), types (mypy), unit tests (pytest), dependency audit (pip-audit advisory).
+- Container best practices: multi-stage build, non-root user, minimized base image.
+- Dependency locking: `requirements.lock` for reproducible builds.
+- Release hygiene: CHANGELOG, release checklist, semantic model versioning.
+- Performance baseline: Locust script + documented methodology.
+
+### In Progress / Phase 4 Targets
+- Observability metrics: Prometheus `/metrics` endpoint (request counts, latency histograms, inference timing).
+- Enhanced error taxonomy: central catalog of error codes and mapping to HTTP statuses.
+- Security upgrades: optional Bandit SAST stage (fail on high severity), SBOM generation (CycloneDX or Syft) in CI.
+- Rate limiting evolution: pluggable backend (Redis) + sliding window or token bucket algorithm.
+- Model monitoring hooks: log distribution drift indicators (placeholder for later integration).
+- Build provenance: container image signing (cosign) & attestation (future enhancement).
+
+### Planned CI Enhancements (Proposed Jobs)
+| Job | Purpose | Tooling |
+|-----|---------|---------|
+| `sast` | Static security analysis | Bandit |
+| `sbom` | Generate and upload SBOM | cyclonedx-bom or syft |
+| `metrics-test` | Validate metrics endpoint shape | curl + jq schema check |
+| `perf-smoke` | Quick latency sanity check | k6 or Locust headless |
+| `image-sign` | Sign built image | cosign |
+
+### Operational Recommendations
+- Configure log aggregation (ELK, Loki, or Cloud Logs) parsing JSON lines.
+- Set Kubernetes resource requests/limits informed by Locust baseline.
+- Add health/readiness probes using `/health/live` and `/health/ready`.
+- Enable horizontal autoscaling once metrics exported (RPS & latency triggers).
+- Periodically snapshot `metrics.json` into artifact storage for model performance tracking.
+
+### Security Posture Roadmap
+| Layer | Current | Next Step |
+|-------|---------|-----------|
+| Dependencies | pip-audit advisory | Enforce fail-on-high, add SBOM diff | 
+| Code | Type + lint checks | Bandit & secret scanning | 
+| Runtime | Non-root, size limit, rate limit | Add WAF / API key auth (if external) | 
+| Supply Chain | Multi-stage Docker | Image signing & provenance attestations | 
+
+### Contributing to Hardening
+When opening PRs for hardening tasks, prefix titles with `hardening:` or `security:` and include:
+1. Rationale / threat or reliability risk addressed.
+2. Success criteria & verification steps.
+3. Rollback considerations.
+
+---
+
+## Evaluation & Visual Testing
+
+To understand model behavior quickly, two helper scripts are provided under `scripts/`:
+
+| Script | Purpose | Typical Target |
+|--------|---------|----------------|
+| `scripts/smoke_test.py` | Fast endpoint & single prediction health check (colored output) | Local / CI / Prod URL |
+| `scripts/bulk_eval.py` | Batch evaluation over labeled CSV with per-row table & metrics | Local / Staging / Prod shadow |
+
+### 1. Smoke Test
+Runs liveness, readiness, version, and one classification.
+
+Local default (assumes `uvicorn` on port 8000):
+```powershell
+python scripts/smoke_test.py
+```
+
+Remote deployment:
+```powershell
+python scripts/smoke_test.py --base-url https://YOUR-DOMAIN.up.railway.app
+```
+
+Show full JSON payloads:
+```powershell
+python scripts/smoke_test.py --base-url https://YOUR-DOMAIN.up.railway.app --show-json
+```
+
+Exit code non‑zero if any step fails (use in CI gates).
+
+Example successful output snippet:
+```
+Smoke Test Target: http://127.0.0.1:8000
+✔ /health/live - code=200
+✔ /health/ready - code=200
+✔ /version - code=200 loaded=True
+✔ /classify - code=200
+Prediction: {
+  "priority": "Urgent",
+  "priority_conf": 0.62,
+  "department": "Tech Support",
+  "department_conf": 0.76
+}
+```
+
+### 2. Bulk Evaluation
+Evaluates all rows in `data/mock_eval.csv` (add or replace with real samples). Each row must contain `title,description`; optional `priority,department` labels enable accuracy & macro-F1 computation.
+
+Basic run (local):
+```powershell
+python scripts/bulk_eval.py --base-url http://localhost:8000
+```
+
+Against deployment, create a Markdown report:
+```powershell
+python scripts/bulk_eval.py `
+  --base-url https://YOUR-DOMAIN.up.railway.app `
+  --csv data/mock_eval.csv `
+  --md-report reports/eval_report.md
+```
+
+Threshold enforcement (fail build if accuracy drops):
+```powershell
+python scripts/bulk_eval.py --base-url http://localhost:8000 \
+  --fail-threshold-priority-acc 0.85 \
+  --fail-threshold-dept-acc 0.95
+```
+
+Output includes a colorized table:
+```
+Title                        | P_true | P_pred | P_conf | MatchP | D_true | D_pred | D_conf | MatchD
+-----------------------------+--------+--------+--------+--------+--------+--------+--------+-------
+Server outage                | Urgent | Urgent | 0.61   | Y      | Tech Support | Tech Support | 0.80 | Y
+Partial degradation          | High   | High   | 0.74   | Y      | Tech Support | Tech Support | 0.88 | Y
+...
+```
+
+Markdown report (if path supplied) stores metrics + a simple table for sharing in PRs.
+
+Example summary metrics (from mock dataset):
+```
+Priority Accuracy: 40.00%  MacroF1: 0.377
+Department Accuracy: 75.00% MacroF1: 0.734
+```
+
+### 3. Direct In-Process Demo (Bypass HTTP)
+Load the classifier directly for quick exploratory predictions:
+```powershell
+python - <<'PY'
+from app.models.classifier import TicketClassifier
+from app.config import settings
+from pathlib import Path
+import json
+
+clf = TicketClassifier()
+base = Path(settings.MODELS_BASE_DIR)
+version_dir = base / settings.MODEL_VERSION
+if not version_dir.exists():
+  candidates = [d for d in base.iterdir() if d.is_dir() and d.name.startswith('v')]
+  if candidates:
+    version_dir = sorted(candidates)[-1]
+clf.load_models(str(version_dir))
+samples = [
+  ("Critical outage", "Production API returning 500 for all requests"),
+  ("Billing discrepancy", "Customer charged twice for last month invoice"),
+  ("Feature request", "User asking about roadmap for dark mode"),
+]
+rows = []
+for t,d in samples:
+  p, dept, pc, dc = clf.predict(t, d)
+  rows.append({"title": t, "priority": p, "p_conf": round(pc,3), "department": dept, "d_conf": round(dc,3)})
+print(json.dumps(rows, indent=2))
+PY
+```
+
+### 4. Troubleshooting Evaluation Scripts
+| Symptom | Cause | Fix |
+|---------|-------|-----|
+| `ModuleNotFoundError: No module named 'app'` | PYTHONPATH not set in Windows PowerShell | `$env:PYTHONPATH=(Get-Location)` then rerun |
+| `No module named 'requests'` | Missing dependency (scripts use `requests`) | `pip install requests` (now documented) |
+| All endpoints failing in smoke test | Server not running / wrong port | Start uvicorn, confirm `http://localhost:8000/health/live` returns 200 |
+| Low priority accuracy vs department | Limited synthetic examples / class imbalance | Add more labeled priority samples & retrain |
+| Confidence values low (<0.55) | Model uncertainty / sparse features | Collect more data, add n-grams, tune C parameter |
+
+### 5. Dependency Note
+The evaluation helper scripts use the `requests` library (added to dependencies). If you previously created a virtual environment before this update, run:
+```powershell
+pip install requests
+```
+
+### 3. Workflow Suggestion
+1. Run `python train.py` (updates artifacts & metrics).
+2. Run `python scripts/smoke_test.py` locally – ensure green.
+3. Run `python scripts/bulk_eval.py --md-report reports/eval_report.md` – inspect misclassifications.
+4. Commit `reports/eval_report.md` if illustrating a model change in a PR.
+5. CI job (added) invokes smoke + bulk evaluation with accuracy thresholds to block regressions (see section below).
+
+### 4. Extending Evaluation
+- Add additional CSVs (e.g., `data/edge_cases.csv`) and run bulk eval per file.
+- Introduce a `--jsonl-output` flag (future) to persist raw predictions for downstream drift tools.
+- Feed misclassified samples back into next training cycle for targeted improvement.
+
+### 5. Understanding Confidence
+- `priority_confidence` & `department_confidence` are the max softmax probabilities from logistic regression.
+- Low confidence (< ~0.55) can be routed to human review; incorporate later as a threshold-based decision rule.
+- Track average confidence over time to detect silent model degradation.
+
+---
+
+## Continuous Evaluation in CI
+
+The GitHub Actions workflow now includes an `evaluation` job that:
+
+| Step | Action | Purpose |
+|------|--------|---------|
+| Start API | `uvicorn app.main:app` | Launch in-process server for tests |
+| Smoke Test | `python scripts/smoke_test.py` | Verifies health + one inference |
+| Bulk Eval | `python scripts/bulk_eval.py` | Runs labeled dataset & computes metrics |
+| Threshold Gate | Accuracy checks | Fails build if below minimums |
+| Artifact Upload | `reports/eval_report.md` | Attachable evaluation summary |
+
+Default thresholds (edit in `.github/workflows/ci.yml`):
+```
+--fail-threshold-priority-acc 0.80
+--fail-threshold-dept-acc 0.90
+```
+
+To raise standards over time (example):
+```
+--fail-threshold-priority-acc 0.85
+--fail-threshold-dept-acc 0.95
+```
+
+These thresholds should be revisited after introducing real (non-synthetic) samples.
+
+### Adjusting the Dataset
+Update or replace `data/mock_eval.csv`; the CI job will automatically use new rows. Keep it **small (<50)** for speed; use offline evaluation for large corpora.
+
+### Adding Macro-F1 Gating (Future)
+Extend `bulk_eval.py` with a `--fail-threshold-priority-macrof1` flag and invoke similarly in the workflow for more robust multi-class quality enforcement.
+
+---

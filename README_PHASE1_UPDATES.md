@@ -186,3 +186,24 @@ Foundation for advanced observability and metrics export is now in place. Phase 
 - Enhanced structured error taxonomy (stable error codes & documentation).
 - Optional distributed rate limiting strategy (back-end store) if scaling beyond single instance.
 - Instrumentation of classifier inference path (timers + success/failure counters).
+
+## Evaluation Tooling & Continuous Quality Gate (Added Post Phase 3)
+
+Two scripts were introduced to enable fast human and automated feedback loops:
+
+| Script | Purpose |
+|--------|---------|
+| `scripts/smoke_test.py` | Verifies liveness, readiness, version metadata, and a single classification (colored output) |
+| `scripts/bulk_eval.py` | Runs labeled dataset to compute accuracy & macro-F1, produces optional Markdown report, supports failure thresholds |
+
+These are now integrated into the CI `evaluation` job which:
+1. Starts the API (`uvicorn app.main:app`).
+2. Executes the smoke test (health + one prediction).
+3. Runs bulk evaluation against `data/mock_eval.csv`.
+4. Enforces accuracy thresholds (currently priority ≥ 0.80, department ≥ 0.90).
+5. Uploads `reports/eval_report.md` as an artifact for inspection.
+
+Planned enhancements:
+- Add macro-F1 gating flags.
+- Persist historical evaluation artifacts for trend analysis.
+- Introduce JSONL raw predictions output for future drift detection.
