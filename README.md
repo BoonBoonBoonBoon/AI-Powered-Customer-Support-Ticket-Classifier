@@ -337,3 +337,85 @@ When opening PRs for hardening tasks, prefix titles with `hardening:` or `securi
 
 ---
 
+## Evaluation & Visual Testing
+
+To understand model behavior quickly, two helper scripts are provided under `scripts/`:
+
+| Script | Purpose | Typical Target |
+|--------|---------|----------------|
+| `scripts/smoke_test.py` | Fast endpoint & single prediction health check (colored output) | Local / CI / Prod URL |
+| `scripts/bulk_eval.py` | Batch evaluation over labeled CSV with per-row table & metrics | Local / Staging / Prod shadow |
+
+### 1. Smoke Test
+Runs liveness, readiness, version, and one classification.
+
+Local default (assumes `uvicorn` on port 8000):
+```powershell
+python scripts/smoke_test.py
+```
+
+Remote deployment:
+```powershell
+python scripts/smoke_test.py --base-url https://YOUR-DOMAIN.up.railway.app
+```
+
+Show full JSON payloads:
+```powershell
+python scripts/smoke_test.py --base-url https://YOUR-DOMAIN.up.railway.app --show-json
+```
+
+Exit code non‑zero if any step fails (use in CI gates).
+
+### 2. Bulk Evaluation
+Evaluates all rows in `data/mock_eval.csv` (add or replace with real samples). Each row must contain `title,description`; optional `priority,department` labels enable accuracy & macro-F1 computation.
+
+Basic run (local):
+```powershell
+python scripts/bulk_eval.py --base-url http://localhost:8000
+```
+
+Against deployment, create a Markdown report:
+```powershell
+python scripts/bulk_eval.py `
+  --base-url https://YOUR-DOMAIN.up.railway.app `
+  --csv data/mock_eval.csv `
+  --md-report reports/eval_report.md
+```
+
+Threshold enforcement (fail build if accuracy drops):
+```powershell
+python scripts/bulk_eval.py --base-url http://localhost:8000 \
+  --fail-threshold-priority-acc 0.85 \
+  --fail-threshold-dept-acc 0.95
+```
+
+Output includes a colorized table:
+```
+Title                        | P_true | P_pred | P_conf | MatchP | D_true | D_pred | D_conf | MatchD
+-----------------------------+--------+--------+--------+--------+--------+--------+--------+-------
+Server outage                | Urgent | Urgent | 0.61   | Y      | Tech Support | Tech Support | 0.80 | Y
+Partial degradation          | High   | High   | 0.74   | Y      | Tech Support | Tech Support | 0.88 | Y
+...
+```
+
+Markdown report (if path supplied) stores metrics + a simple table for sharing in PRs.
+
+### 3. Workflow Suggestion
+1. Run `python train.py` (updates artifacts & metrics).
+2. Run `python scripts/smoke_test.py` locally – ensure green.
+3. Run `python scripts/bulk_eval.py --md-report reports/eval_report.md` – inspect misclassifications.
+4. Commit `reports/eval_report.md` if illustrating a model change in a PR.
+5. (Future) CI job invokes smoke and bulk eval with thresholds to block regressions.
+
+### 4. Extending Evaluation
+- Add additional CSVs (e.g., `data/edge_cases.csv`) and run bulk eval per file.
+- Introduce a `--jsonl-output` flag (future) to persist raw predictions for downstream drift tools.
+- Feed misclassified samples back into next training cycle for targeted improvement.
+
+### 5. Understanding Confidence
+- `priority_confidence` & `department_confidence` are the max softmax probabilities from logistic regression.
+- Low confidence (< ~0.55) can be routed to human review; incorporate later as a threshold-based decision rule.
+- Track average confidence over time to detect silent model degradation.
+
+---
+

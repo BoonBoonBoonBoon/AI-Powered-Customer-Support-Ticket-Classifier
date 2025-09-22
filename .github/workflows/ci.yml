@@ -42,6 +42,45 @@ jobs:
       - name: Build Docker image
         run: docker build -t ticket-classifier:ci .
 
+  evaluation:
+    needs: build-test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install requests
+      - name: Start API (background)
+        run: |
+          uvicorn app.main:app --host 0.0.0.0 --port 8000 &
+          echo $! > uvicorn_pid
+          sleep 5
+      - name: Smoke Test
+        run: python scripts/smoke_test.py --base-url http://localhost:8000 --show-json
+      - name: Bulk Evaluation
+        run: |
+          python scripts/bulk_eval.py --base-url http://localhost:8000 --csv data/mock_eval.csv \
+            --md-report reports/eval_report.md \
+            --fail-threshold-priority-acc 0.80 \
+            --fail-threshold-dept-acc 0.90
+      - name: Upload Evaluation Report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: evaluation-report
+          path: reports/eval_report.md
+      - name: Stop API
+        if: always()
+        run: |
+          kill $(cat uvicorn_pid) || true
+
   publish-image:
     needs: build-test
     if: startsWith(github.ref, 'refs/tags/v')
