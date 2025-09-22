@@ -419,3 +419,37 @@ Markdown report (if path supplied) stores metrics + a simple table for sharing i
 
 ---
 
+## Continuous Evaluation in CI
+
+The GitHub Actions workflow now includes an `evaluation` job that:
+
+| Step | Action | Purpose |
+|------|--------|---------|
+| Start API | `uvicorn app.main:app` | Launch in-process server for tests |
+| Smoke Test | `python scripts/smoke_test.py` | Verifies health + one inference |
+| Bulk Eval | `python scripts/bulk_eval.py` | Runs labeled dataset & computes metrics |
+| Threshold Gate | Accuracy checks | Fails build if below minimums |
+| Artifact Upload | `reports/eval_report.md` | Attachable evaluation summary |
+
+Default thresholds (edit in `.github/workflows/ci.yml`):
+```
+--fail-threshold-priority-acc 0.80
+--fail-threshold-dept-acc 0.90
+```
+
+To raise standards over time (example):
+```
+--fail-threshold-priority-acc 0.85
+--fail-threshold-dept-acc 0.95
+```
+
+These thresholds should be revisited after introducing real (non-synthetic) samples.
+
+### Adjusting the Dataset
+Update or replace `data/mock_eval.csv`; the CI job will automatically use new rows. Keep it **small (<50)** for speed; use offline evaluation for large corpora.
+
+### Adding Macro-F1 Gating (Future)
+Extend `bulk_eval.py` with a `--fail-threshold-priority-macrof1` flag and invoke similarly in the workflow for more robust multi-class quality enforcement.
+
+---
+
