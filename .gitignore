@@ -8,12 +8,18 @@ venv/
 env/
 .env
 
-# Ignore model files (they should be trained locally)
-models/
+# Ignore large/binary model artifacts (train locally); allow code & metadata
+models/*
+!models/**/model_metadata.json
+!models/**/metrics.json
+!models/**/holdout_metrics.json
+!models/**/classifier_config.json
 *.pkl
+*.joblib
 
-# Ignore data files
+# Ignore raw/enriched data CSVs except explicit small examples
 data/*.csv
+!data/sample_tickets.csv
 !data/generate_dataset.py
 
 # Ignore logs

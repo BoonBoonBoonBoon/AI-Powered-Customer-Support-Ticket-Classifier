@@ -15,6 +15,7 @@ An intelligent FastAPI service that classifies incoming support tickets by Prior
 - Multi-stage Docker image & GitHub Actions CI pipeline
 - Reproducible training with seeded randomness
 - Performance baseline harness (Locust) & load test docs
+- Dedicated data import & training workflow guide (`README_DATA_IMPORT.md`)
 
 ## Tech Stack
 
@@ -37,7 +38,8 @@ An intelligent FastAPI service that classifies incoming support tickets by Prior
 │   ├── logging_utils.py        # Structured logging + middleware
 │   ├── main.py                 # FastAPI app (lifespan, endpoints, rate limiting)
 │   └── models/
-│       ├── classifier.py       # Training & inference class
+│       ├── classifier.py       # (Advanced) Sklearn training & inference class (if present)
+│       ├── simple_classifier.py# Lightweight rule-based fallback classifier
 │       └── schemas.py          # Pydantic models (Ticket, ErrorResponse, enums)
 ├── data/
 │   └── generate_dataset.py     # Synthetic dataset generator
@@ -96,6 +98,24 @@ python train.py --data path\to\tickets.csv
 ```
 
 Expected columns: `title,description,priority,department`.
+
+### Advanced Training Flags
+The training script now supports holdout reservation, class weighting, and simple feature augmentation:
+```
+python train.py \
+  --data data/normalized_tickets.csv \
+  --holdout-frac 0.15 \
+  --class-weight balanced \
+  --augment-length \
+  --min-class-samples 5
+```
+Flags:
+- `--holdout-frac`: Reserve final untouched evaluation set (stratified by priority).
+- `--class-weight balanced`: Mitigate class imbalance in logistic regression models.
+- `--augment-length`: Append length bucket tokens (`__LEN_SHORT__`, etc.).
+- `--min-class-samples`: Warn if any class in train split falls below threshold.
+- `--department-exclude-regex REGEX` (repeatable): Remove matching token patterns from descriptions ONLY for the department model (helps prevent label leakage when enrichment injects structured tokens like `__type_...`).
+Artifacts now include `holdout_metrics.json` when a holdout split is used.
 
 ## Running the API
 
@@ -295,6 +315,7 @@ MIT License. See `LICENSE`.
 
 ---
 For historical phased progress and detailed rationale see `README_PHASE1_UPDATES.md`.
+For end-to-end dataset ingestion & normalization see `README_DATA_IMPORT.md`.
  
 ## Hardening & Real-World Standards
 
@@ -531,3 +552,61 @@ Update or replace `data/mock_eval.csv`; the CI job will automatically use new ro
 Extend `bulk_eval.py` with a `--fail-threshold-priority-macrof1` flag and invoke similarly in the workflow for more robust multi-class quality enforcement.
 
 ---
+
+## Imported Dataset Eval Notes 
+
+### Dataset Profile Highlights
+
+Rows: 8,469
+Priority distribution: Medium 2192 | Urgent 2129 | High 2085 | Low 2063 (fairly balanced)
+Department distribution: Billing 5081 (60%) | Tech Support 1747 | Sales 1641 (department imbalance)
+Approx duplicate pair rate: 1.70%
+Average description length: 46.5 tokens (much richer than synthetic set)
+
+### Model v1.0.1 Performance Validation (1,440 samples):
+
+Priority: accuracy 0.2403 | macro F1 0.2403
+Department: accuracy 0.3986 | macro F1 0.3417
+
+Holdout (1,270 samples):
+
+Priority: accuracy 0.2850 | macro F1 0.2850
+Department: accuracy 0.3827 | macro F1 0.3269
+
+### Performance Comparison Priority (Validation):
+
+v1.0.1 macro F1: 0.2403 → v1.0.2 macro F1: 0.2436 (marginal +0.0033) Priority (Holdout):
+v1.0.1 macro F1: 0.2850 → v1.0.2 macro F1: 0.2662 (slight drop)
+Department (Validation / Holdout):
+
+v1.0.1: macro F1 0.3417 / 0.3269
+v1.0.2: macro F1 1.0000 / 1.0000 (suspiciously perfect)
+
+### Leakage Discovery & Remediation (v1.0.3)
+
+The perfect `1.0000` macro F1 for department in v1.0.2 was caused by feature leakage: the enrichment step injected `__type_<ticket_type>__` tokens that were near-direct transforms of the `department` label source column. Because those markers appeared verbatim in both train and validation/holdout splits, the department classifier trivially memorized mappings.
+
+Remediation steps (implemented in `v1.0.3`):
+1. Added `--department-exclude-regex` flag to strip leaking token patterns when building the department training corpus (and at prediction time). 
+2. Invoked training with: 
+   ```powershell
+   $env:MODEL_VERSION='1.0.3'
+   python train.py --data data/enriched_customer_tickets.csv \
+     --holdout-frac 0.15 --class-weight balanced --augment-length \
+     --min-class-samples 10 --department-exclude-regex '__type_[a-z0-9_]+'
+   ```
+3. Persisted exclusion patterns in `classifier_config.json` for reproducibility.
+
+v1.0.3 Metrics (Validation / Holdout):
+
+| Target | Macro F1 (Val) | Accuracy (Val) | Macro F1 (Holdout) | Accuracy (Holdout) |
+|--------|----------------|----------------|--------------------|--------------------|
+| Priority | 0.244 | 0.244 | 0.266 | 0.266 |
+| Department | 0.327 | 0.384 | 0.323 | 0.382 |
+
+Department performance returns to realistic (imperfect) levels, confirming leakage removal. Priority remains low and will require richer, domain-specific signal engineering (future work: keyword lexicons, calibrated decision thresholds, alternative algorithms, or additional real labeled data).
+
+Recommended next steps:
+- Run `scripts/error_analysis.py` against `models/v1.0.3` to surface hardest confusions.
+- Introduce heuristic leakage guard: warn if any per-target macro F1 == 1.0 with >50 validation samples.
+- Explore per-target hyperparameter tuning (e.g., higher `C` for department, class-weight adjustments, or linear SVM comparison).
