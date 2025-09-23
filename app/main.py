@@ -182,7 +182,7 @@ async def model_status(classifier: TicketClassifier = Depends(get_classifier)):
     """Get model training status"""
     return {
         "is_trained": classifier.is_trained,
-        "models_loaded": classifier.priority_model is not None and classifier.department_model is not None
+        "models_loaded": getattr(classifier, 'priority_bundle', None) is not None and getattr(classifier, 'department_bundle', None) is not None
     }
 
 

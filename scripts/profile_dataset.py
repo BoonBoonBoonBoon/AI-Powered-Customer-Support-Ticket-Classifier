@@ -23,9 +23,17 @@ PRIORITY_NORMALIZATION = {
 }
 
 DEPARTMENT_NORMALIZATION = {
+    # Tech Support synonyms / ticket types
     'technical support': 'Tech Support', 'tech support': 'Tech Support', 'support': 'Tech Support',
-    'billing issue': 'Billing', 'billing': 'Billing', 'billing inquiry': 'Billing',
-    'sales inquiry': 'Sales', 'sales': 'Sales', 'pricing question': 'Sales', 'pricing': 'Sales'
+    'technical issue': 'Tech Support', 'network problem': 'Tech Support', 'installation support': 'Tech Support',
+    'product setup': 'Tech Support', 'data loss': 'Tech Support', 'peripheral compatibility': 'Tech Support',
+    'battery life': 'Tech Support', 'account access': 'Tech Support', 'payment issue': 'Billing',
+    # Billing
+    'billing issue': 'Billing', 'billing': 'Billing', 'billing inquiry': 'Billing', 'refund request': 'Billing',
+    'cancellation request': 'Billing', 'invoice question': 'Billing', 'subscription cancellation': 'Billing',
+    # Sales / commercial
+    'sales inquiry': 'Sales', 'sales': 'Sales', 'pricing question': 'Sales', 'pricing': 'Sales',
+    'product inquiry': 'Sales', 'product pricing': 'Sales', 'product roadmap': 'Sales', 'plan upgrade billing': 'Sales'
 }
 
 REQUIRED_TARGET_COLUMNS = ['title', 'description', 'priority', 'department']
