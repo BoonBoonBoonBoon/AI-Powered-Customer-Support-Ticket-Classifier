@@ -38,6 +38,7 @@ def train_model(
     augment_length: bool = False,
     min_class_samples: int = 1,
     department_exclude_regex: list[str] | None = None,
+    priority_extra: bool = False,
 ):
     """Train the ticket classifier with the provided dataset and produce metrics/metadata.
 
@@ -134,6 +135,7 @@ def train_model(
         class_weight=class_weight,
         augment_length_buckets=augment_length,
         department_exclude_regexes=department_exclude_regex,
+        enable_priority_extra=priority_extra,
     )
     
     # Versioned model directory
@@ -214,6 +216,7 @@ def train_model(
         'class_weight': class_weight,
         'augment_length_buckets': augment_length,
         'department_exclude_regex': department_exclude_regex,
+        'priority_extra': priority_extra,
     }
     with open(os.path.join(version_dir, 'model_metadata.json'), 'w', encoding='utf-8') as f:
         json.dump(metadata, f, indent=2)
@@ -305,6 +308,11 @@ def main():
         default=[],
         help="Regex pattern(s) to remove from description when training/predicting department model (can be repeated)"
     )
+    parser.add_argument(
+        "--priority-extra",
+        action="store_true",
+        help="Enable engineered priority-specific feature tokens (keywords, structural ratios)"
+    )
     
     args = parser.parse_args()
     
@@ -317,6 +325,7 @@ def main():
             augment_length=args.augment_length,
             min_class_samples=args.min_class_samples,
             department_exclude_regex=args.department_exclude_regex or None,
+            priority_extra=args.priority_extra,
         )
     except Exception as e:
         print(f"Error during training: {e}")

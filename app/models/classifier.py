@@ -64,6 +64,8 @@ class TicketClassifier:
         self.class_weight: Optional[str] = None  # 'balanced' or None
         # Token exclusion patterns (regex) applied ONLY for department model to reduce leakage
         self.department_exclude_patterns: list[str] = []
+        # Enable extra engineered tokens for priority model only
+        self.enable_priority_extra: bool = False
 
     # ------------------------------ Public API ------------------------------
     def train(
@@ -72,11 +74,13 @@ class TicketClassifier:
         class_weight: Optional[str] = None,
         augment_length_buckets: bool = False,
         department_exclude_regexes: Optional[list[str]] = None,
+        enable_priority_extra: bool = False,
     ) -> None:
         self.class_weight = class_weight
         self.augment_length_buckets = augment_length_buckets
         if department_exclude_regexes:
             self.department_exclude_patterns = department_exclude_regexes
+        self.enable_priority_extra = enable_priority_extra
 
         required = {"title", "description", "priority", "department"}
         if not required.issubset(df.columns):
@@ -91,6 +95,10 @@ class TicketClassifier:
             title = self._preprocess(row["title"])  # type: ignore[arg-type]
             desc_original = self._preprocess(row["description"])  # type: ignore[arg-type]
             combined_priority = f"title: {title}\nbody: {desc_original}".strip()
+            if self.enable_priority_extra:
+                extra_tokens = self._priority_extra_tokens(title, desc_original)
+                if extra_tokens:
+                    combined_priority = f"{combined_priority} {' '.join(extra_tokens)}"
             if augment_length_buckets:
                 bucket = _length_bucket(len(combined_priority.split()))
                 combined_priority = f"{combined_priority} {bucket}"
@@ -141,6 +149,10 @@ class TicketClassifier:
         title_p = self._preprocess(title)
         desc_p_original = self._preprocess(description)
         combined_priority = f"title: {title_p}\nbody: {desc_p_original}".strip()
+        if self.enable_priority_extra:
+            extra_tokens = self._priority_extra_tokens(title_p, desc_p_original)
+            if extra_tokens:
+                combined_priority = f"{combined_priority} {' '.join(extra_tokens)}"
         if self.augment_length_buckets:
             combined_priority = f"{combined_priority} {_length_bucket(len(combined_priority.split()))}"
 
@@ -182,6 +194,7 @@ class TicketClassifier:
             "version": 1,
             "model_type": "sklearn_logreg_tfidf",
             "department_exclude_patterns": self.department_exclude_patterns,
+            "enable_priority_extra": self.enable_priority_extra,
         }
         with open(os.path.join(output_dir, "classifier_config.json"), "w", encoding="utf-8") as f:
             json.dump(config, f, indent=2)
@@ -206,6 +219,7 @@ class TicketClassifier:
                 self.class_weight = cfg.get("class_weight")
                 self.augment_length_buckets = cfg.get("augment_length_buckets", False)
                 self.department_exclude_patterns = cfg.get("department_exclude_patterns", []) or []
+                self.enable_priority_extra = cfg.get("enable_priority_extra", False)
             except Exception:
                 pass
         self.is_trained = True
@@ -219,6 +233,45 @@ class TicketClassifier:
         text = text.strip().lower()
         text = re.sub(r"\s+", " ", text)
         return text
+
+    def _priority_extra_tokens(self, title: str, desc: str) -> list[str]:
+        """Generate additional engineered tokens to aid priority discrimination.
+
+        Heuristics:
+          - Keyword groups (urgent/outage, billing/payment, access/security)
+          - Structural signals (caps ratio, punctuation density, exclamations, digits)
+        """
+        text = f"{title} {desc}".lower()
+        tokens: list[str] = []
+        # Keyword groups (keep compact & general)
+        urgent_kw = ["outage", "down", "critical", "severe", "emergency", "unresponsive"]
+        high_kw = ["failure", "crash", "error", "corrupt", "broken"]
+        billing_kw = ["invoice", "charged", "billing", "payment", "refund"]
+        access_kw = ["login", "credential", "password", "access", "locked"]
+        def any_kw(words):
+            return any(w in text for w in words)
+        if any_kw(urgent_kw):
+            tokens.append("__KWD_URGENT__")
+        if any_kw(high_kw):
+            tokens.append("__KWD_HIGH__")
+        if any_kw(billing_kw):
+            tokens.append("__KWD_BILLING_CTX__")
+        if any_kw(access_kw):
+            tokens.append("__KWD_ACCESS__")
+        # Structural features
+        total_chars = max(len(desc), 1)
+        caps_chars = sum(1 for c in desc if c.isupper())
+        caps_ratio = caps_chars / total_chars
+        if caps_ratio > 0.2:
+            tokens.append("__STRUCT_CAPS_HEAVY__")
+        punct_ratio = sum(1 for c in desc if c in "!?") / total_chars
+        if punct_ratio > 0.02:
+            tokens.append("__STRUCT_PUNCT_ATTENTION__")
+        if desc.count("!") >= 2:
+            tokens.append("__STRUCT_MULTI_EXCL__")
+        if any(ch.isdigit() for ch in desc):
+            tokens.append("__STRUCT_DIGITS__")
+        return tokens
 
 
 __all__ = ["TicketClassifier", "PRIORITY_LEVELS"]
