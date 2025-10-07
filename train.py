@@ -174,6 +174,19 @@ def train_model(
             json.dump(metrics, f, indent=2)
         print("Validation metrics written to metrics.json")
 
+        # Leakage guard: warn if perfect macro F1 with non-trivial support
+        for target in ("priority", "department"):
+            rep = metrics.get(target, {}).get('report', {})
+            macro = rep.get('macro avg', {})
+            macro_f1 = macro.get('f1-score')
+            # total support from sum of class supports (exclude accuracy keys)
+            support_sum = 0
+            for k, v in rep.items():
+                if isinstance(v, dict) and 'support' in v and k not in ('macro avg', 'weighted avg'):  # class row
+                    support_sum += int(v.get('support', 0))
+            if macro_f1 == 1.0 and support_sum >= 50:
+                print(f"WARNING: Potential leakage detected for '{target}' (macro F1 == 1.0 on {support_sum} samples)")
+
     # Metadata
     metadata = {
         'model_version': settings.MODEL_VERSION,
