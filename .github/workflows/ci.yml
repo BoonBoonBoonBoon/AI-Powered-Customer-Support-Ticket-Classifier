@@ -39,6 +39,11 @@ jobs:
       - name: Run tests
         run: pytest -q
 
+      - name: Macro-F1 Gating (priority >=0.22, department >=0.30)
+        run: |
+          python train.py --data data/sample_tickets.csv --class-weight balanced --augment-length --holdout-frac 0.0 || exit 1
+          python scripts/macro_f1_gate.py --priority-threshold 0.22 --department-threshold 0.30
+
       - name: Build Docker image
         run: docker build -t ticket-classifier:ci .
 

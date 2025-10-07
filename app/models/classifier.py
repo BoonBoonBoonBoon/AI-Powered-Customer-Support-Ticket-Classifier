@@ -66,6 +66,11 @@ class TicketClassifier:
         self.department_exclude_patterns: list[str] = []
         # Enable extra engineered tokens for priority model only
         self.enable_priority_extra: bool = False
+        # Per-target hyperparameters (currently only C for LogisticRegression)
+        self.priority_C: float = 1.0
+        self.department_C: float = 1.0
+        # Probability calibration flag
+        self.calibrate_probabilities: bool = False
 
     # ------------------------------ Public API ------------------------------
     def train(
@@ -75,12 +80,18 @@ class TicketClassifier:
         augment_length_buckets: bool = False,
         department_exclude_regexes: Optional[list[str]] = None,
         enable_priority_extra: bool = False,
+        priority_C: float = 1.0,
+        department_C: float = 1.0,
+        calibrate_probabilities: bool = False,
     ) -> None:
         self.class_weight = class_weight
         self.augment_length_buckets = augment_length_buckets
         if department_exclude_regexes:
             self.department_exclude_patterns = department_exclude_regexes
         self.enable_priority_extra = enable_priority_extra
+        self.priority_C = priority_C
+        self.department_C = department_C
+        self.calibrate_probabilities = calibrate_probabilities
 
         required = {"title", "description", "priority", "department"}
         if not required.issubset(df.columns):
@@ -121,10 +132,16 @@ class TicketClassifier:
         y_priority = pr_encoder.fit_transform(df["priority"].tolist())
         pr_vectorizer = TfidfVectorizer(ngram_range=(1, 2), min_df=2)
         X_priority = pr_vectorizer.fit_transform(priority_texts)
-        pr_model = LogisticRegression(
+        pr_base = LogisticRegression(
             max_iter=200,
             class_weight=class_weight if class_weight == "balanced" else None,
+            C=self.priority_C,
         )
+        if self.calibrate_probabilities:
+            from sklearn.calibration import CalibratedClassifierCV
+            pr_model = CalibratedClassifierCV(pr_base, method="sigmoid", cv=3)
+        else:
+            pr_model = pr_base
         pr_model.fit(X_priority, y_priority)
 
         # Department model ---------------------------------------------------
@@ -132,10 +149,16 @@ class TicketClassifier:
         y_department = dep_encoder.fit_transform(df["department"].tolist())
         dep_vectorizer = TfidfVectorizer(ngram_range=(1, 2), min_df=2)
         X_department = dep_vectorizer.fit_transform(department_texts)
-        dep_model = LogisticRegression(
+        dep_base = LogisticRegression(
             max_iter=200,
             class_weight=class_weight if class_weight == "balanced" else None,
+            C=self.department_C,
         )
+        if self.calibrate_probabilities:
+            from sklearn.calibration import CalibratedClassifierCV
+            dep_model = CalibratedClassifierCV(dep_base, method="sigmoid", cv=3)
+        else:
+            dep_model = dep_base
         dep_model.fit(X_department, y_department)
 
         self.priority_bundle = _ModelBundle(pr_vectorizer, pr_model, pr_encoder)
@@ -195,6 +218,9 @@ class TicketClassifier:
             "model_type": "sklearn_logreg_tfidf",
             "department_exclude_patterns": self.department_exclude_patterns,
             "enable_priority_extra": self.enable_priority_extra,
+            "priority_C": self.priority_C,
+            "department_C": self.department_C,
+            "calibrate_probabilities": self.calibrate_probabilities,
         }
         with open(os.path.join(output_dir, "classifier_config.json"), "w", encoding="utf-8") as f:
             json.dump(config, f, indent=2)
@@ -220,6 +246,9 @@ class TicketClassifier:
                 self.augment_length_buckets = cfg.get("augment_length_buckets", False)
                 self.department_exclude_patterns = cfg.get("department_exclude_patterns", []) or []
                 self.enable_priority_extra = cfg.get("enable_priority_extra", False)
+                self.priority_C = cfg.get("priority_C", 1.0)
+                self.department_C = cfg.get("department_C", 1.0)
+                self.calibrate_probabilities = cfg.get("calibrate_probabilities", False)
             except Exception:
                 pass
         self.is_trained = True

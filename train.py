@@ -39,6 +39,9 @@ def train_model(
     min_class_samples: int = 1,
     department_exclude_regex: list[str] | None = None,
     priority_extra: bool = False,
+    priority_C: float = 1.0,
+    department_C: float = 1.0,
+    calibrate: bool = False,
 ):
     """Train the ticket classifier with the provided dataset and produce metrics/metadata.
 
@@ -136,6 +139,9 @@ def train_model(
         augment_length_buckets=augment_length,
         department_exclude_regexes=department_exclude_regex,
         enable_priority_extra=priority_extra,
+        priority_C=priority_C,
+        department_C=department_C,
+        calibrate_probabilities=calibrate,
     )
     
     # Versioned model directory
@@ -217,6 +223,9 @@ def train_model(
         'augment_length_buckets': augment_length,
         'department_exclude_regex': department_exclude_regex,
         'priority_extra': priority_extra,
+        'priority_C': priority_C,
+        'department_C': department_C,
+        'calibrate_probabilities': calibrate,
     }
     with open(os.path.join(version_dir, 'model_metadata.json'), 'w', encoding='utf-8') as f:
         json.dump(metadata, f, indent=2)
@@ -313,6 +322,23 @@ def main():
         action="store_true",
         help="Enable engineered priority-specific feature tokens (keywords, structural ratios)"
     )
+    parser.add_argument(
+        "--priority-C",
+        type=float,
+        default=1.0,
+        help="C (inverse regularization strength) for priority LogisticRegression"
+    )
+    parser.add_argument(
+        "--department-C",
+        type=float,
+        default=1.0,
+        help="C for department LogisticRegression"
+    )
+    parser.add_argument(
+        "--calibrate",
+        action="store_true",
+        help="Apply probability calibration (sigmoid) via CalibratedClassifierCV"
+    )
     
     args = parser.parse_args()
     
@@ -326,6 +352,9 @@ def main():
             min_class_samples=args.min_class_samples,
             department_exclude_regex=args.department_exclude_regex or None,
             priority_extra=args.priority_extra,
+            priority_C=args.priority_C,
+            department_C=args.department_C,
+            calibrate=args.calibrate,
         )
     except Exception as e:
         print(f"Error during training: {e}")
