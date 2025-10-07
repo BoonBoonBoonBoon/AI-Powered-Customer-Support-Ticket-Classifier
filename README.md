@@ -256,6 +256,8 @@ pytest --cov=app --cov-report=term-missing
 - Optional distributed rate limiting (Redis / sliding window)
 - Extended inference timing instrumentation
 
+See also: `TODO_NEXT_STEPS.md` for the active, prioritized backlog and sprint candidates.
+
 ## Deployment: Railway
 
 You can deploy directly to Railway using either the buildpack (Procfile) or Docker.
