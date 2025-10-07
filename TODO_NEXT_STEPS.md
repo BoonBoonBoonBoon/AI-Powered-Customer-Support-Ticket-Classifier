@@ -21,9 +21,12 @@ Legend:  Priority: (🔥 High, 🚀 Medium, 🧪 Low)  Effort: (S / M / L)
    - Next: evaluate during Algorithm Comparison; consider removing low-signal structural tokens if no gain.
 - [ ] Department Noise Audit (🚀, S)
    - Evaluate impact of removing/keeping `__product_` tokens; prune if not helping.
-- [ ] Algorithm Comparison (🔥, M)
-   - Grid: LogisticRegression (C values), Linear SVM (calibrated), Multinomial NB.
-   - Script outputs comparison table; select per-target best.
+- [x] Algorithm Comparison (🔥, M)
+   - Added `scripts/algorithm_comparison.py`; artifacts: `reports/algo_comparison_v1.0.4.{json,md}`.
+   - Explored: LogReg C∈{0.5,1,2,5}, LinearSVC C∈{0.5,1,2}, MultinomialNB α∈{0.5,1,2}; with/without engineered tokens.
+   - Best priority macro F1: 0.2654 (LogReg C=5.0 balanced, no priority-extra) vs previous 0.2436 (+0.0218 abs; meets +0.02 target).
+   - Best department macro F1: 0.3335 (LogReg C=2.0 balanced) vs 0.3267 (+0.0068).
+   - Engineered priority tokens underperformed; candidate for pruning/refinement after calibration.
 - [ ] Probability Calibration (🚀, M)
    - Use `CalibratedClassifierCV` for both targets; store Brier score & reliability plot.
 
