@@ -1,0 +1,233 @@
+{
+  "priority": {
+    "report": {
+      "High": {
+        "precision": 0.2390745501285347,
+        "recall": 0.2627118644067797,
+        "f1-score": 0.2503364737550471,
+        "support": 354.0
+      },
+      "Low": {
+        "precision": 0.25205479452054796,
+        "recall": 0.2621082621082621,
+        "f1-score": 0.2569832402234637,
+        "support": 351.0
+      },
+      "Medium": {
+        "precision": 0.2598187311178248,
+        "recall": 0.23056300268096513,
+        "f1-score": 0.24431818181818182,
+        "support": 373.0
+      },
+      "Urgent": {
+        "precision": 0.2112676056338028,
+        "recall": 0.20718232044198895,
+        "f1-score": 0.20920502092050208,
+        "support": 362.0
+      },
+      "accuracy": 0.24027777777777778,
+      "macro avg": {
+        "precision": 0.24055392035017753,
+        "recall": 0.24064136240949896,
+        "f1-score": 0.2402107291792987,
+        "support": 1440.0
+      },
+      "weighted avg": {
+        "precision": 0.24062144692263807,
+        "recall": 0.24027777777777778,
+        "f1-score": 0.2400577280688375,
+        "support": 1440.0
+      }
+    },
+    "confusion_matrix": [
+      [
+        93,
+        87,
+        81,
+        93
+      ],
+      [
+        105,
+        92,
+        78,
+        76
+      ],
+      [
+        93,
+        83,
+        86,
+        111
+      ],
+      [
+        98,
+        103,
+        86,
+        75
+      ]
+    ]
+  },
+  "department": {
+    "report": {
+      "Billing": {
+        "precision": 0.6085626911314985,
+        "recall": 0.44769403824521936,
+        "f1-score": 0.5158781594296824,
+        "support": 889.0
+      },
+      "Sales": {
+        "precision": 0.21173469387755103,
+        "recall": 0.30970149253731344,
+        "f1-score": 0.2515151515151515,
+        "support": 268.0
+      },
+      "Tech Support": {
+        "precision": 0.18274111675126903,
+        "recall": 0.254416961130742,
+        "f1-score": 0.21270310192023634,
+        "support": 283.0
+      },
+      "accuracy": 0.3840277777777778,
+      "macro avg": {
+        "precision": 0.3343461672534396,
+        "recall": 0.3372708306377583,
+        "f1-score": 0.32669880428835674,
+        "support": 1440.0
+      },
+      "weighted avg": {
+        "precision": 0.45102282389978815,
+        "recall": 0.3840277777777778,
+        "f1-score": 0.40709494596005213,
+        "support": 1440.0
+      }
+    },
+    "confusion_matrix": [
+      [
+        398,
+        241,
+        250
+      ],
+      [
+        113,
+        83,
+        72
+      ],
+      [
+        143,
+        68,
+        72
+      ]
+    ]
+  },
+  "high_conf_misclassifications": [
+    {
+      "title": "Product recommendation",
+      "priority_true": "Medium",
+      "priority_pred": "Low",
+      "priority_conf": 0.313,
+      "department_true": "Billing",
+      "department_pred": "Sales",
+      "department_conf": 0.684,
+      "mis_priority": true,
+      "mis_department": true
+    },
+    {
+      "title": "Network problem",
+      "priority_true": "Medium",
+      "priority_pred": "Low",
+      "priority_conf": 0.312,
+      "department_true": "Billing",
+      "department_pred": "Sales",
+      "department_conf": 0.655,
+      "mis_priority": true,
+      "mis_department": true
+    },
+    {
+      "title": "Software bug",
+      "priority_true": "High",
+      "priority_pred": "Urgent",
+      "priority_conf": 0.349,
+      "department_true": "Billing",
+      "department_pred": "Sales",
+      "department_conf": 0.672,
+      "mis_priority": true,
+      "mis_department": true
+    },
+    {
+      "title": "Account access",
+      "priority_true": "High",
+      "priority_pred": "Medium",
+      "priority_conf": 0.399,
+      "department_true": "Tech Support",
+      "department_pred": "Billing",
+      "department_conf": 0.65,
+      "mis_priority": true,
+      "mis_department": true
+    },
+    {
+      "title": "Product setup",
+      "priority_true": "Urgent",
+      "priority_pred": "Medium",
+      "priority_conf": 0.399,
+      "department_true": "Sales",
+      "department_pred": "Billing",
+      "department_conf": 0.607,
+      "mis_priority": true,
+      "mis_department": true
+    },
+    {
+      "title": "Product compatibility",
+      "priority_true": "Urgent",
+      "priority_pred": "Low",
+      "priority_conf": 0.319,
+      "department_true": "Billing",
+      "department_pred": "Sales",
+      "department_conf": 0.637,
+      "mis_priority": true,
+      "mis_department": true
+    },
+    {
+      "title": "Delivery problem",
+      "priority_true": "High",
+      "priority_pred": "Urgent",
+      "priority_conf": 0.258,
+      "department_true": "Billing",
+      "department_pred": "Sales",
+      "department_conf": 0.618,
+      "mis_priority": true,
+      "mis_department": true
+    },
+    {
+      "title": "Software bug",
+      "priority_true": "Medium",
+      "priority_pred": "Medium",
+      "priority_conf": 0.392,
+      "department_true": "Sales",
+      "department_pred": "Billing",
+      "department_conf": 0.606,
+      "mis_priority": false,
+      "mis_department": true
+    },
+    {
+      "title": "Data loss",
+      "priority_true": "High",
+      "priority_pred": "Urgent",
+      "priority_conf": 0.301,
+      "department_true": "Billing",
+      "department_pred": "Tech Support",
+      "department_conf": 0.601,
+      "mis_priority": true,
+      "mis_department": true
+    },
+    {
+      "title": "Cancellation request",
+      "priority_true": "Urgent",
+      "priority_pred": "Low",
+      "priority_conf": 0.284,
+      "department_true": "Billing",
+      "department_pred": "Sales",
+      "department_conf": 0.636,
+      "mis_priority": true,
+      "mis_department": true
+    }
+  ]
+}

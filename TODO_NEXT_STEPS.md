@@ -15,9 +15,10 @@ Legend:  Priority: (🔥 High, 🚀 Medium, 🧪 Low)  Effort: (S / M / L)
    - Added `reports/baseline_model_v1.0.3.md` summarizing metrics, discrepancies, and recommendations. Commit: abbc5b1.
 
 ## Tier 1 – Model Performance
-- [ ] Priority Feature Engineering (🔥, M)
-   - Add escalation keyword lexicon tokens; textual ratio features (caps %, digit count, punctuation density).
-   - Goal: +0.02 absolute macro F1 on priority (validation).
+- [x] Priority Feature Engineering (🔥, M)
+   - Added engineered keyword + structural tokens behind `--priority-extra` (v1.0.4). Artifacts: `models/v1.0.4/*`.
+   - Result: Priority macro F1 (val) 0.2436 -> 0.2402 (Δ -0.0034); holdout 0.2662 -> 0.2648 (Δ -0.0014). No uplift; retain for now pending interaction pruning/algo search.
+   - Next: evaluate during Algorithm Comparison; consider removing low-signal structural tokens if no gain.
 - [ ] Department Noise Audit (🚀, S)
    - Evaluate impact of removing/keeping `__product_` tokens; prune if not helping.
 - [ ] Algorithm Comparison (🔥, M)
