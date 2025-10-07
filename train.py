@@ -106,6 +106,15 @@ def train_model(
             shuffle=True,
             stratify=df_work['priority'] if 'priority' in df_work else None
         )
+        # Persist indices for reproducibility (relative to original df index)
+        train_indices_path = Path(models_dir) / f"v{settings.MODEL_VERSION}" / "train_indices.txt"
+        val_indices_path = Path(models_dir) / f"v{settings.MODEL_VERSION}" / "val_indices.txt"
+        try:
+            os.makedirs(train_indices_path.parent, exist_ok=True)
+            train_df.index.to_series().to_csv(train_indices_path, index=False, header=False)
+            val_df.index.to_series().to_csv(val_indices_path, index=False, header=False)
+        except Exception as e:
+            print(f"WARNING: Failed to persist split indices: {e}")
     else:
         train_df, val_df = df_work, None
 

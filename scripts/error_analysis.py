@@ -118,17 +118,35 @@ def main():
         raise SystemExit(f"Data not found: {data_path}")
     df = pd.read_csv(data_path)
 
-    # Recreate split (mirrors train.py stratification by priority)
-    from sklearn.model_selection import train_test_split
-    _, val_df = train_test_split(
-        df,
-        test_size=args.val_frac,
-        random_state=args.seed,
-        shuffle=True,
-        stratify=df['priority'] if 'priority' in df else None
-    )
-
+    # Attempt to load persisted validation indices
     version_dir = Path(args.models_dir) / f"v{args.version}"
+    train_idx_file = version_dir / "train_indices.txt"
+    val_idx_file = version_dir / "val_indices.txt"
+    if val_idx_file.exists():
+        try:
+            val_indices = [int(x.strip()) for x in val_idx_file.read_text().splitlines() if x.strip()]
+            val_df = df.loc[val_indices]
+            print(f"Loaded {len(val_df)} validation rows from persisted indices.")
+        except Exception as e:
+            print(f"WARNING: Failed to load validation indices ({e}); regenerating split.")
+            from sklearn.model_selection import train_test_split
+            _, val_df = train_test_split(
+                df,
+                test_size=args.val_frac,
+                random_state=args.seed,
+                shuffle=True,
+                stratify=df['priority'] if 'priority' in df else None
+            )
+    else:
+        print("WARNING: val_indices.txt not found; regenerating split (metrics may differ).")
+        from sklearn.model_selection import train_test_split
+        _, val_df = train_test_split(
+            df,
+            test_size=args.val_frac,
+            random_state=args.seed,
+            shuffle=True,
+            stratify=df['priority'] if 'priority' in df else None
+        )
     if not version_dir.exists():
         raise SystemExit(f"Model version directory not found: {version_dir}")
 
