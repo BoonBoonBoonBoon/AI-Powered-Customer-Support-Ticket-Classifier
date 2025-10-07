@@ -84,8 +84,8 @@ Legend:  Priority: (🔥 High, 🚀 Medium, 🧪 Low)  Effort: (S / M / L)
    - Weight misclassification of Urgent more; calibrate recall.
 
 ## Documentation
-- [ ] MODEL_CARD.md (🚀, S)
-   - Intended use, limitations, metrics, ethical notes.
+- [x] MODEL_CARD.md (🚀, S)
+   - Added `MODEL_CARD.md` (v1.0.5) including calibration metrics, data profile, limitations, and regression warning. Future update pending improved v1.0.6 metrics.
 - [ ] Operational Playbook (🧪, S)
    - Roll, rollback, evaluate, promote.
 - [ ] Data Lineage Section (🚀, S)
