@@ -1,0 +1,145 @@
+{
+  "priority": {
+    "report": {
+      "High": {
+        "precision": 0.6047619047619047,
+        "recall": 0.6091127098321343,
+        "f1-score": 0.6069295101553166,
+        "support": 417.0
+      },
+      "Low": {
+        "precision": 0.6114942528735632,
+        "recall": 0.6440677966101694,
+        "f1-score": 0.6273584905660378,
+        "support": 413.0
+      },
+      "Medium": {
+        "precision": 0.675609756097561,
+        "recall": 0.632420091324201,
+        "f1-score": 0.6533018867924528,
+        "support": 438.0
+      },
+      "Urgent": {
+        "precision": 0.655011655011655,
+        "recall": 0.6596244131455399,
+        "f1-score": 0.6573099415204678,
+        "support": 426.0
+      },
+      "accuracy": 0.6363636363636364,
+      "macro avg": {
+        "precision": 0.636719392186171,
+        "recall": 0.6363062527280111,
+        "f1-score": 0.6362249572585688,
+        "support": 1694.0
+      },
+      "weighted avg": {
+        "precision": 0.6373582520237265,
+        "recall": 0.6363636363636364,
+        "f1-score": 0.6365696126572339,
+        "support": 1694.0
+      }
+    },
+    "confusion_matrix": [
+      [
+        254,
+        71,
+        45,
+        47
+      ],
+      [
+        60,
+        266,
+        43,
+        44
+      ],
+      [
+        60,
+        44,
+        277,
+        57
+      ],
+      [
+        46,
+        54,
+        45,
+        281
+      ]
+    ]
+  },
+  "department": {
+    "report": {
+      "Billing": {
+        "precision": 0.8825806451612903,
+        "recall": 0.6705882352941176,
+        "f1-score": 0.762116991643454,
+        "support": 1020.0
+      },
+      "Sales": {
+        "precision": 0.5648351648351648,
+        "recall": 0.7717717717717718,
+        "f1-score": 0.6522842639593909,
+        "support": 333.0
+      },
+      "Tech Support": {
+        "precision": 0.5474137931034483,
+        "recall": 0.7448680351906158,
+        "f1-score": 0.631055900621118,
+        "support": 341.0
+      },
+      "accuracy": 0.70543093270366,
+      "macro avg": {
+        "precision": 0.6649432010333012,
+        "recall": 0.7290760140855017,
+        "f1-score": 0.6818190520746543,
+        "support": 1694.0
+      },
+      "weighted avg": {
+        "precision": 0.7526508095648772,
+        "recall": 0.70543093270366,
+        "f1-score": 0.7141440693545463,
+        "support": 1694.0
+      }
+    },
+    "confusion_matrix": [
+      [
+        684,
+        163,
+        173
+      ],
+      [
+        39,
+        257,
+        37
+      ],
+      [
+        52,
+        35,
+        254
+      ]
+    ]
+  },
+  "high_conf_misclassifications": [
+    {
+      "title": "Hardware issue",
+      "priority_true": "Medium",
+      "priority_pred": "Medium",
+      "priority_conf": 0.352,
+      "department_true": "Billing",
+      "department_pred": "Sales",
+      "department_conf": 0.616,
+      "mis_priority": false,
+      "mis_department": true
+    },
+    {
+      "title": "Software bug",
+      "priority_true": "Low",
+      "priority_pred": "Low",
+      "priority_conf": 0.318,
+      "department_true": "Billing",
+      "department_pred": "Sales",
+      "department_conf": 0.606,
+      "mis_priority": false,
+      "mis_department": true
+    }
+  ]
+}
