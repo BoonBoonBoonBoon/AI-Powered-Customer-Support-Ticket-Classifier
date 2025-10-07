@@ -158,10 +158,38 @@ def train_model(
         y_true_department = val_df['department'].tolist()
         pred_priority = []
         pred_department = []
+        pr_probs_all = []
+        dep_probs_all = []
         for _, row in val_df.iterrows():
-            p, d, _, _ = classifier.predict(row['title'], row['description'])
+            p, d, p_conf, d_conf = classifier.predict(row['title'], row['description'])
             pred_priority.append(p)
             pred_department.append(d)
+            # Recompute full probability distributions using underlying models for calibration metrics
+            # Access vectorizers directly (already loaded in classifier bundles)
+            from app.models.classifier import _length_bucket  # local import safe
+            # We reconstruct combined texts similarly to predict logic for probability arrays
+            title_p = classifier._preprocess(row['title'])
+            desc_p = classifier._preprocess(row['description'])
+            combined_priority = f"title: {title_p}\nbody: {desc_p}".strip()
+            if classifier.enable_priority_extra:
+                extra_tokens = classifier._priority_extra_tokens(title_p, desc_p)
+                if extra_tokens:
+                    combined_priority = f"{combined_priority} {' '.join(extra_tokens)}"
+            if classifier.augment_length_buckets:
+                combined_priority = f"{combined_priority} {_length_bucket(len(combined_priority.split()))}"
+            Xp = classifier.priority_bundle.vectorizer.transform([combined_priority])  # type: ignore
+            pr_probs_all.append(classifier.priority_bundle.model.predict_proba(Xp)[0])  # type: ignore
+            dep_text = desc_p
+            if classifier.department_exclude_patterns:
+                import re as _re
+                for pattern in classifier.department_exclude_patterns:
+                    dep_text = _re.sub(pattern, " ", dep_text)
+                dep_text = _re.sub(r"\s+", " ", dep_text).strip()
+            combined_dep = f"title: {title_p}\nbody: {dep_text}".strip()
+            if classifier.augment_length_buckets:
+                combined_dep = f"{combined_dep} {_length_bucket(len(combined_dep.split()))}"
+            Xd = classifier.department_bundle.vectorizer.transform([combined_dep])  # type: ignore
+            dep_probs_all.append(classifier.department_bundle.model.predict_proba(Xd)[0])  # type: ignore
 
         pr_report = classification_report(y_true_priority, pred_priority, output_dict=True)
         dep_report = classification_report(y_true_department, pred_department, output_dict=True)
@@ -190,6 +218,62 @@ def train_model(
         with open(os.path.join(version_dir, 'metrics.json'), 'w', encoding='utf-8') as f:
             json.dump(metrics, f, indent=2)
         print("Validation metrics written to metrics.json")
+
+        # Calibration / Brier metrics (multiclass): mean over samples of sum_k (y_k - p_k)^2
+        try:
+            import numpy as _np
+            from collections import defaultdict as _dd
+            def multiclass_brier(probs, true_labels, classes):
+                class_index = {c:i for i,c in enumerate(classes)}
+                total = 0.0
+                for prob, true in zip(probs, true_labels):
+                    y = [0.0]*len(classes)
+                    y[class_index[true]] = 1.0
+                    total += sum((y_i - p_i)**2 for y_i,p_i in zip(y, prob))
+                return total/len(true_labels)
+            pr_classes = list(metrics['priority']['report'].keys())
+            pr_classes = [c for c in pr_classes if c not in ('accuracy','macro avg','weighted avg')]
+            dep_classes = list(metrics['department']['report'].keys())
+            dep_classes = [c for c in dep_classes if c not in ('accuracy','macro avg','weighted avg')]
+            brier_priority = multiclass_brier(pr_probs_all, y_true_priority, pr_classes)
+            brier_department = multiclass_brier(dep_probs_all, y_true_department, dep_classes)
+            # Reliability bins (top-class confidence vs empirical accuracy)
+            def reliability(probs, true_labels, classes, bins=10):
+                class_index = {c:i for i,c in enumerate(classes)}
+                buckets = [ _dd(int) for _ in range(bins) ]
+                stats = [ {'bin': i, 'count':0, 'avg_conf':0.0, 'accuracy':0.0} for i in range(bins)]
+                for prob, true in zip(probs, true_labels):
+                    top_idx = int(_np.argmax(prob))
+                    top_label = classes[top_idx]
+                    conf = float(prob[top_idx])
+                    b = min(bins-1, int(conf * bins))
+                    stats[b]['count'] += 1
+                    stats[b].setdefault('conf_sum',0.0); stats[b]['conf_sum'] += conf
+                    stats[b].setdefault('correct',0); stats[b]['correct'] += int(top_label == true)
+                for s in stats:
+                    if s['count'] > 0:
+                        s['avg_conf'] = s['conf_sum']/s['count']
+                        s['accuracy'] = s['correct']/s['count']
+                        s.pop('conf_sum', None); s.pop('correct', None)
+                return stats
+            reliability_priority = reliability(pr_probs_all, y_true_priority, pr_classes)
+            reliability_department = reliability(dep_probs_all, y_true_department, dep_classes)
+            calibration_payload = {
+                'priority': {
+                    'brier_score': brier_priority,
+                    'reliability': reliability_priority
+                },
+                'department': {
+                    'brier_score': brier_department,
+                    'reliability': reliability_department
+                },
+                'calibrated': classifier.calibrate_probabilities
+            }
+            with open(os.path.join(version_dir, 'calibration_metrics.json'), 'w', encoding='utf-8') as cf:
+                json.dump(calibration_payload, cf, indent=2)
+            print("Calibration metrics written to calibration_metrics.json")
+        except Exception as ce:
+            print(f"WARNING: Failed to compute calibration metrics: {ce}")
 
         # Leakage guard: warn if perfect macro F1 with non-trivial support
         for target in ("priority", "department"):
@@ -226,6 +310,7 @@ def train_model(
         'priority_C': priority_C,
         'department_C': department_C,
         'calibrate_probabilities': calibrate,
+        'calibration_metrics_file': 'calibration_metrics.json' if metrics else None,
     }
     with open(os.path.join(version_dir, 'model_metadata.json'), 'w', encoding='utf-8') as f:
         json.dump(metadata, f, indent=2)

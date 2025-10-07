@@ -1,0 +1,133 @@
+{
+  "priority": {
+    "brier_score": 0.7497498748731942,
+    "reliability": [
+      {
+        "bin": 0,
+        "count": 0,
+        "avg_conf": 0.0,
+        "accuracy": 0.0
+      },
+      {
+        "bin": 1,
+        "count": 0,
+        "avg_conf": 0.0,
+        "accuracy": 0.0
+      },
+      {
+        "bin": 2,
+        "count": 1440,
+        "avg_conf": 0.2597106445007082,
+        "accuracy": 0.2534722222222222
+      },
+      {
+        "bin": 3,
+        "count": 0,
+        "avg_conf": 0.0,
+        "accuracy": 0.0
+      },
+      {
+        "bin": 4,
+        "count": 0,
+        "avg_conf": 0.0,
+        "accuracy": 0.0
+      },
+      {
+        "bin": 5,
+        "count": 0,
+        "avg_conf": 0.0,
+        "accuracy": 0.0
+      },
+      {
+        "bin": 6,
+        "count": 0,
+        "avg_conf": 0.0,
+        "accuracy": 0.0
+      },
+      {
+        "bin": 7,
+        "count": 0,
+        "avg_conf": 0.0,
+        "accuracy": 0.0
+      },
+      {
+        "bin": 8,
+        "count": 0,
+        "avg_conf": 0.0,
+        "accuracy": 0.0
+      },
+      {
+        "bin": 9,
+        "count": 0,
+        "avg_conf": 0.0,
+        "accuracy": 0.0
+      }
+    ]
+  },
+  "department": {
+    "brier_score": 0.5462898300734662,
+    "reliability": [
+      {
+        "bin": 0,
+        "count": 0,
+        "avg_conf": 0.0,
+        "accuracy": 0.0
+      },
+      {
+        "bin": 1,
+        "count": 0,
+        "avg_conf": 0.0,
+        "accuracy": 0.0
+      },
+      {
+        "bin": 2,
+        "count": 0,
+        "avg_conf": 0.0,
+        "accuracy": 0.0
+      },
+      {
+        "bin": 3,
+        "count": 0,
+        "avg_conf": 0.0,
+        "accuracy": 0.0
+      },
+      {
+        "bin": 4,
+        "count": 0,
+        "avg_conf": 0.0,
+        "accuracy": 0.0
+      },
+      {
+        "bin": 5,
+        "count": 1246,
+        "avg_conf": 0.5966762676040099,
+        "accuracy": 0.6195826645264848
+      },
+      {
+        "bin": 6,
+        "count": 194,
+        "avg_conf": 0.601096829068574,
+        "accuracy": 0.6030927835051546
+      },
+      {
+        "bin": 7,
+        "count": 0,
+        "avg_conf": 0.0,
+        "accuracy": 0.0
+      },
+      {
+        "bin": 8,
+        "count": 0,
+        "avg_conf": 0.0,
+        "accuracy": 0.0
+      },
+      {
+        "bin": 9,
+        "count": 0,
+        "avg_conf": 0.0,
+        "accuracy": 0.0
+      }
+    ]
+  },
+  "calibrated": true
+}

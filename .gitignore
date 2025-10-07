@@ -14,6 +14,7 @@ models/*
 !models/**/metrics.json
 !models/**/holdout_metrics.json
 !models/**/classifier_config.json
+!models/**/calibration_metrics.json
 *.pkl
 *.joblib
 
