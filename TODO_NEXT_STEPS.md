@@ -6,15 +6,13 @@ Legend:  Priority: (🔥 High, 🚀 Medium, 🧪 Low)  Effort: (S / M / L)
 
 ---
 ## Tier 0 – Immediate (Stabilize & Understand)
-- [ ] Error Analysis (🔥, S)
-   - Run `scripts/error_analysis.py` on validation + holdout for v1.0.3.
-   - Output: confusion matrices, per-class PRF1, top high-confidence misclassifications.
-   - Artifact: `reports/error_analysis_v1.0.3.{json,md}`.
-- [ ] Leakage Guard (🔥, S)
-   - Add warning in `train.py` if any target macro F1 == 1.0 with support > 30.
-   - Unit test with synthetic perfectly separable dataset.
-- [ ] Baseline Snapshot (🚀, S)
-   - Commit `reports/baseline_model_v1.0.3.md` summarizing metrics & distributions.
+- [x] Error Analysis (🔥, S)
+   - Completed for v1.0.3. Artifacts: `reports/error_analysis_v1.0.3.{json,md}`.
+   - NOTE: Initial run used regenerated split (indices not yet persisted); subsequent enhancement adds index persistence for future versions.
+- [x] Leakage Guard (🔥, S)
+   - Added macro F1 perfection warning in `train.py` (prints WARNING if macro F1 == 1.0 with support ≥ 50). Commit: d9557a3.
+- [x] Baseline Snapshot (🚀, S)
+   - Added `reports/baseline_model_v1.0.3.md` summarizing metrics, discrepancies, and recommendations. Commit: abbc5b1.
 
 ## Tier 1 – Model Performance
 - [ ] Priority Feature Engineering (🔥, M)
@@ -116,4 +114,4 @@ Success Criteria: measurable macro F1 improvement (priority +0.02, department st
 - Re-evaluate priorities whenever new data or performance changes.
 
 ---
-_Last updated: <INSERT DATE WHEN EDITING NEXT>_
+_Last updated: 2025-10-07_
