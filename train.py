@@ -40,11 +40,14 @@ def train_model(
     department_exclude_regex: list[str] | None = None,
     priority_extra: bool = False,
     priority_interactions: bool = False,
+    priority_char: bool = False,
+    department_char: bool = False,
     priority_C: float = 1.0,
     department_C: float = 1.0,
     calibrate: bool = False,
     min_recall_priority: float | None = None,
     min_recall_department: float | None = None,
+    priority_cost_weights: dict | None = None,
 ):
     """Train the ticket classifier with the provided dataset and produce metrics/metadata.
 
@@ -143,9 +146,12 @@ def train_model(
         department_exclude_regexes=department_exclude_regex,
         enable_priority_extra=priority_extra,
         enable_priority_interactions=priority_interactions,
+        enable_priority_char=priority_char,
+        enable_department_char=department_char,
         priority_C=priority_C,
         department_C=department_C,
         calibrate_probabilities=calibrate,
+        priority_cost_weights=priority_cost_weights,
     )
     
     # Versioned model directory
@@ -333,10 +339,13 @@ def train_model(
         'department_exclude_regex': department_exclude_regex,
         'priority_extra': priority_extra,
     'priority_interactions': priority_interactions,
+    'priority_char': priority_char,
+    'department_char': department_char,
         'priority_C': priority_C,
         'department_C': department_C,
         'calibrate_probabilities': calibrate,
         'calibration_metrics_file': 'calibration_metrics.json' if metrics else None,
+    'priority_cost_weights': priority_cost_weights,
         # Drift / data profile telemetry (v1.0.6+)
         'avg_description_length_tokens': float(train_df['description'].astype(str).str.split().map(len).mean()),
         'priority_vocab_size': int(getattr(classifier.priority_bundle.vectorizer, 'vocabulary_', {}) and len(classifier.priority_bundle.vectorizer.vocabulary_)),  # type: ignore
@@ -443,6 +452,22 @@ def main():
         help="Enable composite interaction tokens for priority (e.g., CSAT + urgency)"
     )
     parser.add_argument(
+        "--priority-char-ngrams",
+        action="store_true",
+        help="Enable character 3-5 gram TF-IDF features for priority model"
+    )
+    parser.add_argument(
+        "--department-char-ngrams",
+        action="store_true",
+        help="Enable character 3-5 gram TF-IDF features for department model"
+    )
+    parser.add_argument(
+        "--priority-cost-weights",
+        type=str,
+        default=None,
+        help="JSON mapping of priority label to weight, e.g. '{\"Urgent\":1.3,\"High\":1.1}'"
+    )
+    parser.add_argument(
         "--priority-C",
         type=float,
         default=1.0,
@@ -487,11 +512,14 @@ def main():
             department_exclude_regex=args.department_exclude_regex or None,
             priority_extra=args.priority_extra,
             priority_interactions=args.priority_interactions,
+            priority_char=args.priority_char_ngrams,
+            department_char=args.department_char_ngrams,
             priority_C=args.priority_C,
             department_C=args.department_C,
             calibrate=args.calibrate,
             min_recall_priority=args.min_recall_priority,
             min_recall_department=args.min_recall_department,
+            priority_cost_weights=(json.loads(args.priority_cost_weights) if args.priority_cost_weights else None),
         )
     except Exception as e:
         print(f"Error during training: {e}")

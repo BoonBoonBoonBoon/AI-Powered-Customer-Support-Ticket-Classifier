@@ -31,6 +31,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
 from sklearn.preprocessing import LabelEncoder
 import joblib
+from scipy import sparse
 
 
 PRIORITY_LEVELS = ["Urgent", "High", "Medium", "Low"]
@@ -68,6 +69,15 @@ class TicketClassifier:
         self.enable_priority_extra: bool = False
         # Enable interaction composite tokens for priority
         self.enable_priority_interactions: bool = False
+        # Optional character n-gram vectorizers (disabled by default)
+        self.enable_priority_char: bool = False
+        self.enable_department_char: bool = False
+        self.priority_char_vectorizer: Optional[TfidfVectorizer] = None
+        self.department_char_vectorizer: Optional[TfidfVectorizer] = None
+        self.priority_char_ngram_range = (3,5)
+        self.department_char_ngram_range = (3,5)
+        # Priority sample weighting (cost-sensitive emphasis per class)
+        self.priority_class_weights_override: Optional[dict[str,float]] = None
         # Per-target hyperparameters (currently only C for LogisticRegression)
         self.priority_C: float = 1.0
         self.department_C: float = 1.0
@@ -86,6 +96,11 @@ class TicketClassifier:
         department_C: float = 1.0,
         calibrate_probabilities: bool = False,
         enable_priority_interactions: bool = False,
+        enable_priority_char: bool = False,
+        enable_department_char: bool = False,
+        priority_char_ngram_range: tuple[int,int] = (3,5),
+        department_char_ngram_range: tuple[int,int] = (3,5),
+        priority_cost_weights: Optional[dict[str,float]] = None,
     ) -> None:
         self.class_weight = class_weight
         self.augment_length_buckets = augment_length_buckets
@@ -93,6 +108,11 @@ class TicketClassifier:
             self.department_exclude_patterns = department_exclude_regexes
         self.enable_priority_extra = enable_priority_extra
         self.enable_priority_interactions = enable_priority_interactions
+        self.enable_priority_char = enable_priority_char
+        self.enable_department_char = enable_department_char
+        self.priority_char_ngram_range = priority_char_ngram_range
+        self.department_char_ngram_range = department_char_ngram_range
+        self.priority_class_weights_override = priority_cost_weights
         self.priority_C = priority_C
         self.department_C = department_C
         self.calibrate_probabilities = calibrate_probabilities
@@ -140,6 +160,17 @@ class TicketClassifier:
         y_priority = pr_encoder.fit_transform(df["priority"].tolist())
         pr_vectorizer = TfidfVectorizer(ngram_range=(1, 2), min_df=2)
         X_priority = pr_vectorizer.fit_transform(priority_texts)
+        if self.enable_priority_char:
+            self.priority_char_vectorizer = TfidfVectorizer(analyzer='char', ngram_range=self.priority_char_ngram_range, min_df=5)
+            Xp_char = self.priority_char_vectorizer.fit_transform(priority_texts)
+            X_priority = sparse.hstack([X_priority, Xp_char], format='csr')
+        sample_weight = None
+        if self.priority_class_weights_override:
+            # map original string labels to weight
+            sw = []
+            for lbl in df['priority'].tolist():
+                sw.append(self.priority_class_weights_override.get(str(lbl), 1.0))
+            sample_weight = np.array(sw)
         pr_base = LogisticRegression(
             max_iter=200,
             class_weight=class_weight if class_weight == "balanced" else None,
@@ -150,13 +181,20 @@ class TicketClassifier:
             pr_model = CalibratedClassifierCV(pr_base, method="sigmoid", cv=3)
         else:
             pr_model = pr_base
-        pr_model.fit(X_priority, y_priority)
+        if sample_weight is not None and not self.calibrate_probabilities:
+            pr_model.fit(X_priority, y_priority, sample_weight=sample_weight)
+        else:
+            pr_model.fit(X_priority, y_priority)
 
         # Department model ---------------------------------------------------
         dep_encoder = LabelEncoder()
         y_department = dep_encoder.fit_transform(df["department"].tolist())
         dep_vectorizer = TfidfVectorizer(ngram_range=(1, 2), min_df=2)
         X_department = dep_vectorizer.fit_transform(department_texts)
+        if self.enable_department_char:
+            self.department_char_vectorizer = TfidfVectorizer(analyzer='char', ngram_range=self.department_char_ngram_range, min_df=5)
+            Xd_char = self.department_char_vectorizer.fit_transform(department_texts)
+            X_department = sparse.hstack([X_department, Xd_char], format='csr')
         dep_base = LogisticRegression(
             max_iter=200,
             class_weight=class_weight if class_weight == "balanced" else None,
@@ -193,6 +231,9 @@ class TicketClassifier:
 
         # Priority
         Xp = self.priority_bundle.vectorizer.transform([combined_priority])
+        if self.enable_priority_char and self.priority_char_vectorizer is not None:
+            Xp_char = self.priority_char_vectorizer.transform([combined_priority])
+            Xp = sparse.hstack([Xp, Xp_char], format='csr')
         pr_probs = self.priority_bundle.model.predict_proba(Xp)[0]
         pr_idx = int(np.argmax(pr_probs))
         pr_label = self.priority_bundle.label_encoder.inverse_transform([pr_idx])[0]
@@ -206,6 +247,9 @@ class TicketClassifier:
         if self.augment_length_buckets:
             combined_dep = f"{combined_dep} {_length_bucket(len(combined_dep.split()))}"
         Xd = self.department_bundle.vectorizer.transform([combined_dep])
+        if self.enable_department_char and self.department_char_vectorizer is not None:
+            Xd_char = self.department_char_vectorizer.transform([combined_dep])
+            Xd = sparse.hstack([Xd, Xd_char], format='csr')
         dep_probs = self.department_bundle.model.predict_proba(Xd)[0]
         dep_idx = int(np.argmax(dep_probs))
         dep_label = self.department_bundle.label_encoder.inverse_transform([dep_idx])[0]
@@ -231,6 +275,11 @@ class TicketClassifier:
             "department_exclude_patterns": self.department_exclude_patterns,
             "enable_priority_extra": self.enable_priority_extra,
             "enable_priority_interactions": self.enable_priority_interactions,
+            "enable_priority_char": self.enable_priority_char,
+            "enable_department_char": self.enable_department_char,
+            "priority_char_ngram_range": self.priority_char_ngram_range,
+            "department_char_ngram_range": self.department_char_ngram_range,
+            "priority_cost_weights": self.priority_class_weights_override,
             "priority_C": self.priority_C,
             "department_C": self.department_C,
             "calibrate_probabilities": self.calibrate_probabilities,
@@ -260,6 +309,11 @@ class TicketClassifier:
                 self.department_exclude_patterns = cfg.get("department_exclude_patterns", []) or []
                 self.enable_priority_extra = cfg.get("enable_priority_extra", False)
                 self.enable_priority_interactions = cfg.get("enable_priority_interactions", False)
+                self.enable_priority_char = cfg.get("enable_priority_char", False)
+                self.enable_department_char = cfg.get("enable_department_char", False)
+                self.priority_char_ngram_range = tuple(cfg.get("priority_char_ngram_range", (3,5)))
+                self.department_char_ngram_range = tuple(cfg.get("department_char_ngram_range", (3,5)))
+                self.priority_class_weights_override = cfg.get("priority_cost_weights") or None
                 self.priority_C = cfg.get("priority_C", 1.0)
                 self.department_C = cfg.get("department_C", 1.0)
                 self.calibrate_probabilities = cfg.get("calibrate_probabilities", False)
