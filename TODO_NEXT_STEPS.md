@@ -29,16 +29,24 @@ Legend:  Priority: (🔥 High, 🚀 Medium, 🧪 Low)  Effort: (S / M / L)
    - Best department macro F1: 0.3335 (LogReg C=2.0 balanced) vs 0.3267 (+0.0068).
    - Engineered priority tokens underperformed; candidate for pruning/refinement after calibration.
 - [x] Probability Calibration (🚀, M)
-   - Added `--calibrate` flag; wraps LogisticRegression in `CalibratedClassifierCV (sigmoid, cv=3)`.
-   - Config persisted in `classifier_config.json` (`calibrate_probabilities=true/false`). Brier score storage still TODO.
+    - Added `--calibrate` flag; wraps LogisticRegression in `CalibratedClassifierCV (sigmoid, cv=3)`.
+    - Config persisted in `classifier_config.json`; brier & reliability captured in `calibration_metrics.json`.
+    - v1.0.5 regression triggered rollback in v1.0.6; calibration now disabled pending safer reintroduction criteria.
+ - [x] Per-Class Recall Gate (🔥, S)
+    - Implemented in `train.py` (v1.0.6). Threshold used: 0.05. All classes passed (lowest recall ≈0.23).
+ - [x] Regression Remediation (🔥, S)
+    - v1.0.6 removed calibration; restored class diversity. Priority macro F1 +0.091 vs v1.0.5; department +0.063.
 
 ## Tier 2 – Data Quality & Enrichment
-- [ ] Hard Negative Mining (🚀, M)
-   - Collect false positives/negatives ≥ confidence 0.60; store in `data/hard_negatives.csv`.
-- [ ] De-duplication Pass (🚀, S)
-   - MinHash / Jaccard to remove near duplicates; log % removed.
-- [ ] Interaction Tokens (🧪, M)
-   - Add composite tokens (e.g., `__csat_low__+urgent`). Include only if macro F1 improves ≥ 0.01.
+- [x] Hard Negative Mining (🚀, M)
+   - Script `scripts/hard_negative_mining.py` added; collects high-confidence (≥0.60) misclassifications into `data/hard_negatives.csv`.
+   - Next: integrate into periodic evaluation pipeline.
+- [x] De-duplication Pass (🚀, S)
+   - Script `scripts/deduplicate_dataset.py` added (Jaccard over 3-gram shingles) with report JSON.
+   - Next: run & compare performance on deduplicated corpus.
+- [x] Interaction Tokens (🧪, M)
+   - Added `--priority-interactions` flag; composite tokens generation in classifier.
+   - Next: train A/B (v1.0.7) with interactions to measure macro F1 delta (target +0.01 priority without hurting department >0.005).
 
 ## Tier 3 – Evaluation & Monitoring
 - [x] Macro-F1 CI Gating (🚀, S)
@@ -85,7 +93,9 @@ Legend:  Priority: (🔥 High, 🚀 Medium, 🧪 Low)  Effort: (S / M / L)
 
 ## Documentation
 - [x] MODEL_CARD.md (🚀, S)
-   - Added `MODEL_CARD.md` (v1.0.5) including calibration metrics, data profile, limitations, and regression warning. Future update pending improved v1.0.6 metrics.
+   - Updated to v1.0.6 with remediation summary, delta table, recall gate description.
+ - [ ] Operational Playbook (🧪, S)
+   - Add promote/rollback workflow referencing recall & macro F1 gates.
 - [ ] Operational Playbook (🧪, S)
    - Roll, rollback, evaluate, promote.
 - [ ] Data Lineage Section (🚀, S)
@@ -121,4 +131,4 @@ Success Criteria: measurable macro F1 improvement (priority +0.02, department st
 - Re-evaluate priorities whenever new data or performance changes.
 
 ---
-_Last updated: 2025-10-07_
+_Last updated: 2025-10-07 (post v1.0.6)_

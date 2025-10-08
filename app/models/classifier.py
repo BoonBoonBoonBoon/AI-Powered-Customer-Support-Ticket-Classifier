@@ -66,6 +66,8 @@ class TicketClassifier:
         self.department_exclude_patterns: list[str] = []
         # Enable extra engineered tokens for priority model only
         self.enable_priority_extra: bool = False
+        # Enable interaction composite tokens for priority
+        self.enable_priority_interactions: bool = False
         # Per-target hyperparameters (currently only C for LogisticRegression)
         self.priority_C: float = 1.0
         self.department_C: float = 1.0
@@ -83,12 +85,14 @@ class TicketClassifier:
         priority_C: float = 1.0,
         department_C: float = 1.0,
         calibrate_probabilities: bool = False,
+        enable_priority_interactions: bool = False,
     ) -> None:
         self.class_weight = class_weight
         self.augment_length_buckets = augment_length_buckets
         if department_exclude_regexes:
             self.department_exclude_patterns = department_exclude_regexes
         self.enable_priority_extra = enable_priority_extra
+        self.enable_priority_interactions = enable_priority_interactions
         self.priority_C = priority_C
         self.department_C = department_C
         self.calibrate_probabilities = calibrate_probabilities
@@ -110,6 +114,10 @@ class TicketClassifier:
                 extra_tokens = self._priority_extra_tokens(title, desc_original)
                 if extra_tokens:
                     combined_priority = f"{combined_priority} {' '.join(extra_tokens)}"
+            if self.enable_priority_interactions:
+                inter_tokens = self._priority_interaction_tokens(title, desc_original)
+                if inter_tokens:
+                    combined_priority = f"{combined_priority} {' '.join(inter_tokens)}"
             if augment_length_buckets:
                 bucket = _length_bucket(len(combined_priority.split()))
                 combined_priority = f"{combined_priority} {bucket}"
@@ -176,6 +184,10 @@ class TicketClassifier:
             extra_tokens = self._priority_extra_tokens(title_p, desc_p_original)
             if extra_tokens:
                 combined_priority = f"{combined_priority} {' '.join(extra_tokens)}"
+        if self.enable_priority_interactions:
+            inter_tokens = self._priority_interaction_tokens(title_p, desc_p_original)
+            if inter_tokens:
+                combined_priority = f"{combined_priority} {' '.join(inter_tokens)}"
         if self.augment_length_buckets:
             combined_priority = f"{combined_priority} {_length_bucket(len(combined_priority.split()))}"
 
@@ -218,6 +230,7 @@ class TicketClassifier:
             "model_type": "sklearn_logreg_tfidf",
             "department_exclude_patterns": self.department_exclude_patterns,
             "enable_priority_extra": self.enable_priority_extra,
+            "enable_priority_interactions": self.enable_priority_interactions,
             "priority_C": self.priority_C,
             "department_C": self.department_C,
             "calibrate_probabilities": self.calibrate_probabilities,
@@ -246,6 +259,7 @@ class TicketClassifier:
                 self.augment_length_buckets = cfg.get("augment_length_buckets", False)
                 self.department_exclude_patterns = cfg.get("department_exclude_patterns", []) or []
                 self.enable_priority_extra = cfg.get("enable_priority_extra", False)
+                self.enable_priority_interactions = cfg.get("enable_priority_interactions", False)
                 self.priority_C = cfg.get("priority_C", 1.0)
                 self.department_C = cfg.get("department_C", 1.0)
                 self.calibrate_probabilities = cfg.get("calibrate_probabilities", False)
@@ -300,6 +314,36 @@ class TicketClassifier:
             tokens.append("__STRUCT_MULTI_EXCL__")
         if any(ch.isdigit() for ch in desc):
             tokens.append("__STRUCT_DIGITS__")
+        return tokens
+
+    def _priority_interaction_tokens(self, title: str, desc: str) -> list[str]:
+        """Composite interaction tokens combining enrichment signals + keyword intents.
+
+        Examples:
+          __INT_CSAT_LOW_URGENT__  if low CSAT marker + urgent/outage wording.
+          __INT_BILLING_ESCALATE__ if billing/refund keywords + escalation punctuation.
+          __INT_ACCESS_URGENT__    if access keywords + urgent/outage wording.
+        """
+        text_lower = f"{title} {desc}".lower()
+        tokens: list[str] = []
+        urgent_kw = ["outage", "down", "critical", "severe", "emergency", "unresponsive"]
+        billing_kw = ["invoice", "charged", "billing", "payment", "refund"]
+        access_kw = ["login", "credential", "password", "access", "locked"]
+        refund_kw = ["refund", "chargeback", "reimburs"]
+        def any_kw(words):
+            return any(w in text_lower for w in words)
+        # CSAT low + urgent
+        if "__csat_low__" in text_lower and any_kw(urgent_kw):
+            tokens.append("__INT_CSAT_LOW_URGENT__")
+        # Billing escalation punctuation
+        if any_kw(billing_kw) and text_lower.count("!") >= 2:
+            tokens.append("__INT_BILLING_ESCALATE__")
+        # Refund + urgent
+        if any_kw(refund_kw) and any_kw(urgent_kw):
+            tokens.append("__INT_REFUND_URGENT__")
+        # Access + urgent
+        if any_kw(access_kw) and any_kw(urgent_kw):
+            tokens.append("__INT_ACCESS_URGENT__")
         return tokens
 
 

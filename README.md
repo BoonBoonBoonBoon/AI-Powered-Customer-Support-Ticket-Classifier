@@ -241,6 +241,8 @@ Document results in `load_test.md` (latency, RPS, error rate). Establish baselin
 | v1.0.2 | Pre-leakage fix | 0.244 | 1.000 (leak) | 0.266 | 1.000 (leak) | Department leakage via `__type_*` tokens |
 | v1.0.3 | Leakage excluded (`--department-exclude-regex`) | 0.244 | 0.327 | 0.266 | 0.323 | Realistic dept performance restored |
 | v1.0.4 | Added engineered priority tokens (`--priority-extra`) | 0.240 | 0.327 | 0.265 | 0.265 | No uplift; tokens under review |
+| v1.0.5 | Calibration + per-target C (regressed) | 0.158 | 0.254 | 0.156 | 0.248 | Collapsed predictions (majority) |
+| v1.0.6 | Calibration removed + recall gate | 0.249 | 0.318 | (n/a) | (n/a) | Recovered from collapse; added drift telemetry |
 
 ### Algorithm Comparison (v1.0.4 Split)
 
@@ -251,6 +253,11 @@ Best results (validation):
 * Department: LogisticRegression C=2.0 (balanced) → Macro F1 0.3335
 
 Engineered tokens underperformed across the grid and are slated for pruning or refinement after probability calibration.
+
+v1.0.6 adds:
+* Per-class recall gating (≥0.05) to prevent class collapse.
+* Drift metadata fields (`avg_description_length_tokens`, vocabulary sizes) in `model_metadata.json`.
+* Department noise audit script usage (see `reports/department_noise_audit.md`) revealing remaining enrichment token leakage risk.
 
 Run the comparison:
 ```powershell

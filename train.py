@@ -39,9 +39,12 @@ def train_model(
     min_class_samples: int = 1,
     department_exclude_regex: list[str] | None = None,
     priority_extra: bool = False,
+    priority_interactions: bool = False,
     priority_C: float = 1.0,
     department_C: float = 1.0,
     calibrate: bool = False,
+    min_recall_priority: float | None = None,
+    min_recall_department: float | None = None,
 ):
     """Train the ticket classifier with the provided dataset and produce metrics/metadata.
 
@@ -139,6 +142,7 @@ def train_model(
         augment_length_buckets=augment_length,
         department_exclude_regexes=department_exclude_regex,
         enable_priority_extra=priority_extra,
+        enable_priority_interactions=priority_interactions,
         priority_C=priority_C,
         department_C=department_C,
         calibrate_probabilities=calibrate,
@@ -218,6 +222,27 @@ def train_model(
         with open(os.path.join(version_dir, 'metrics.json'), 'w', encoding='utf-8') as f:
             json.dump(metrics, f, indent=2)
         print("Validation metrics written to metrics.json")
+
+        # Class recall gating
+        def check_recall(metric_block, threshold, target_name):
+            if threshold is None:
+                return True
+            failing = []
+            for cls, vals in metric_block['report'].items():
+                if cls in ('accuracy','macro avg','weighted avg'):
+                    continue
+                r = vals.get('recall', 0.0)
+                if r < threshold:
+                    failing.append((cls, r))
+            if failing:
+                print(f"ERROR: {target_name} classes below recall threshold {threshold}: {failing}")
+                return False
+            return True
+        recall_ok = True
+        recall_ok &= check_recall(metrics['priority'], min_recall_priority, 'priority') if 'priority' in locals() else True
+        recall_ok &= check_recall(metrics['department'], min_recall_department, 'department') if 'department' in locals() else True
+        if not recall_ok:
+            raise SystemExit("Training failed recall gate")
 
         # Calibration / Brier metrics (multiclass): mean over samples of sum_k (y_k - p_k)^2
         try:
@@ -307,10 +332,15 @@ def train_model(
         'augment_length_buckets': augment_length,
         'department_exclude_regex': department_exclude_regex,
         'priority_extra': priority_extra,
+    'priority_interactions': priority_interactions,
         'priority_C': priority_C,
         'department_C': department_C,
         'calibrate_probabilities': calibrate,
         'calibration_metrics_file': 'calibration_metrics.json' if metrics else None,
+        # Drift / data profile telemetry (v1.0.6+)
+        'avg_description_length_tokens': float(train_df['description'].astype(str).str.split().map(len).mean()),
+        'priority_vocab_size': int(getattr(classifier.priority_bundle.vectorizer, 'vocabulary_', {}) and len(classifier.priority_bundle.vectorizer.vocabulary_)),  # type: ignore
+        'department_vocab_size': int(getattr(classifier.department_bundle.vectorizer, 'vocabulary_', {}) and len(classifier.department_bundle.vectorizer.vocabulary_)),  # type: ignore
     }
     with open(os.path.join(version_dir, 'model_metadata.json'), 'w', encoding='utf-8') as f:
         json.dump(metadata, f, indent=2)
@@ -408,6 +438,11 @@ def main():
         help="Enable engineered priority-specific feature tokens (keywords, structural ratios)"
     )
     parser.add_argument(
+        "--priority-interactions",
+        action="store_true",
+        help="Enable composite interaction tokens for priority (e.g., CSAT + urgency)"
+    )
+    parser.add_argument(
         "--priority-C",
         type=float,
         default=1.0,
@@ -424,6 +459,20 @@ def main():
         action="store_true",
         help="Apply probability calibration (sigmoid) via CalibratedClassifierCV"
     )
+    parser.add_argument(
+        "--min-recall-priority",
+        type=float,
+        default=None,
+        help="If set, fail training if any priority class recall < this value"
+    )
+    parser.add_argument(
+        "--min-recall-department",
+        type=float,
+        default=None,
+        help="If set, fail training if any department class recall < this value"
+    )
+    # Example usage (next planned run):
+    # python train.py --version v1.0.6 --priority-C 5.0 --department-C 2.0 --department-exclude-regex __type_[a-z0-9_]+ --augment-length --min-recall-priority 0.05 --min-recall-department 0.05 --no-calibrate
     
     args = parser.parse_args()
     
@@ -437,9 +486,12 @@ def main():
             min_class_samples=args.min_class_samples,
             department_exclude_regex=args.department_exclude_regex or None,
             priority_extra=args.priority_extra,
+            priority_interactions=args.priority_interactions,
             priority_C=args.priority_C,
             department_C=args.department_C,
             calibrate=args.calibrate,
+            min_recall_priority=args.min_recall_priority,
+            min_recall_department=args.min_recall_department,
         )
     except Exception as e:
         print(f"Error during training: {e}")

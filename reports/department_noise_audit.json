@@ -1,0 +1,42 @@
+[
+  {
+    "exclude": [],
+    "priority_macro_f1": 0.2431810917548914,
+    "department_macro_f1": 1.0,
+    "department_accuracy": 1.0
+  },
+  {
+    "exclude": [
+      "__product_[a-z0-9_]+"
+    ],
+    "priority_macro_f1": 0.2431810917548914,
+    "department_macro_f1": 1.0,
+    "department_accuracy": 1.0
+  },
+  {
+    "exclude": [
+      "__channel_[a-z0-9_]+"
+    ],
+    "priority_macro_f1": 0.2431810917548914,
+    "department_macro_f1": 1.0,
+    "department_accuracy": 1.0
+  },
+  {
+    "exclude": [
+      "__csat_[a-z0-9_]+"
+    ],
+    "priority_macro_f1": 0.2431810917548914,
+    "department_macro_f1": 1.0,
+    "department_accuracy": 1.0
+  },
+  {
+    "exclude": [
+      "__product_[a-z0-9_]+",
+      "__channel_[a-z0-9_]+",
+      "__csat_[a-z0-9_]+"
+    ],
+    "priority_macro_f1": 0.2431810917548914,
+    "department_macro_f1": 1.0,
+    "department_accuracy": 1.0
+  }
+]
