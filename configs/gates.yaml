@@ -1,0 +1,7 @@
+priority:
+  accuracy_min: 0.50
+  macro_f1_min: 0.45
+  per_class_recall_min: 0.25
+department:
+  accuracy_min: 0.65
+  macro_f1_min: 0.58

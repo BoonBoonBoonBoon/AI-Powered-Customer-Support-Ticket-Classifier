@@ -1,4 +1,7 @@
 from fastapi import FastAPI, HTTPException, Depends
+from fastapi import FastAPI, HTTPException, Depends
+from .models.runtime_loader import ensure_model_ready
+from .models.schemas import HealthResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from contextlib import asynccontextmanager
@@ -129,9 +132,13 @@ async def liveness():
     return HealthResponse(status="alive", message="Service process responsive")
 
 @app.get("/health/ready", response_model=HealthResponse, tags=["health"])
-async def readiness(classifier: TicketClassifier = Depends(get_classifier)):
-    ready = classifier.is_trained if classifier else False
-    return HealthResponse(status="ready" if ready else "not_ready", message="Classifier loaded" if ready else "Classifier not ready")
+def readiness():
+    # Minimal check: ensure registry pointer + manifest + artifacts are accessible locally
+    try:
+        ensure_model_ready("production")
+        return HealthResponse(status="ready", message="Registry and manifest accessible")
+    except Exception as e:
+        return HealthResponse(status="degraded", message=str(e))
 
 @app.get("/health", response_model=HealthResponse)
 async def legacy_health(classifier: TicketClassifier = Depends(get_classifier)):

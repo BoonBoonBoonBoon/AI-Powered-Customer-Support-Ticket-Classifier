@@ -8,15 +8,29 @@ venv/
 env/
 .env
 
-# Ignore large/binary model artifacts (train locally); allow code & metadata
-models/*
+# Ignore large/binary model artifacts by type; allow manifests and metadata
+*.pkl
+*.joblib
+*.pt
+*.onnx
+
 !models/**/model_metadata.json
 !models/**/metrics.json
 !models/**/holdout_metrics.json
 !models/**/classifier_config.json
 !models/**/calibration_metrics.json
-*.pkl
-*.joblib
+!models/**/manifest.json
+!models/**/label_map.json
+!models/registry/*.json
+!models/specs/*.json
+
+# Ignore runtime cache (downloaded weights/tokenizers)
+runtime_cache/
+
+# Hugging Face cache
+cache/
+**/.cache/
+**/.huggingface/
 
 # Ignore raw/enriched data CSVs except explicit small examples
 data/*.csv

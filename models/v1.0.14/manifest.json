@@ -1,0 +1,18 @@
+{
+  "model_id": "sklearn:v1.0.14",
+  "framework": "sklearn",
+  "format": "joblib",
+  "created_at": "2025-10-15T00:00:00Z",
+  "artifacts": {
+    "weights_uri": "file://models/v1.0.14/priority_model.joblib",
+    "label_map_uri": "file://models/v1.0.14/label_map.json",
+    "tokenizer_uri": "",
+    "onnx_uri": ""
+  },
+  "metrics": {
+    "validation": {
+      "priority": {"accuracy": 0.2497, "macro_f1": 0.2491},
+      "department": {"accuracy": 0.3914, "macro_f1": 0.3178}
+    }
+  }
+}

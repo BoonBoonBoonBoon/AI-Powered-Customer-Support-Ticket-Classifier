@@ -1,0 +1,37 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://example.com/model_manifest.schema.json",
+  "title": "Model Manifest",
+  "type": "object",
+  "required": ["model_id", "framework", "format", "created_at", "artifacts", "metrics"],
+  "properties": {
+    "model_id": {"type": "string"},
+    "task": {
+      "type": ["string", "array"],
+      "items": {"type": "string"}
+    },
+    "framework": {"type": "string"},
+    "format": {"type": "string"},
+    "created_at": {"type": "string", "format": "date-time"},
+    "training": {"type": "object"},
+    "artifacts": {
+      "type": "object",
+      "required": ["weights_uri"],
+      "properties": {
+        "weights_uri": {"type": "string"},
+        "tokenizer_uri": {"type": "string"},
+        "onnx_uri": {"type": "string"},
+        "label_map_uri": {"type": "string"}
+      }
+    },
+    "metrics": {
+      "type": "object",
+      "properties": {
+        "validation": {"type": "object"},
+        "holdout": {"type": "object"}
+      }
+    },
+    "drift": {"type": "object"},
+    "security": {"type": "object"}
+  }
+}

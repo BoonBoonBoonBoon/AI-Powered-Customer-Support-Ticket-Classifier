@@ -1,0 +1,4 @@
+{
+  "model_id": "sklearn:v1.0.10",
+  "manifest_uri": "file://models/v1.0.10/manifest.json"
+}

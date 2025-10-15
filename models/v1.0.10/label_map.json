@@ -1,0 +1,4 @@
+{
+  "priority": ["Low", "Medium", "High", "Urgent"],
+  "department": ["Sales", "Billing", "Tech Support"]
+}
