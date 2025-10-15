@@ -1,0 +1,33 @@
+{
+  "n_rows": 8469,
+  "columns": [
+    "Ticket ID",
+    "Customer Name",
+    "Customer Email",
+    "Customer Age",
+    "Customer Gender",
+    "Product Purchased",
+    "Date of Purchase",
+    "department",
+    "title",
+    "description",
+    "Ticket Status",
+    "Resolution",
+    "priority",
+    "Ticket Channel",
+    "First Response Time",
+    "Time to Resolution",
+    "Customer Satisfaction Rating"
+  ],
+  "priority_distribution": {
+    "Medium": 2192,
+    "Urgent": 2129,
+    "High": 2085,
+    "Low": 2063
+  },
+  "department_distribution": {
+    "Billing": 5081,
+    "Tech Support": 1747,
+    "Sales": 1641
+  }
+}

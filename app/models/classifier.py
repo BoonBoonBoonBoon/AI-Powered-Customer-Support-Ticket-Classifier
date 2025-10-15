@@ -76,6 +76,9 @@ class TicketClassifier:
         self.department_char_vectorizer: Optional[TfidfVectorizer] = None
         self.priority_char_ngram_range = (3,5)
         self.department_char_ngram_range = (3,5)
+        # Max feature caps for char n-gram vectorizers (kept moderate to avoid huge sparse matrices)
+        self.priority_char_max_features = 10000
+        self.department_char_max_features = 10000
         # Priority sample weighting (cost-sensitive emphasis per class)
         self.priority_class_weights_override: Optional[dict[str,float]] = None
         # Per-target hyperparameters (currently only C for LogisticRegression)
@@ -101,6 +104,14 @@ class TicketClassifier:
         priority_char_ngram_range: tuple[int,int] = (3,5),
         department_char_ngram_range: tuple[int,int] = (3,5),
         priority_cost_weights: Optional[dict[str,float]] = None,
+        priority_char_max_features: Optional[int] = 10000,
+        department_char_max_features: Optional[int] = 10000,
+        priority_word_ngram_max: int = 2,
+        department_word_ngram_max: int = 2,
+        priority_penalty: str = "l2",
+        department_penalty: str = "l2",
+        priority_l1_ratio: Optional[float] = None,
+        department_l1_ratio: Optional[float] = None,
     ) -> None:
         self.class_weight = class_weight
         self.augment_length_buckets = augment_length_buckets
@@ -116,6 +127,16 @@ class TicketClassifier:
         self.priority_C = priority_C
         self.department_C = department_C
         self.calibrate_probabilities = calibrate_probabilities
+        # Persist max feature limits for reproducibility
+        self.priority_char_max_features = priority_char_max_features
+        self.department_char_max_features = department_char_max_features
+        # Store new ngram / penalty settings
+        self._priority_word_ngram_max = priority_word_ngram_max
+        self._department_word_ngram_max = department_word_ngram_max
+        self._priority_penalty = priority_penalty
+        self._department_penalty = department_penalty
+        self._priority_l1_ratio = priority_l1_ratio
+        self._department_l1_ratio = department_l1_ratio
 
         required = {"title", "description", "priority", "department"}
         if not required.issubset(df.columns):
@@ -158,10 +179,16 @@ class TicketClassifier:
         # Priority model -----------------------------------------------------
         pr_encoder = LabelEncoder()
         y_priority = pr_encoder.fit_transform(df["priority"].tolist())
-        pr_vectorizer = TfidfVectorizer(ngram_range=(1, 2), min_df=2)
+        pr_vectorizer = TfidfVectorizer(ngram_range=(1, priority_word_ngram_max), min_df=2)
         X_priority = pr_vectorizer.fit_transform(priority_texts)
         if self.enable_priority_char:
-            self.priority_char_vectorizer = TfidfVectorizer(analyzer='char', ngram_range=self.priority_char_ngram_range, min_df=5)
+            # Limit dimensionality so training remains tractable; high-dimensional char space can explode
+            self.priority_char_vectorizer = TfidfVectorizer(
+                analyzer='char',
+                ngram_range=self.priority_char_ngram_range,
+                min_df=5,
+                max_features=self.priority_char_max_features,
+            )
             Xp_char = self.priority_char_vectorizer.fit_transform(priority_texts)
             X_priority = sparse.hstack([X_priority, Xp_char], format='csr')
         sample_weight = None
@@ -171,11 +198,19 @@ class TicketClassifier:
             for lbl in df['priority'].tolist():
                 sw.append(self.priority_class_weights_override.get(str(lbl), 1.0))
             sample_weight = np.array(sw)
-        pr_base = LogisticRegression(
-            max_iter=200,
-            class_weight=class_weight if class_weight == "balanced" else None,
-            C=self.priority_C,
-        )
+        # Configure solver/penalty
+        pr_solver = "saga" if priority_penalty in ("l1", "elasticnet") or self.enable_priority_char else "lbfgs"
+        pr_kwargs = {
+            'max_iter': 250,
+            'class_weight': class_weight if class_weight == "balanced" else None,
+            'C': self.priority_C,
+            'solver': pr_solver,
+            'penalty': priority_penalty,
+            'multi_class': 'auto'
+        }
+        if priority_penalty == 'elasticnet':
+            pr_kwargs['l1_ratio'] = priority_l1_ratio if priority_l1_ratio is not None else 0.5
+        pr_base = LogisticRegression(**pr_kwargs)
         if self.calibrate_probabilities:
             from sklearn.calibration import CalibratedClassifierCV
             pr_model = CalibratedClassifierCV(pr_base, method="sigmoid", cv=3)
@@ -189,17 +224,29 @@ class TicketClassifier:
         # Department model ---------------------------------------------------
         dep_encoder = LabelEncoder()
         y_department = dep_encoder.fit_transform(df["department"].tolist())
-        dep_vectorizer = TfidfVectorizer(ngram_range=(1, 2), min_df=2)
+        dep_vectorizer = TfidfVectorizer(ngram_range=(1, department_word_ngram_max), min_df=2)
         X_department = dep_vectorizer.fit_transform(department_texts)
         if self.enable_department_char:
-            self.department_char_vectorizer = TfidfVectorizer(analyzer='char', ngram_range=self.department_char_ngram_range, min_df=5)
+            self.department_char_vectorizer = TfidfVectorizer(
+                analyzer='char',
+                ngram_range=self.department_char_ngram_range,
+                min_df=5,
+                max_features=self.department_char_max_features,
+            )
             Xd_char = self.department_char_vectorizer.fit_transform(department_texts)
             X_department = sparse.hstack([X_department, Xd_char], format='csr')
-        dep_base = LogisticRegression(
-            max_iter=200,
-            class_weight=class_weight if class_weight == "balanced" else None,
-            C=self.department_C,
-        )
+        dep_solver = "saga" if department_penalty in ("l1", "elasticnet") or self.enable_department_char else "lbfgs"
+        dep_kwargs = {
+            'max_iter': 250,
+            'class_weight': class_weight if class_weight == "balanced" else None,
+            'C': self.department_C,
+            'solver': dep_solver,
+            'penalty': department_penalty,
+            'multi_class': 'auto'
+        }
+        if department_penalty == 'elasticnet':
+            dep_kwargs['l1_ratio'] = department_l1_ratio if department_l1_ratio is not None else 0.5
+        dep_base = LogisticRegression(**dep_kwargs)
         if self.calibrate_probabilities:
             from sklearn.calibration import CalibratedClassifierCV
             dep_model = CalibratedClassifierCV(dep_base, method="sigmoid", cv=3)
@@ -283,6 +330,15 @@ class TicketClassifier:
             "priority_C": self.priority_C,
             "department_C": self.department_C,
             "calibrate_probabilities": self.calibrate_probabilities,
+            # Note: max_features not persisted previously; include now for reproducibility
+            "priority_char_max_features": self.priority_char_max_features,
+            "department_char_max_features": self.department_char_max_features,
+            "priority_word_ngram_max": self._priority_word_ngram_max,
+            "department_word_ngram_max": self._department_word_ngram_max,
+            "priority_penalty": self._priority_penalty,
+            "department_penalty": self._department_penalty,
+            "priority_l1_ratio": self._priority_l1_ratio,
+            "department_l1_ratio": self._department_l1_ratio,
         }
         with open(os.path.join(output_dir, "classifier_config.json"), "w", encoding="utf-8") as f:
             json.dump(config, f, indent=2)
@@ -317,6 +373,8 @@ class TicketClassifier:
                 self.priority_C = cfg.get("priority_C", 1.0)
                 self.department_C = cfg.get("department_C", 1.0)
                 self.calibrate_probabilities = cfg.get("calibrate_probabilities", False)
+                self.priority_char_max_features = cfg.get("priority_char_max_features", 10000)
+                self.department_char_max_features = cfg.get("department_char_max_features", 10000)
             except Exception:
                 pass
         self.is_trained = True

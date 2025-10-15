@@ -1,0 +1,26 @@
+[
+  {
+    "pattern": "__csat_[a-z0-9_]+",
+    "presence_rate": 0.3269571377966702,
+    "department_mi": 1.5391498600220155e-05,
+    "priority_mi": 0.0003667536372020108
+  },
+  {
+    "pattern": "__product_[a-z0-9_]+",
+    "presence_rate": 1.0,
+    "department_mi": 0.0,
+    "priority_mi": 0.0
+  },
+  {
+    "pattern": "__channel_[a-z0-9_]+",
+    "presence_rate": 1.0,
+    "department_mi": 0.0,
+    "priority_mi": 0.0
+  },
+  {
+    "pattern": "__type_[a-z0-9_]+",
+    "presence_rate": 1.0,
+    "department_mi": 0.0,
+    "priority_mi": 0.0
+  }
+]

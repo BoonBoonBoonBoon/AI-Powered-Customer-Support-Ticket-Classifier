@@ -48,6 +48,14 @@ def train_model(
     min_recall_priority: float | None = None,
     min_recall_department: float | None = None,
     priority_cost_weights: dict | None = None,
+    priority_char_max_features: int | None = 10000,
+    department_char_max_features: int | None = 10000,
+    priority_word_ngram_max: int = 2,
+    department_word_ngram_max: int = 2,
+    priority_penalty: str = "l2",
+    department_penalty: str = "l2",
+    priority_l1_ratio: float | None = None,
+    department_l1_ratio: float | None = None,
 ):
     """Train the ticket classifier with the provided dataset and produce metrics/metadata.
 
@@ -152,6 +160,14 @@ def train_model(
         department_C=department_C,
         calibrate_probabilities=calibrate,
         priority_cost_weights=priority_cost_weights,
+        priority_char_max_features=priority_char_max_features,
+        department_char_max_features=department_char_max_features,
+        priority_word_ngram_max=priority_word_ngram_max,
+        department_word_ngram_max=department_word_ngram_max,
+        priority_penalty=priority_penalty,
+        department_penalty=department_penalty,
+        priority_l1_ratio=priority_l1_ratio,
+        department_l1_ratio=department_l1_ratio,
     )
     
     # Versioned model directory
@@ -170,14 +186,15 @@ def train_model(
         pred_department = []
         pr_probs_all = []
         dep_probs_all = []
+        from app.models.classifier import _length_bucket  # local import safe
+        from scipy import sparse as _sparse
         for _, row in val_df.iterrows():
+            # Use predict once (already handles char features) for predicted labels + confidences
             p, d, p_conf, d_conf = classifier.predict(row['title'], row['description'])
             pred_priority.append(p)
             pred_department.append(d)
-            # Recompute full probability distributions using underlying models for calibration metrics
-            # Access vectorizers directly (already loaded in classifier bundles)
-            from app.models.classifier import _length_bucket  # local import safe
-            # We reconstruct combined texts similarly to predict logic for probability arrays
+
+            # Rebuild combined texts for full probability distributions including optional char features
             title_p = classifier._preprocess(row['title'])
             desc_p = classifier._preprocess(row['description'])
             combined_priority = f"title: {title_p}\nbody: {desc_p}".strip()
@@ -188,7 +205,11 @@ def train_model(
             if classifier.augment_length_buckets:
                 combined_priority = f"{combined_priority} {_length_bucket(len(combined_priority.split()))}"
             Xp = classifier.priority_bundle.vectorizer.transform([combined_priority])  # type: ignore
+            if classifier.enable_priority_char and classifier.priority_char_vectorizer is not None:
+                Xp_char = classifier.priority_char_vectorizer.transform([combined_priority])
+                Xp = _sparse.hstack([Xp, Xp_char], format='csr')
             pr_probs_all.append(classifier.priority_bundle.model.predict_proba(Xp)[0])  # type: ignore
+
             dep_text = desc_p
             if classifier.department_exclude_patterns:
                 import re as _re
@@ -199,6 +220,9 @@ def train_model(
             if classifier.augment_length_buckets:
                 combined_dep = f"{combined_dep} {_length_bucket(len(combined_dep.split()))}"
             Xd = classifier.department_bundle.vectorizer.transform([combined_dep])  # type: ignore
+            if classifier.enable_department_char and classifier.department_char_vectorizer is not None:
+                Xd_char = classifier.department_char_vectorizer.transform([combined_dep])
+                Xd = _sparse.hstack([Xd, Xd_char], format='csr')
             dep_probs_all.append(classifier.department_bundle.model.predict_proba(Xd)[0])  # type: ignore
 
         pr_report = classification_report(y_true_priority, pred_priority, output_dict=True)
@@ -462,6 +486,24 @@ def main():
         help="Enable character 3-5 gram TF-IDF features for department model"
     )
     parser.add_argument(
+        "--priority-char-max-features",
+        type=int,
+        default=10000,
+        help="Max features for priority char n-gram vectorizer (to cap dimensionality)"
+    )
+    parser.add_argument(
+        "--department-char-max-features",
+        type=int,
+        default=10000,
+        help="Max features for department char n-gram vectorizer"
+    )
+    parser.add_argument("--priority-word-ngram-max", type=int, default=2, help="Max word n-gram length for priority (1..N)")
+    parser.add_argument("--department-word-ngram-max", type=int, default=2, help="Max word n-gram length for department")
+    parser.add_argument("--priority-penalty", choices=["l2","l1","elasticnet"], default="l2", help="Penalty for priority logistic model")
+    parser.add_argument("--department-penalty", choices=["l2","l1","elasticnet"], default="l2", help="Penalty for department logistic model")
+    parser.add_argument("--priority-l1-ratio", type=float, default=None, help="ElasticNet l1_ratio for priority (if penalty=elasticnet)")
+    parser.add_argument("--department-l1-ratio", type=float, default=None, help="ElasticNet l1_ratio for department (if penalty=elasticnet)")
+    parser.add_argument(
         "--priority-cost-weights",
         type=str,
         default=None,
@@ -520,6 +562,14 @@ def main():
             min_recall_priority=args.min_recall_priority,
             min_recall_department=args.min_recall_department,
             priority_cost_weights=(json.loads(args.priority_cost_weights) if args.priority_cost_weights else None),
+            priority_char_max_features=args.priority_char_max_features,
+            department_char_max_features=args.department_char_max_features,
+            priority_word_ngram_max=args.priority_word_ngram_max,
+            department_word_ngram_max=args.department_word_ngram_max,
+            priority_penalty=args.priority_penalty,
+            department_penalty=args.department_penalty,
+            priority_l1_ratio=args.priority_l1_ratio,
+            department_l1_ratio=args.department_l1_ratio,
         )
     except Exception as e:
         print(f"Error during training: {e}")

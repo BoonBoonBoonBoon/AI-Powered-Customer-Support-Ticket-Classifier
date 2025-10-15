@@ -1,0 +1,7 @@
+{
+  "total": 8469,
+  "duplicates_removed": 48,
+  "percent_removed": 0.567,
+  "threshold": 0.85,
+  "output": "data/enriched_customer_tickets_dedup.csv"
+}

@@ -1,0 +1,1001 @@
+title,description,department,priority,customer_email
+Help needed: Database connection error,"Cannot connect to database, all services are affected Thanks in advance.",Tech Support,Urgent,customer0@example.com
+Help needed: Product pricing inquiry,What are the pricing options for enterprise plans? This is affecting my business.,Sales,Medium,customer1@example.com
+Issue with incorrect billing amount,I was charged twice for my subscription this month This is affecting my business.,Billing,High,customer2@example.com
+Issue with demo request,Please help! I would like to schedule a product demonstration,Sales,Low,customer3@example.com
+Issue with partnership opportunity,Please help! Interested in becoming a reseller partner,Sales,Medium,customer4@example.com
+Demo request,I would like to schedule a product demonstration This is affecting my business.,Sales,Urgent,customer5@example.com
+Issue with volume discount,Do you offer discounts for bulk purchases? Can someone assist?,Sales,Medium,customer6@example.com
+Help needed: Payment method update,Need to update my credit card information Can someone assist?,Billing,Low,customer7@example.com
+Feature comparison,Can you compare your product with competitors? This is affecting my business.,Sales,Low,customer8@example.com
+SERVER DOWN,"Unable to connect to the server, getting timeout errors",Tech Support,Urgent,customer9@example.com
+Issue with database connection error,"Please help! Cannot connect to database, all services are affected",Tech Support,Urgent,customer10@example.com
+TRIAL EXTENSION,Please help! Can we extend our trial period?,Sales,Medium,customer11@example.com
+Issue with plan upgrade billing,Questions about pricing for plan upgrade Can someone assist?,Billing,Medium,customer12@example.com
+Help needed: Product roadmap,What new features are planned for next year?,Sales,Low,customer13@example.com
+Issue with slow loading times,"Please help! The dashboard takes forever to load, it's affecting my productivity",Tech Support,Medium,customer14@example.com
+URGENT: Contract negotiation,Need to discuss contract terms and conditions Can someone assist?,Sales,High,customer15@example.com
+URGENT: Demo request,I would like to schedule a product demonstration Can someone assist?,Sales,High,customer16@example.com
+Issue with password reset issue,"I can't reset my password, the email is not coming through Can someone assist?",Tech Support,Medium,customer17@example.com
+ENTERPRISE INQUIRY,Interested in enterprise licensing and support Thanks in advance.,Sales,High,customer18@example.com
+URGENT: Tax information,Need tax documentation for business expenses,Billing,Medium,customer19@example.com
+PARTNERSHIP OPPORTUNITY,Interested in becoming a reseller partner,Sales,Medium,customer20@example.com
+Product roadmap,What new features are planned for next year?,Sales,Low,customer21@example.com
+Database connection error,"Cannot connect to database, all services are affected Can someone assist?",Tech Support,Urgent,customer22@example.com
+Help needed: Login problems,"Cannot log into my account, shows invalid credentials",Tech Support,Medium,customer23@example.com
+Login problems,"Cannot log into my account, shows invalid credentials This is affecting my business.",Tech Support,High,customer24@example.com
+URGENT: Server down,"Unable to connect to the server, getting timeout errors",Tech Support,Urgent,customer25@example.com
+Issue with partnership opportunity,Please help! Interested in becoming a reseller partner,Sales,Medium,customer26@example.com
+WEBSITE NOT LOADING,The website shows a 404 error when I try to access my account This is affecting my business.,Tech Support,Medium,customer27@example.com
+Help needed: Payment failed,My credit card payment was declined but money was deducted This is affecting my business.,Billing,High,customer28@example.com
+Help needed: Website not loading,The website shows a 404 error when I try to access my account,Tech Support,High,customer29@example.com
+Help needed: Server down,"Unable to connect to the server, getting timeout errors",Tech Support,Urgent,customer30@example.com
+URGENT: Invoice missing,I haven't received my invoice for last month Can someone assist?,Billing,Low,customer31@example.com
+Refund request,I want to request a refund for unused services Can someone assist?,Billing,Medium,customer32@example.com
+PRODUCT ROADMAP,What new features are planned for next year? Thanks in advance.,Sales,Low,customer33@example.com
+Issue with invoice missing,I haven't received my invoice for last month Thanks in advance.,Billing,Low,customer34@example.com
+Issue with database connection error,"Please help! Cannot connect to database, all services are affected",Tech Support,Urgent,customer35@example.com
+Browser compatibility,Site doesn't work properly on Safari browser Thanks in advance.,Tech Support,Low,customer36@example.com
+Issue with api not responding,Getting 500 internal server error when making API calls Can someone assist?,Tech Support,Urgent,customer37@example.com
+Help needed: Plan upgrade billing,Please help! Questions about pricing for plan upgrade,Billing,Medium,customer38@example.com
+Feature comparison,Can you compare your product with competitors?,Sales,Low,customer39@example.com
+Enterprise inquiry,Interested in enterprise licensing and support Can someone assist?,Sales,High,customer40@example.com
+Help needed: Refund request,I want to request a refund for unused services,Billing,Medium,customer41@example.com
+Help needed: Contract negotiation,Please help! Need to discuss contract terms and conditions,Sales,High,customer42@example.com
+Help needed: Payment failed,My credit card payment was declined but money was deducted,Billing,High,customer43@example.com
+Plan upgrade billing,Please help! Questions about pricing for plan upgrade,Billing,Medium,customer44@example.com
+URGENT: Plan upgrade billing,Questions about pricing for plan upgrade This is affecting my business.,Billing,Medium,customer45@example.com
+Billing address change,Please update my billing address This is affecting my business.,Billing,Low,customer46@example.com
+Issue with billing address change,Please update my billing address Thanks in advance.,Billing,Low,customer47@example.com
+URGENT: Website not loading,The website shows a 404 error when I try to access my account Thanks in advance.,Tech Support,High,customer48@example.com
+Issue with payment failed,My credit card payment was declined but money was deducted This is affecting my business.,Billing,High,customer49@example.com
+CUSTOM SOLUTION NEEDED,We need a custom integration for our business Can someone assist?,Sales,High,customer50@example.com
+Help needed: Password reset issue,"I can't reset my password, the email is not coming through",Tech Support,Medium,customer51@example.com
+FEATURE NOT WORKING,The export function is not working properly This is affecting my business.,Tech Support,Low,customer52@example.com
+Issue with plan upgrade billing,Questions about pricing for plan upgrade This is affecting my business.,Billing,Medium,customer53@example.com
+Help needed: Trial extension,Can we extend our trial period? Can someone assist?,Sales,Medium,customer54@example.com
+Database connection error,"Please help! Cannot connect to database, all services are affected",Tech Support,Urgent,customer55@example.com
+Issue with login problems,"Cannot log into my account, shows invalid credentials",Tech Support,High,customer56@example.com
+URGENT: Enterprise inquiry,Interested in enterprise licensing and support This is affecting my business.,Sales,High,customer57@example.com
+URGENT: Database connection error,"Cannot connect to database, all services are affected",Tech Support,Urgent,customer58@example.com
+URGENT: Plan upgrade billing,Questions about pricing for plan upgrade,Billing,Medium,customer59@example.com
+PAYMENT METHOD UPDATE,Need to update my credit card information Thanks in advance.,Billing,Low,customer60@example.com
+Volume discount,Do you offer discounts for bulk purchases? This is affecting my business.,Sales,Medium,customer61@example.com
+Help needed: Overcharged account,My account shows charges I didn't authorize Can someone assist?,Billing,Urgent,customer62@example.com
+Custom solution needed,We need a custom integration for our business Can someone assist?,Sales,High,customer63@example.com
+Issue with incorrect billing amount,I was charged twice for my subscription this month Can someone assist?,Billing,High,customer64@example.com
+Contract negotiation,Need to discuss contract terms and conditions This is affecting my business.,Sales,High,customer65@example.com
+URGENT: Enterprise inquiry,Please help! Interested in enterprise licensing and support,Sales,Low,customer66@example.com
+DEMO REQUEST,I would like to schedule a product demonstration,Sales,High,customer67@example.com
+Slow loading times,"The dashboard takes forever to load, it's affecting my productivity Thanks in advance.",Tech Support,Medium,customer68@example.com
+Help needed: Payment method update,Need to update my credit card information,Billing,Low,customer69@example.com
+Help needed: Website not loading,The website shows a 404 error when I try to access my account This is affecting my business.,Tech Support,High,customer70@example.com
+DEMO REQUEST,I would like to schedule a product demonstration This is affecting my business.,Sales,High,customer71@example.com
+Help needed: Demo request,Please help! I would like to schedule a product demonstration,Sales,High,customer72@example.com
+Issue with product pricing inquiry,What are the pricing options for enterprise plans?,Sales,Medium,customer73@example.com
+Help needed: Server down,"Unable to connect to the server, getting timeout errors Can someone assist?",Tech Support,Urgent,customer74@example.com
+App crashes frequently,The mobile app keeps crashing when I try to upload files Can someone assist?,Tech Support,High,customer75@example.com
+PARTNERSHIP OPPORTUNITY,Interested in becoming a reseller partner This is affecting my business.,Sales,Medium,customer76@example.com
+PARTNERSHIP OPPORTUNITY,Interested in becoming a reseller partner,Sales,Low,customer77@example.com
+Help needed: Subscription cancellation,I need to cancel my subscription immediately Can someone assist?,Billing,Medium,customer78@example.com
+WEBSITE NOT LOADING,The website shows a 404 error when I try to access my account,Tech Support,Urgent,customer79@example.com
+App crashes frequently,Please help! The mobile app keeps crashing when I try to upload files,Tech Support,High,customer80@example.com
+URGENT: Demo request,Please help! I would like to schedule a product demonstration,Sales,High,customer81@example.com
+URGENT: Volume discount,Do you offer discounts for bulk purchases?,Sales,Medium,customer82@example.com
+Help needed: Login problems,"Cannot log into my account, shows invalid credentials Thanks in advance.",Tech Support,High,customer83@example.com
+Help needed: Browser compatibility,Please help! Site doesn't work properly on Safari browser,Tech Support,Low,customer84@example.com
+Issue with enterprise inquiry,Please help! Interested in enterprise licensing and support,Sales,High,customer85@example.com
+DATABASE CONNECTION ERROR,"Cannot connect to database, all services are affected Can someone assist?",Tech Support,Urgent,customer86@example.com
+Issue with website not loading,The website shows a 404 error when I try to access my account This is affecting my business.,Tech Support,High,customer87@example.com
+URGENT: Feature comparison,Can you compare your product with competitors? This is affecting my business.,Sales,High,customer88@example.com
+ENTERPRISE INQUIRY,Please help! Interested in enterprise licensing and support,Sales,High,customer89@example.com
+URGENT: Trial extension,Can we extend our trial period? This is affecting my business.,Sales,Low,customer90@example.com
+PARTNERSHIP OPPORTUNITY,Interested in becoming a reseller partner Can someone assist?,Sales,Medium,customer91@example.com
+Issue with payment failed,My credit card payment was declined but money was deducted Thanks in advance.,Billing,High,customer92@example.com
+Help needed: Plan upgrade billing,Questions about pricing for plan upgrade Can someone assist?,Billing,Medium,customer93@example.com
+Issue with payment method update,Please help! Need to update my credit card information,Billing,Low,customer94@example.com
+Help needed: Contract negotiation,Need to discuss contract terms and conditions Can someone assist?,Sales,Low,customer95@example.com
+URGENT: Trial extension,Can we extend our trial period? Thanks in advance.,Sales,Urgent,customer96@example.com
+Contract negotiation,Need to discuss contract terms and conditions Can someone assist?,Sales,High,customer97@example.com
+Product pricing inquiry,Please help! What are the pricing options for enterprise plans?,Sales,High,customer98@example.com
+CONTRACT NEGOTIATION,Need to discuss contract terms and conditions Thanks in advance.,Sales,Urgent,customer99@example.com
+WEBSITE NOT LOADING,The website shows a 404 error when I try to access my account Thanks in advance.,Tech Support,High,customer100@example.com
+Help needed: Feature comparison,Can you compare your product with competitors? Thanks in advance.,Sales,High,customer101@example.com
+Issue with demo request,I would like to schedule a product demonstration Thanks in advance.,Sales,High,customer102@example.com
+Issue with invoice missing,I haven't received my invoice for last month Thanks in advance.,Billing,High,customer103@example.com
+PAYMENT FAILED,My credit card payment was declined but money was deducted Can someone assist?,Billing,High,customer104@example.com
+WEBSITE NOT LOADING,Please help! The website shows a 404 error when I try to access my account,Tech Support,High,customer105@example.com
+Issue with browser compatibility,Please help! Site doesn't work properly on Safari browser,Tech Support,Low,customer106@example.com
+URGENT: Plan upgrade billing,Questions about pricing for plan upgrade This is affecting my business.,Billing,Medium,customer107@example.com
+TRIAL EXTENSION,Can we extend our trial period? Thanks in advance.,Sales,Medium,customer108@example.com
+URGENT: Slow loading times,"The dashboard takes forever to load, it's affecting my productivity",Tech Support,Medium,customer109@example.com
+Help needed: Partnership opportunity,Interested in becoming a reseller partner Can someone assist?,Sales,Medium,customer110@example.com
+Help needed: Custom solution needed,We need a custom integration for our business Can someone assist?,Sales,High,customer111@example.com
+Help needed: Website not loading,The website shows a 404 error when I try to access my account This is affecting my business.,Tech Support,High,customer112@example.com
+Server down,"Unable to connect to the server, getting timeout errors",Tech Support,Urgent,customer113@example.com
+Issue with login problems,"Cannot log into my account, shows invalid credentials Thanks in advance.",Tech Support,High,customer114@example.com
+URGENT: Refund request,I want to request a refund for unused services Thanks in advance.,Billing,Medium,customer115@example.com
+Overcharged account,Please help! My account shows charges I didn't authorize,Billing,Urgent,customer116@example.com
+URGENT: Login problems,"Please help! Cannot log into my account, shows invalid credentials",Tech Support,High,customer117@example.com
+Contract negotiation,Need to discuss contract terms and conditions Can someone assist?,Sales,High,customer118@example.com
+TRIAL EXTENSION,Can we extend our trial period? This is affecting my business.,Sales,Medium,customer119@example.com
+PRODUCT ROADMAP,What new features are planned for next year? Thanks in advance.,Sales,Urgent,customer120@example.com
+ENTERPRISE INQUIRY,Interested in enterprise licensing and support,Sales,High,customer121@example.com
+Custom solution needed,We need a custom integration for our business This is affecting my business.,Sales,High,customer122@example.com
+Payment method update,Need to update my credit card information Thanks in advance.,Billing,Low,customer123@example.com
+PAYMENT FAILED,My credit card payment was declined but money was deducted,Billing,High,customer124@example.com
+App crashes frequently,The mobile app keeps crashing when I try to upload files,Tech Support,High,customer125@example.com
+Contract negotiation,Need to discuss contract terms and conditions Thanks in advance.,Sales,High,customer126@example.com
+Issue with volume discount,Do you offer discounts for bulk purchases? Thanks in advance.,Sales,Low,customer127@example.com
+Feature not working,The export function is not working properly Can someone assist?,Tech Support,Low,customer128@example.com
+Issue with subscription cancellation,I need to cancel my subscription immediately This is affecting my business.,Billing,Medium,customer129@example.com
+TRIAL EXTENSION,Can we extend our trial period? Thanks in advance.,Sales,Medium,customer130@example.com
+Issue with app crashes frequently,The mobile app keeps crashing when I try to upload files This is affecting my business.,Tech Support,High,customer131@example.com
+Product pricing inquiry,What are the pricing options for enterprise plans? Thanks in advance.,Sales,Medium,customer132@example.com
+URGENT: Product pricing inquiry,What are the pricing options for enterprise plans? Thanks in advance.,Sales,Medium,customer133@example.com
+Help needed: App crashes frequently,The mobile app keeps crashing when I try to upload files This is affecting my business.,Tech Support,High,customer134@example.com
+Tax information,Please help! Need tax documentation for business expenses,Billing,Medium,customer135@example.com
+TRIAL EXTENSION,Can we extend our trial period? Thanks in advance.,Sales,Medium,customer136@example.com
+Help needed: Login problems,"Please help! Cannot log into my account, shows invalid credentials",Tech Support,High,customer137@example.com
+Help needed: Password reset issue,"I can't reset my password, the email is not coming through Thanks in advance.",Tech Support,Urgent,customer138@example.com
+Website not loading,The website shows a 404 error when I try to access my account,Tech Support,High,customer139@example.com
+Issue with refund request,I want to request a refund for unused services This is affecting my business.,Billing,Medium,customer140@example.com
+Help needed: Product roadmap,Please help! What new features are planned for next year?,Sales,Low,customer141@example.com
+Help needed: Trial extension,Can we extend our trial period? Thanks in advance.,Sales,Medium,customer142@example.com
+URGENT: Refund request,I want to request a refund for unused services Can someone assist?,Billing,Medium,customer143@example.com
+Partnership opportunity,Interested in becoming a reseller partner,Sales,Medium,customer144@example.com
+App crashes frequently,The mobile app keeps crashing when I try to upload files Can someone assist?,Tech Support,High,customer145@example.com
+BILLING ADDRESS CHANGE,Please help! Please update my billing address,Billing,Urgent,customer146@example.com
+PAYMENT FAILED,My credit card payment was declined but money was deducted Thanks in advance.,Billing,High,customer147@example.com
+INVOICE MISSING,I haven't received my invoice for last month This is affecting my business.,Billing,Low,customer148@example.com
+Help needed: Partnership opportunity,Interested in becoming a reseller partner Can someone assist?,Sales,Medium,customer149@example.com
+Enterprise inquiry,Interested in enterprise licensing and support,Sales,High,customer150@example.com
+Subscription cancellation,I need to cancel my subscription immediately Thanks in advance.,Billing,Medium,customer151@example.com
+Demo request,I would like to schedule a product demonstration This is affecting my business.,Sales,High,customer152@example.com
+Issue with payment failed,My credit card payment was declined but money was deducted Can someone assist?,Billing,High,customer153@example.com
+Issue with product pricing inquiry,What are the pricing options for enterprise plans? Can someone assist?,Sales,Medium,customer154@example.com
+Issue with trial extension,Please help! Can we extend our trial period?,Sales,Medium,customer155@example.com
+Issue with partnership opportunity,Interested in becoming a reseller partner This is affecting my business.,Sales,Urgent,customer156@example.com
+Demo request,I would like to schedule a product demonstration Thanks in advance.,Sales,Urgent,customer157@example.com
+PLAN UPGRADE BILLING,Questions about pricing for plan upgrade Thanks in advance.,Billing,Medium,customer158@example.com
+URGENT: Subscription cancellation,I need to cancel my subscription immediately This is affecting my business.,Billing,High,customer159@example.com
+URGENT: Server down,"Please help! Unable to connect to the server, getting timeout errors",Tech Support,Urgent,customer160@example.com
+Help needed: Custom solution needed,We need a custom integration for our business Thanks in advance.,Sales,High,customer161@example.com
+Server down,"Please help! Unable to connect to the server, getting timeout errors",Tech Support,Urgent,customer162@example.com
+INVOICE MISSING,Please help! I haven't received my invoice for last month,Billing,Low,customer163@example.com
+Help needed: Enterprise inquiry,Interested in enterprise licensing and support,Sales,High,customer164@example.com
+Help needed: Refund request,I want to request a refund for unused services,Billing,Urgent,customer165@example.com
+Issue with product pricing inquiry,What are the pricing options for enterprise plans?,Sales,High,customer166@example.com
+Help needed: Server down,"Unable to connect to the server, getting timeout errors Thanks in advance.",Tech Support,Urgent,customer167@example.com
+FEATURE COMPARISON,Please help! Can you compare your product with competitors?,Sales,Low,customer168@example.com
+BROWSER COMPATIBILITY,Site doesn't work properly on Safari browser,Tech Support,Low,customer169@example.com
+SUBSCRIPTION CANCELLATION,I need to cancel my subscription immediately Thanks in advance.,Billing,Medium,customer170@example.com
+Slow loading times,"Please help! The dashboard takes forever to load, it's affecting my productivity",Tech Support,Medium,customer171@example.com
+URGENT: Partnership opportunity,Please help! Interested in becoming a reseller partner,Sales,Medium,customer172@example.com
+Help needed: Password reset issue,"I can't reset my password, the email is not coming through This is affecting my business.",Tech Support,Medium,customer173@example.com
+Issue with tax information,Need tax documentation for business expenses Thanks in advance.,Billing,Medium,customer174@example.com
+Contract negotiation,Need to discuss contract terms and conditions,Sales,High,customer175@example.com
+PAYMENT METHOD UPDATE,Need to update my credit card information Thanks in advance.,Billing,Low,customer176@example.com
+Help needed: Subscription cancellation,I need to cancel my subscription immediately Can someone assist?,Billing,Medium,customer177@example.com
+URGENT: Password reset issue,"Please help! I can't reset my password, the email is not coming through",Tech Support,Medium,customer178@example.com
+Help needed: Contract negotiation,Please help! Need to discuss contract terms and conditions,Sales,High,customer179@example.com
+Plan upgrade billing,Questions about pricing for plan upgrade Can someone assist?,Billing,Medium,customer180@example.com
+Help needed: Contract negotiation,Need to discuss contract terms and conditions,Sales,High,customer181@example.com
+URGENT: Server down,"Unable to connect to the server, getting timeout errors",Tech Support,Urgent,customer182@example.com
+Issue with browser compatibility,Site doesn't work properly on Safari browser Thanks in advance.,Tech Support,Low,customer183@example.com
+URGENT: Password reset issue,"I can't reset my password, the email is not coming through Thanks in advance.",Tech Support,Medium,customer184@example.com
+Help needed: Contract negotiation,Need to discuss contract terms and conditions This is affecting my business.,Sales,High,customer185@example.com
+Help needed: Invoice missing,I haven't received my invoice for last month Can someone assist?,Billing,Low,customer186@example.com
+Login problems,"Cannot log into my account, shows invalid credentials This is affecting my business.",Tech Support,High,customer187@example.com
+URGENT: App crashes frequently,The mobile app keeps crashing when I try to upload files Thanks in advance.,Tech Support,High,customer188@example.com
+TRIAL EXTENSION,Can we extend our trial period? Thanks in advance.,Sales,Medium,customer189@example.com
+TAX INFORMATION,Need tax documentation for business expenses Thanks in advance.,Billing,Medium,customer190@example.com
+API not responding,Getting 500 internal server error when making API calls Can someone assist?,Tech Support,Urgent,customer191@example.com
+Trial extension,Please help! Can we extend our trial period?,Sales,Medium,customer192@example.com
+URGENT: Refund request,I want to request a refund for unused services,Billing,Medium,customer193@example.com
+Help needed: Invoice missing,I haven't received my invoice for last month Thanks in advance.,Billing,Low,customer194@example.com
+Billing address change,Please update my billing address,Billing,Low,customer195@example.com
+URGENT: App crashes frequently,The mobile app keeps crashing when I try to upload files Can someone assist?,Tech Support,High,customer196@example.com
+URGENT: Feature comparison,Can you compare your product with competitors? Thanks in advance.,Sales,Low,customer197@example.com
+Help needed: Trial extension,Can we extend our trial period? This is affecting my business.,Sales,Low,customer198@example.com
+Help needed: Invoice missing,I haven't received my invoice for last month Can someone assist?,Billing,Low,customer199@example.com
+Help needed: Refund request,I want to request a refund for unused services This is affecting my business.,Billing,Medium,customer200@example.com
+INVOICE MISSING,I haven't received my invoice for last month Can someone assist?,Billing,Low,customer201@example.com
+Browser compatibility,Please help! Site doesn't work properly on Safari browser,Tech Support,Low,customer202@example.com
+Contract negotiation,Need to discuss contract terms and conditions Thanks in advance.,Sales,High,customer203@example.com
+URGENT: Plan upgrade billing,Questions about pricing for plan upgrade This is affecting my business.,Billing,Medium,customer204@example.com
+Issue with feature not working,Please help! The export function is not working properly,Tech Support,Low,customer205@example.com
+Invoice missing,I haven't received my invoice for last month Can someone assist?,Billing,Low,customer206@example.com
+OVERCHARGED ACCOUNT,My account shows charges I didn't authorize Can someone assist?,Billing,Urgent,customer207@example.com
+Help needed: Trial extension,Can we extend our trial period? This is affecting my business.,Sales,Medium,customer208@example.com
+Refund request,I want to request a refund for unused services,Billing,Medium,customer209@example.com
+Issue with product pricing inquiry,What are the pricing options for enterprise plans? This is affecting my business.,Sales,Medium,customer210@example.com
+Contract negotiation,Need to discuss contract terms and conditions This is affecting my business.,Sales,High,customer211@example.com
+Issue with overcharged account,Please help! My account shows charges I didn't authorize,Billing,Urgent,customer212@example.com
+Issue with plan upgrade billing,Questions about pricing for plan upgrade,Billing,Medium,customer213@example.com
+Help needed: Contract negotiation,Need to discuss contract terms and conditions,Sales,High,customer214@example.com
+URGENT: Password reset issue,"I can't reset my password, the email is not coming through This is affecting my business.",Tech Support,Medium,customer215@example.com
+URGENT: Refund request,I want to request a refund for unused services Can someone assist?,Billing,Medium,customer216@example.com
+Issue with overcharged account,My account shows charges I didn't authorize,Billing,Urgent,customer217@example.com
+URGENT: Payment failed,My credit card payment was declined but money was deducted Thanks in advance.,Billing,High,customer218@example.com
+Issue with contract negotiation,Need to discuss contract terms and conditions Thanks in advance.,Sales,High,customer219@example.com
+URGENT: Incorrect billing amount,Please help! I was charged twice for my subscription this month,Billing,High,customer220@example.com
+URGENT: Server down,"Unable to connect to the server, getting timeout errors Thanks in advance.",Tech Support,Low,customer221@example.com
+Login problems,"Cannot log into my account, shows invalid credentials Thanks in advance.",Tech Support,High,customer222@example.com
+Help needed: Feature not working,The export function is not working properly This is affecting my business.,Tech Support,Low,customer223@example.com
+CONTRACT NEGOTIATION,Need to discuss contract terms and conditions Can someone assist?,Sales,High,customer224@example.com
+PAYMENT FAILED,My credit card payment was declined but money was deducted This is affecting my business.,Billing,High,customer225@example.com
+Help needed: Feature not working,The export function is not working properly This is affecting my business.,Tech Support,Low,customer226@example.com
+Issue with website not loading,The website shows a 404 error when I try to access my account Thanks in advance.,Tech Support,High,customer227@example.com
+LOGIN PROBLEMS,"Cannot log into my account, shows invalid credentials Can someone assist?",Tech Support,High,customer228@example.com
+CONTRACT NEGOTIATION,Need to discuss contract terms and conditions Thanks in advance.,Sales,High,customer229@example.com
+URGENT: Overcharged account,My account shows charges I didn't authorize Can someone assist?,Billing,Urgent,customer230@example.com
+Enterprise inquiry,Please help! Interested in enterprise licensing and support,Sales,High,customer231@example.com
+Help needed: Login problems,"Cannot log into my account, shows invalid credentials Thanks in advance.",Tech Support,High,customer232@example.com
+API not responding,Getting 500 internal server error when making API calls,Tech Support,Urgent,customer233@example.com
+URGENT: Billing address change,Please update my billing address Thanks in advance.,Billing,Low,customer234@example.com
+Help needed: Login problems,"Cannot log into my account, shows invalid credentials This is affecting my business.",Tech Support,High,customer235@example.com
+URGENT: Database connection error,"Cannot connect to database, all services are affected Can someone assist?",Tech Support,Urgent,customer236@example.com
+Invoice missing,I haven't received my invoice for last month Can someone assist?,Billing,Low,customer237@example.com
+Issue with contract negotiation,Need to discuss contract terms and conditions Thanks in advance.,Sales,High,customer238@example.com
+API NOT RESPONDING,Getting 500 internal server error when making API calls Thanks in advance.,Tech Support,Urgent,customer239@example.com
+Issue with volume discount,Please help! Do you offer discounts for bulk purchases?,Sales,Medium,customer240@example.com
+URGENT: Browser compatibility,Site doesn't work properly on Safari browser,Tech Support,Low,customer241@example.com
+Issue with demo request,I would like to schedule a product demonstration Thanks in advance.,Sales,High,customer242@example.com
+CUSTOM SOLUTION NEEDED,We need a custom integration for our business Thanks in advance.,Sales,High,customer243@example.com
+Issue with product roadmap,What new features are planned for next year? Thanks in advance.,Sales,Low,customer244@example.com
+Help needed: Password reset issue,"I can't reset my password, the email is not coming through Can someone assist?",Tech Support,Medium,customer245@example.com
+Help needed: Slow loading times,"The dashboard takes forever to load, it's affecting my productivity Thanks in advance.",Tech Support,Medium,customer246@example.com
+URGENT: Plan upgrade billing,Please help! Questions about pricing for plan upgrade,Billing,Medium,customer247@example.com
+URGENT: Subscription cancellation,I need to cancel my subscription immediately Thanks in advance.,Billing,Medium,customer248@example.com
+Login problems,"Cannot log into my account, shows invalid credentials",Tech Support,High,customer249@example.com
+Help needed: Invoice missing,I haven't received my invoice for last month Can someone assist?,Billing,Low,customer250@example.com
+Issue with payment failed,My credit card payment was declined but money was deducted Thanks in advance.,Billing,High,customer251@example.com
+URGENT: Custom solution needed,We need a custom integration for our business,Sales,Medium,customer252@example.com
+Partnership opportunity,Interested in becoming a reseller partner This is affecting my business.,Sales,Medium,customer253@example.com
+Product roadmap,What new features are planned for next year? This is affecting my business.,Sales,Low,customer254@example.com
+FEATURE COMPARISON,Can you compare your product with competitors? Thanks in advance.,Sales,Low,customer255@example.com
+Trial extension,Can we extend our trial period?,Sales,Medium,customer256@example.com
+DEMO REQUEST,I would like to schedule a product demonstration,Sales,High,customer257@example.com
+Issue with product pricing inquiry,What are the pricing options for enterprise plans?,Sales,Medium,customer258@example.com
+Help needed: Product pricing inquiry,What are the pricing options for enterprise plans? Can someone assist?,Sales,Medium,customer259@example.com
+URGENT: Enterprise inquiry,Please help! Interested in enterprise licensing and support,Sales,High,customer260@example.com
+Volume discount,Do you offer discounts for bulk purchases? This is affecting my business.,Sales,Medium,customer261@example.com
+Help needed: Volume discount,Do you offer discounts for bulk purchases?,Sales,Medium,customer262@example.com
+DATABASE CONNECTION ERROR,"Cannot connect to database, all services are affected",Tech Support,Urgent,customer263@example.com
+Help needed: Billing address change,Please help! Please update my billing address,Billing,Low,customer264@example.com
+Partnership opportunity,Interested in becoming a reseller partner,Sales,Medium,customer265@example.com
+Issue with plan upgrade billing,Questions about pricing for plan upgrade Can someone assist?,Billing,Medium,customer266@example.com
+Product roadmap,What new features are planned for next year? Thanks in advance.,Sales,Low,customer267@example.com
+Help needed: Contract negotiation,Need to discuss contract terms and conditions This is affecting my business.,Sales,High,customer268@example.com
+CONTRACT NEGOTIATION,Need to discuss contract terms and conditions,Sales,High,customer269@example.com
+Help needed: Refund request,Please help! I want to request a refund for unused services,Billing,Medium,customer270@example.com
+URGENT: Website not loading,Please help! The website shows a 404 error when I try to access my account,Tech Support,High,customer271@example.com
+URGENT: Demo request,I would like to schedule a product demonstration This is affecting my business.,Sales,High,customer272@example.com
+SLOW LOADING TIMES,"The dashboard takes forever to load, it's affecting my productivity This is affecting my business.",Tech Support,Medium,customer273@example.com
+URGENT: Browser compatibility,Site doesn't work properly on Safari browser Can someone assist?,Tech Support,Low,customer274@example.com
+URGENT: Website not loading,The website shows a 404 error when I try to access my account Thanks in advance.,Tech Support,Low,customer275@example.com
+Help needed: Login problems,"Cannot log into my account, shows invalid credentials This is affecting my business.",Tech Support,Medium,customer276@example.com
+Product roadmap,What new features are planned for next year? Thanks in advance.,Sales,Low,customer277@example.com
+Issue with app crashes frequently,Please help! The mobile app keeps crashing when I try to upload files,Tech Support,High,customer278@example.com
+Help needed: App crashes frequently,The mobile app keeps crashing when I try to upload files Can someone assist?,Tech Support,High,customer279@example.com
+PLAN UPGRADE BILLING,Please help! Questions about pricing for plan upgrade,Billing,Medium,customer280@example.com
+Database connection error,"Cannot connect to database, all services are affected Thanks in advance.",Tech Support,Urgent,customer281@example.com
+Help needed: Overcharged account,My account shows charges I didn't authorize Can someone assist?,Billing,Urgent,customer282@example.com
+URGENT: Product roadmap,What new features are planned for next year?,Sales,Low,customer283@example.com
+Help needed: Invoice missing,Please help! I haven't received my invoice for last month,Billing,Low,customer284@example.com
+Issue with password reset issue,"I can't reset my password, the email is not coming through Can someone assist?",Tech Support,Medium,customer285@example.com
+Server down,"Please help! Unable to connect to the server, getting timeout errors",Tech Support,Urgent,customer286@example.com
+Issue with product pricing inquiry,Please help! What are the pricing options for enterprise plans?,Sales,Medium,customer287@example.com
+Demo request,Please help! I would like to schedule a product demonstration,Sales,High,customer288@example.com
+Contract negotiation,Please help! Need to discuss contract terms and conditions,Sales,High,customer289@example.com
+Overcharged account,Please help! My account shows charges I didn't authorize,Billing,Urgent,customer290@example.com
+Refund request,I want to request a refund for unused services This is affecting my business.,Billing,Medium,customer291@example.com
+URGENT: Subscription cancellation,I need to cancel my subscription immediately Thanks in advance.,Billing,Medium,customer292@example.com
+REFUND REQUEST,I want to request a refund for unused services This is affecting my business.,Billing,Medium,customer293@example.com
+API NOT RESPONDING,Please help! Getting 500 internal server error when making API calls,Tech Support,Urgent,customer294@example.com
+URGENT: Slow loading times,"The dashboard takes forever to load, it's affecting my productivity",Tech Support,Medium,customer295@example.com
+URGENT: Server down,"Unable to connect to the server, getting timeout errors Can someone assist?",Tech Support,Urgent,customer296@example.com
+FEATURE COMPARISON,Can you compare your product with competitors? This is affecting my business.,Sales,Low,customer297@example.com
+Help needed: Enterprise inquiry,Please help! Interested in enterprise licensing and support,Sales,High,customer298@example.com
+PAYMENT FAILED,Please help! My credit card payment was declined but money was deducted,Billing,High,customer299@example.com
+REFUND REQUEST,I want to request a refund for unused services Can someone assist?,Billing,Medium,customer300@example.com
+URGENT: Contract negotiation,Need to discuss contract terms and conditions Can someone assist?,Sales,High,customer301@example.com
+Help needed: Demo request,I would like to schedule a product demonstration Thanks in advance.,Sales,High,customer302@example.com
+SLOW LOADING TIMES,"The dashboard takes forever to load, it's affecting my productivity Thanks in advance.",Tech Support,Medium,customer303@example.com
+Issue with incorrect billing amount,I was charged twice for my subscription this month,Billing,High,customer304@example.com
+Help needed: Volume discount,Please help! Do you offer discounts for bulk purchases?,Sales,Medium,customer305@example.com
+FEATURE COMPARISON,Can you compare your product with competitors?,Sales,Low,customer306@example.com
+Help needed: Trial extension,Can we extend our trial period? This is affecting my business.,Sales,Low,customer307@example.com
+Help needed: Plan upgrade billing,Questions about pricing for plan upgrade Thanks in advance.,Billing,High,customer308@example.com
+URGENT: Incorrect billing amount,Please help! I was charged twice for my subscription this month,Billing,High,customer309@example.com
+Product pricing inquiry,What are the pricing options for enterprise plans?,Sales,Medium,customer310@example.com
+URGENT: Enterprise inquiry,Interested in enterprise licensing and support,Sales,High,customer311@example.com
+DATABASE CONNECTION ERROR,"Cannot connect to database, all services are affected Can someone assist?",Tech Support,High,customer312@example.com
+URGENT: Payment failed,My credit card payment was declined but money was deducted Can someone assist?,Billing,High,customer313@example.com
+Help needed: Overcharged account,My account shows charges I didn't authorize This is affecting my business.,Billing,Urgent,customer314@example.com
+URGENT: Billing address change,Please update my billing address,Billing,Low,customer315@example.com
+Issue with feature comparison,Can you compare your product with competitors? This is affecting my business.,Sales,Low,customer316@example.com
+Login problems,"Cannot log into my account, shows invalid credentials Thanks in advance.",Tech Support,High,customer317@example.com
+Demo request,Please help! I would like to schedule a product demonstration,Sales,High,customer318@example.com
+Help needed: Enterprise inquiry,Please help! Interested in enterprise licensing and support,Sales,High,customer319@example.com
+URGENT: Feature not working,The export function is not working properly,Tech Support,Low,customer320@example.com
+URGENT: Feature comparison,Can you compare your product with competitors? Thanks in advance.,Sales,Low,customer321@example.com
+URGENT: Database connection error,"Cannot connect to database, all services are affected This is affecting my business.",Tech Support,Urgent,customer322@example.com
+Issue with feature comparison,Can you compare your product with competitors? This is affecting my business.,Sales,Low,customer323@example.com
+Tax information,Need tax documentation for business expenses This is affecting my business.,Billing,Medium,customer324@example.com
+URGENT: Payment failed,My credit card payment was declined but money was deducted This is affecting my business.,Billing,High,customer325@example.com
+URGENT: Server down,"Unable to connect to the server, getting timeout errors Can someone assist?",Tech Support,Urgent,customer326@example.com
+Database connection error,"Cannot connect to database, all services are affected Can someone assist?",Tech Support,Urgent,customer327@example.com
+PRODUCT ROADMAP,Please help! What new features are planned for next year?,Sales,Low,customer328@example.com
+URGENT: Website not loading,The website shows a 404 error when I try to access my account Can someone assist?,Tech Support,High,customer329@example.com
+Help needed: Contract negotiation,Please help! Need to discuss contract terms and conditions,Sales,High,customer330@example.com
+PASSWORD RESET ISSUE,"I can't reset my password, the email is not coming through Thanks in advance.",Tech Support,Medium,customer331@example.com
+Help needed: Tax information,Need tax documentation for business expenses This is affecting my business.,Billing,Medium,customer332@example.com
+Database connection error,"Cannot connect to database, all services are affected Thanks in advance.",Tech Support,Urgent,customer333@example.com
+Contract negotiation,Need to discuss contract terms and conditions Can someone assist?,Sales,High,customer334@example.com
+Invoice missing,I haven't received my invoice for last month Can someone assist?,Billing,Low,customer335@example.com
+Server down,"Unable to connect to the server, getting timeout errors This is affecting my business.",Tech Support,Urgent,customer336@example.com
+URGENT: Refund request,I want to request a refund for unused services Can someone assist?,Billing,Medium,customer337@example.com
+Tax information,Need tax documentation for business expenses,Billing,Medium,customer338@example.com
+Product pricing inquiry,What are the pricing options for enterprise plans?,Sales,Medium,customer339@example.com
+Issue with enterprise inquiry,Interested in enterprise licensing and support This is affecting my business.,Sales,High,customer340@example.com
+TRIAL EXTENSION,Can we extend our trial period? This is affecting my business.,Sales,Medium,customer341@example.com
+Help needed: Partnership opportunity,Interested in becoming a reseller partner Thanks in advance.,Sales,Medium,customer342@example.com
+Issue with password reset issue,"I can't reset my password, the email is not coming through Can someone assist?",Tech Support,Medium,customer343@example.com
+VOLUME DISCOUNT,Do you offer discounts for bulk purchases? Thanks in advance.,Sales,Medium,customer344@example.com
+URGENT: Overcharged account,My account shows charges I didn't authorize This is affecting my business.,Billing,Urgent,customer345@example.com
+Password reset issue,"I can't reset my password, the email is not coming through",Tech Support,Medium,customer346@example.com
+TRIAL EXTENSION,Can we extend our trial period? Thanks in advance.,Sales,Medium,customer347@example.com
+Demo request,I would like to schedule a product demonstration,Sales,High,customer348@example.com
+App crashes frequently,The mobile app keeps crashing when I try to upload files Thanks in advance.,Tech Support,High,customer349@example.com
+URGENT: Volume discount,Please help! Do you offer discounts for bulk purchases?,Sales,Medium,customer350@example.com
+Help needed: Contract negotiation,Need to discuss contract terms and conditions This is affecting my business.,Sales,High,customer351@example.com
+API NOT RESPONDING,Getting 500 internal server error when making API calls,Tech Support,Urgent,customer352@example.com
+FEATURE NOT WORKING,Please help! The export function is not working properly,Tech Support,Low,customer353@example.com
+Help needed: Incorrect billing amount,I was charged twice for my subscription this month This is affecting my business.,Billing,High,customer354@example.com
+Help needed: Partnership opportunity,Interested in becoming a reseller partner,Sales,Medium,customer355@example.com
+Password reset issue,"I can't reset my password, the email is not coming through",Tech Support,Medium,customer356@example.com
+URGENT: Server down,"Unable to connect to the server, getting timeout errors Can someone assist?",Tech Support,Urgent,customer357@example.com
+INVOICE MISSING,Please help! I haven't received my invoice for last month,Billing,Medium,customer358@example.com
+TAX INFORMATION,Need tax documentation for business expenses Can someone assist?,Billing,Low,customer359@example.com
+URGENT: Server down,"Unable to connect to the server, getting timeout errors Thanks in advance.",Tech Support,Urgent,customer360@example.com
+URGENT: Contract negotiation,Need to discuss contract terms and conditions This is affecting my business.,Sales,High,customer361@example.com
+Help needed: Custom solution needed,We need a custom integration for our business Thanks in advance.,Sales,High,customer362@example.com
+Help needed: Refund request,I want to request a refund for unused services Can someone assist?,Billing,Medium,customer363@example.com
+Website not loading,The website shows a 404 error when I try to access my account Thanks in advance.,Tech Support,High,customer364@example.com
+INCORRECT BILLING AMOUNT,Please help! I was charged twice for my subscription this month,Billing,High,customer365@example.com
+Issue with slow loading times,"The dashboard takes forever to load, it's affecting my productivity Thanks in advance.",Tech Support,Medium,customer366@example.com
+Incorrect billing amount,I was charged twice for my subscription this month This is affecting my business.,Billing,High,customer367@example.com
+Help needed: Feature comparison,Can you compare your product with competitors? Thanks in advance.,Sales,Low,customer368@example.com
+URGENT: Contract negotiation,Need to discuss contract terms and conditions Can someone assist?,Sales,High,customer369@example.com
+PASSWORD RESET ISSUE,"I can't reset my password, the email is not coming through Can someone assist?",Tech Support,Medium,customer370@example.com
+DATABASE CONNECTION ERROR,"Cannot connect to database, all services are affected This is affecting my business.",Tech Support,Urgent,customer371@example.com
+URGENT: Billing address change,Please update my billing address Can someone assist?,Billing,Low,customer372@example.com
+Help needed: Custom solution needed,Please help! We need a custom integration for our business,Sales,High,customer373@example.com
+Issue with feature not working,The export function is not working properly Can someone assist?,Tech Support,Low,customer374@example.com
+INVOICE MISSING,I haven't received my invoice for last month Can someone assist?,Billing,Low,customer375@example.com
+URGENT: Plan upgrade billing,Questions about pricing for plan upgrade Can someone assist?,Billing,Medium,customer376@example.com
+Issue with volume discount,Do you offer discounts for bulk purchases?,Sales,Medium,customer377@example.com
+URGENT: Browser compatibility,Site doesn't work properly on Safari browser This is affecting my business.,Tech Support,Low,customer378@example.com
+TAX INFORMATION,Need tax documentation for business expenses Can someone assist?,Billing,Medium,customer379@example.com
+Issue with slow loading times,"The dashboard takes forever to load, it's affecting my productivity Thanks in advance.",Tech Support,Medium,customer380@example.com
+Payment failed,My credit card payment was declined but money was deducted This is affecting my business.,Billing,Medium,customer381@example.com
+URGENT: Incorrect billing amount,Please help! I was charged twice for my subscription this month,Billing,High,customer382@example.com
+Issue with subscription cancellation,I need to cancel my subscription immediately,Billing,Medium,customer383@example.com
+APP CRASHES FREQUENTLY,The mobile app keeps crashing when I try to upload files Thanks in advance.,Tech Support,High,customer384@example.com
+URGENT: Incorrect billing amount,I was charged twice for my subscription this month Can someone assist?,Billing,High,customer385@example.com
+Help needed: Demo request,I would like to schedule a product demonstration,Sales,High,customer386@example.com
+Issue with contract negotiation,Need to discuss contract terms and conditions Thanks in advance.,Sales,High,customer387@example.com
+PRODUCT PRICING INQUIRY,What are the pricing options for enterprise plans? This is affecting my business.,Sales,Medium,customer388@example.com
+Plan upgrade billing,Questions about pricing for plan upgrade Thanks in advance.,Billing,Medium,customer389@example.com
+URGENT: App crashes frequently,The mobile app keeps crashing when I try to upload files Can someone assist?,Tech Support,High,customer390@example.com
+API NOT RESPONDING,Getting 500 internal server error when making API calls This is affecting my business.,Tech Support,Urgent,customer391@example.com
+Issue with billing address change,Please help! Please update my billing address,Billing,Low,customer392@example.com
+Help needed: Invoice missing,I haven't received my invoice for last month Can someone assist?,Billing,Low,customer393@example.com
+SUBSCRIPTION CANCELLATION,I need to cancel my subscription immediately Thanks in advance.,Billing,Medium,customer394@example.com
+URGENT: Login problems,"Cannot log into my account, shows invalid credentials Can someone assist?",Tech Support,High,customer395@example.com
+Issue with database connection error,"Cannot connect to database, all services are affected Thanks in advance.",Tech Support,Urgent,customer396@example.com
+Help needed: Custom solution needed,We need a custom integration for our business Can someone assist?,Sales,High,customer397@example.com
+Subscription cancellation,I need to cancel my subscription immediately Can someone assist?,Billing,Medium,customer398@example.com
+Plan upgrade billing,Questions about pricing for plan upgrade Can someone assist?,Billing,Medium,customer399@example.com
+DEMO REQUEST,Please help! I would like to schedule a product demonstration,Sales,High,customer400@example.com
+CUSTOM SOLUTION NEEDED,We need a custom integration for our business,Sales,High,customer401@example.com
+URGENT: Login problems,"Cannot log into my account, shows invalid credentials This is affecting my business.",Tech Support,High,customer402@example.com
+Issue with refund request,I want to request a refund for unused services,Billing,Medium,customer403@example.com
+Help needed: Login problems,"Cannot log into my account, shows invalid credentials",Tech Support,High,customer404@example.com
+Issue with billing address change,Please update my billing address Can someone assist?,Billing,Low,customer405@example.com
+URGENT: Website not loading,The website shows a 404 error when I try to access my account Can someone assist?,Tech Support,High,customer406@example.com
+Website not loading,The website shows a 404 error when I try to access my account,Tech Support,High,customer407@example.com
+Issue with refund request,Please help! I want to request a refund for unused services,Billing,Urgent,customer408@example.com
+URGENT: Demo request,Please help! I would like to schedule a product demonstration,Sales,High,customer409@example.com
+URGENT: Tax information,Need tax documentation for business expenses Can someone assist?,Billing,Medium,customer410@example.com
+BILLING ADDRESS CHANGE,Please update my billing address This is affecting my business.,Billing,Low,customer411@example.com
+Volume discount,Do you offer discounts for bulk purchases?,Sales,High,customer412@example.com
+URGENT: Tax information,Need tax documentation for business expenses Can someone assist?,Billing,Medium,customer413@example.com
+Help needed: Contract negotiation,Need to discuss contract terms and conditions This is affecting my business.,Sales,High,customer414@example.com
+URGENT: Plan upgrade billing,Please help! Questions about pricing for plan upgrade,Billing,Medium,customer415@example.com
+URGENT: App crashes frequently,The mobile app keeps crashing when I try to upload files This is affecting my business.,Tech Support,Low,customer416@example.com
+Issue with tax information,Need tax documentation for business expenses Thanks in advance.,Billing,Medium,customer417@example.com
+URGENT: Enterprise inquiry,Interested in enterprise licensing and support This is affecting my business.,Sales,High,customer418@example.com
+FEATURE COMPARISON,Can you compare your product with competitors? Thanks in advance.,Sales,Low,customer419@example.com
+Help needed: Feature comparison,Can you compare your product with competitors? Can someone assist?,Sales,Low,customer420@example.com
+TAX INFORMATION,Need tax documentation for business expenses,Billing,Medium,customer421@example.com
+URGENT: Volume discount,Do you offer discounts for bulk purchases? This is affecting my business.,Sales,Medium,customer422@example.com
+App crashes frequently,The mobile app keeps crashing when I try to upload files Can someone assist?,Tech Support,High,customer423@example.com
+URGENT: Billing address change,Please update my billing address Thanks in advance.,Billing,Low,customer424@example.com
+Issue with custom solution needed,We need a custom integration for our business Can someone assist?,Sales,High,customer425@example.com
+Issue with payment failed,Please help! My credit card payment was declined but money was deducted,Billing,High,customer426@example.com
+Billing address change,Please update my billing address Can someone assist?,Billing,Low,customer427@example.com
+Issue with trial extension,Please help! Can we extend our trial period?,Sales,Medium,customer428@example.com
+URGENT: Invoice missing,I haven't received my invoice for last month This is affecting my business.,Billing,Low,customer429@example.com
+OVERCHARGED ACCOUNT,My account shows charges I didn't authorize Can someone assist?,Billing,Urgent,customer430@example.com
+APP CRASHES FREQUENTLY,The mobile app keeps crashing when I try to upload files,Tech Support,High,customer431@example.com
+Issue with app crashes frequently,Please help! The mobile app keeps crashing when I try to upload files,Tech Support,High,customer432@example.com
+URGENT: Payment failed,My credit card payment was declined but money was deducted Thanks in advance.,Billing,High,customer433@example.com
+Issue with server down,"Unable to connect to the server, getting timeout errors Thanks in advance.",Tech Support,Urgent,customer434@example.com
+Invoice missing,I haven't received my invoice for last month Can someone assist?,Billing,Low,customer435@example.com
+Help needed: Password reset issue,"I can't reset my password, the email is not coming through",Tech Support,Urgent,customer436@example.com
+Help needed: Enterprise inquiry,Interested in enterprise licensing and support Thanks in advance.,Sales,High,customer437@example.com
+Issue with server down,"Unable to connect to the server, getting timeout errors Can someone assist?",Tech Support,Urgent,customer438@example.com
+Help needed: Refund request,Please help! I want to request a refund for unused services,Billing,Medium,customer439@example.com
+URGENT: App crashes frequently,The mobile app keeps crashing when I try to upload files Thanks in advance.,Tech Support,High,customer440@example.com
+Browser compatibility,Site doesn't work properly on Safari browser,Tech Support,Low,customer441@example.com
+Help needed: Server down,"Unable to connect to the server, getting timeout errors Can someone assist?",Tech Support,Urgent,customer442@example.com
+Issue with website not loading,The website shows a 404 error when I try to access my account Can someone assist?,Tech Support,High,customer443@example.com
+ENTERPRISE INQUIRY,Interested in enterprise licensing and support Can someone assist?,Sales,High,customer444@example.com
+Issue with server down,"Unable to connect to the server, getting timeout errors Can someone assist?",Tech Support,Urgent,customer445@example.com
+Issue with invoice missing,I haven't received my invoice for last month This is affecting my business.,Billing,Low,customer446@example.com
+URGENT: Product roadmap,What new features are planned for next year?,Sales,High,customer447@example.com
+SERVER DOWN,"Unable to connect to the server, getting timeout errors",Tech Support,Urgent,customer448@example.com
+FEATURE COMPARISON,Can you compare your product with competitors? Thanks in advance.,Sales,Low,customer449@example.com
+Volume discount,Do you offer discounts for bulk purchases? This is affecting my business.,Sales,Medium,customer450@example.com
+Issue with subscription cancellation,I need to cancel my subscription immediately Thanks in advance.,Billing,Medium,customer451@example.com
+Help needed: Tax information,Please help! Need tax documentation for business expenses,Billing,Medium,customer452@example.com
+Enterprise inquiry,Interested in enterprise licensing and support This is affecting my business.,Sales,High,customer453@example.com
+Issue with tax information,Need tax documentation for business expenses Thanks in advance.,Billing,Medium,customer454@example.com
+URGENT: Plan upgrade billing,Questions about pricing for plan upgrade Can someone assist?,Billing,Medium,customer455@example.com
+FEATURE COMPARISON,Can you compare your product with competitors?,Sales,Low,customer456@example.com
+FEATURE COMPARISON,Please help! Can you compare your product with competitors?,Sales,Low,customer457@example.com
+URGENT: Website not loading,The website shows a 404 error when I try to access my account This is affecting my business.,Tech Support,High,customer458@example.com
+Browser compatibility,Please help! Site doesn't work properly on Safari browser,Tech Support,High,customer459@example.com
+Login problems,"Cannot log into my account, shows invalid credentials Can someone assist?",Tech Support,High,customer460@example.com
+Issue with volume discount,Do you offer discounts for bulk purchases?,Sales,Medium,customer461@example.com
+WEBSITE NOT LOADING,The website shows a 404 error when I try to access my account Thanks in advance.,Tech Support,High,customer462@example.com
+Issue with feature not working,Please help! The export function is not working properly,Tech Support,Low,customer463@example.com
+Tax information,Need tax documentation for business expenses,Billing,Medium,customer464@example.com
+FEATURE NOT WORKING,The export function is not working properly,Tech Support,Low,customer465@example.com
+Product pricing inquiry,What are the pricing options for enterprise plans? This is affecting my business.,Sales,Medium,customer466@example.com
+Issue with slow loading times,"The dashboard takes forever to load, it's affecting my productivity This is affecting my business.",Tech Support,Medium,customer467@example.com
+API NOT RESPONDING,Getting 500 internal server error when making API calls,Tech Support,Urgent,customer468@example.com
+Help needed: Feature comparison,Can you compare your product with competitors?,Sales,Low,customer469@example.com
+Custom solution needed,We need a custom integration for our business Thanks in advance.,Sales,High,customer470@example.com
+URGENT: Invoice missing,I haven't received my invoice for last month Thanks in advance.,Billing,Low,customer471@example.com
+Overcharged account,My account shows charges I didn't authorize,Billing,Urgent,customer472@example.com
+Help needed: Billing address change,Please update my billing address Can someone assist?,Billing,Low,customer473@example.com
+URGENT: API not responding,Please help! Getting 500 internal server error when making API calls,Tech Support,Medium,customer474@example.com
+SUBSCRIPTION CANCELLATION,Please help! I need to cancel my subscription immediately,Billing,Medium,customer475@example.com
+Issue with login problems,"Cannot log into my account, shows invalid credentials Thanks in advance.",Tech Support,High,customer476@example.com
+Issue with product roadmap,What new features are planned for next year? Thanks in advance.,Sales,Low,customer477@example.com
+Issue with password reset issue,"I can't reset my password, the email is not coming through Can someone assist?",Tech Support,Medium,customer478@example.com
+URGENT: Invoice missing,I haven't received my invoice for last month Can someone assist?,Billing,Low,customer479@example.com
+VOLUME DISCOUNT,Do you offer discounts for bulk purchases? This is affecting my business.,Sales,Medium,customer480@example.com
+FEATURE COMPARISON,Can you compare your product with competitors? Can someone assist?,Sales,Low,customer481@example.com
+Help needed: Invoice missing,I haven't received my invoice for last month This is affecting my business.,Billing,Low,customer482@example.com
+INVOICE MISSING,I haven't received my invoice for last month This is affecting my business.,Billing,Low,customer483@example.com
+Issue with password reset issue,"I can't reset my password, the email is not coming through Thanks in advance.",Tech Support,Medium,customer484@example.com
+PLAN UPGRADE BILLING,Questions about pricing for plan upgrade Can someone assist?,Billing,Medium,customer485@example.com
+URGENT: App crashes frequently,The mobile app keeps crashing when I try to upload files Can someone assist?,Tech Support,High,customer486@example.com
+Contract negotiation,Need to discuss contract terms and conditions Thanks in advance.,Sales,High,customer487@example.com
+Help needed: Slow loading times,"The dashboard takes forever to load, it's affecting my productivity Can someone assist?",Tech Support,Medium,customer488@example.com
+Browser compatibility,Please help! Site doesn't work properly on Safari browser,Tech Support,Low,customer489@example.com
+Issue with product roadmap,What new features are planned for next year? Can someone assist?,Sales,Low,customer490@example.com
+Slow loading times,"The dashboard takes forever to load, it's affecting my productivity Can someone assist?",Tech Support,High,customer491@example.com
+Help needed: Custom solution needed,We need a custom integration for our business Thanks in advance.,Sales,High,customer492@example.com
+FEATURE COMPARISON,Can you compare your product with competitors? Can someone assist?,Sales,Low,customer493@example.com
+URGENT: Feature not working,Please help! The export function is not working properly,Tech Support,Low,customer494@example.com
+Enterprise inquiry,Please help! Interested in enterprise licensing and support,Sales,High,customer495@example.com
+URGENT: Volume discount,Do you offer discounts for bulk purchases? This is affecting my business.,Sales,Medium,customer496@example.com
+URGENT: Slow loading times,"The dashboard takes forever to load, it's affecting my productivity",Tech Support,Medium,customer497@example.com
+URGENT: Tax information,Need tax documentation for business expenses,Billing,Medium,customer498@example.com
+Feature comparison,Can you compare your product with competitors? This is affecting my business.,Sales,Low,customer499@example.com
+PAYMENT FAILED,My credit card payment was declined but money was deducted,Billing,High,customer500@example.com
+Help needed: Demo request,I would like to schedule a product demonstration Can someone assist?,Sales,Medium,customer501@example.com
+URGENT: Database connection error,"Cannot connect to database, all services are affected",Tech Support,Urgent,customer502@example.com
+Subscription cancellation,I need to cancel my subscription immediately,Billing,Medium,customer503@example.com
+PASSWORD RESET ISSUE,"Please help! I can't reset my password, the email is not coming through",Tech Support,Medium,customer504@example.com
+APP CRASHES FREQUENTLY,The mobile app keeps crashing when I try to upload files,Tech Support,High,customer505@example.com
+Issue with billing address change,Please update my billing address This is affecting my business.,Billing,Low,customer506@example.com
+URGENT: Slow loading times,"The dashboard takes forever to load, it's affecting my productivity Thanks in advance.",Tech Support,Medium,customer507@example.com
+SUBSCRIPTION CANCELLATION,I need to cancel my subscription immediately,Billing,Medium,customer508@example.com
+Slow loading times,"The dashboard takes forever to load, it's affecting my productivity This is affecting my business.",Tech Support,Medium,customer509@example.com
+Issue with api not responding,Getting 500 internal server error when making API calls Thanks in advance.,Tech Support,Urgent,customer510@example.com
+Issue with billing address change,Please update my billing address Thanks in advance.,Billing,Low,customer511@example.com
+PAYMENT FAILED,Please help! My credit card payment was declined but money was deducted,Billing,High,customer512@example.com
+APP CRASHES FREQUENTLY,Please help! The mobile app keeps crashing when I try to upload files,Tech Support,High,customer513@example.com
+URGENT: App crashes frequently,The mobile app keeps crashing when I try to upload files Can someone assist?,Tech Support,High,customer514@example.com
+Help needed: Password reset issue,"Please help! I can't reset my password, the email is not coming through",Tech Support,Medium,customer515@example.com
+Issue with feature comparison,Please help! Can you compare your product with competitors?,Sales,Low,customer516@example.com
+SLOW LOADING TIMES,"The dashboard takes forever to load, it's affecting my productivity",Tech Support,Medium,customer517@example.com
+Feature comparison,Can you compare your product with competitors? Can someone assist?,Sales,Low,customer518@example.com
+Issue with billing address change,Please update my billing address This is affecting my business.,Billing,Low,customer519@example.com
+Issue with payment method update,Need to update my credit card information This is affecting my business.,Billing,Low,customer520@example.com
+Issue with login problems,"Cannot log into my account, shows invalid credentials",Tech Support,Low,customer521@example.com
+Issue with enterprise inquiry,Please help! Interested in enterprise licensing and support,Sales,High,customer522@example.com
+Login problems,"Cannot log into my account, shows invalid credentials Thanks in advance.",Tech Support,High,customer523@example.com
+Issue with payment method update,Please help! Need to update my credit card information,Billing,Low,customer524@example.com
+URGENT: Product roadmap,What new features are planned for next year? Thanks in advance.,Sales,Urgent,customer525@example.com
+URGENT: Password reset issue,"I can't reset my password, the email is not coming through This is affecting my business.",Tech Support,Medium,customer526@example.com
+Help needed: Enterprise inquiry,Interested in enterprise licensing and support This is affecting my business.,Sales,High,customer527@example.com
+URGENT: Plan upgrade billing,Questions about pricing for plan upgrade Can someone assist?,Billing,Medium,customer528@example.com
+Help needed: Tax information,Need tax documentation for business expenses This is affecting my business.,Billing,Medium,customer529@example.com
+INVOICE MISSING,I haven't received my invoice for last month Can someone assist?,Billing,Low,customer530@example.com
+Browser compatibility,Please help! Site doesn't work properly on Safari browser,Tech Support,Low,customer531@example.com
+Help needed: API not responding,Please help! Getting 500 internal server error when making API calls,Tech Support,Urgent,customer532@example.com
+Help needed: Contract negotiation,Need to discuss contract terms and conditions Can someone assist?,Sales,High,customer533@example.com
+Help needed: Subscription cancellation,Please help! I need to cancel my subscription immediately,Billing,Urgent,customer534@example.com
+URGENT: Volume discount,Do you offer discounts for bulk purchases? Can someone assist?,Sales,Medium,customer535@example.com
+Tax information,Please help! Need tax documentation for business expenses,Billing,Medium,customer536@example.com
+Enterprise inquiry,Interested in enterprise licensing and support Can someone assist?,Sales,High,customer537@example.com
+SUBSCRIPTION CANCELLATION,I need to cancel my subscription immediately Can someone assist?,Billing,Medium,customer538@example.com
+App crashes frequently,The mobile app keeps crashing when I try to upload files Thanks in advance.,Tech Support,High,customer539@example.com
+PRODUCT PRICING INQUIRY,Please help! What are the pricing options for enterprise plans?,Sales,Medium,customer540@example.com
+Issue with slow loading times,"The dashboard takes forever to load, it's affecting my productivity Thanks in advance.",Tech Support,Medium,customer541@example.com
+Issue with partnership opportunity,Interested in becoming a reseller partner Thanks in advance.,Sales,Medium,customer542@example.com
+SUBSCRIPTION CANCELLATION,I need to cancel my subscription immediately Can someone assist?,Billing,Medium,customer543@example.com
+URGENT: API not responding,Getting 500 internal server error when making API calls Can someone assist?,Tech Support,Medium,customer544@example.com
+Help needed: Feature comparison,Can you compare your product with competitors? Thanks in advance.,Sales,Low,customer545@example.com
+Overcharged account,Please help! My account shows charges I didn't authorize,Billing,Urgent,customer546@example.com
+CONTRACT NEGOTIATION,Need to discuss contract terms and conditions,Sales,High,customer547@example.com
+Help needed: Feature comparison,Can you compare your product with competitors? Thanks in advance.,Sales,Low,customer548@example.com
+Help needed: Feature not working,The export function is not working properly Can someone assist?,Tech Support,Low,customer549@example.com
+Website not loading,The website shows a 404 error when I try to access my account Thanks in advance.,Tech Support,High,customer550@example.com
+DATABASE CONNECTION ERROR,"Cannot connect to database, all services are affected Can someone assist?",Tech Support,Urgent,customer551@example.com
+URGENT: Slow loading times,"The dashboard takes forever to load, it's affecting my productivity Thanks in advance.",Tech Support,Medium,customer552@example.com
+PLAN UPGRADE BILLING,Questions about pricing for plan upgrade This is affecting my business.,Billing,Medium,customer553@example.com
+DATABASE CONNECTION ERROR,"Cannot connect to database, all services are affected Thanks in advance.",Tech Support,Urgent,customer554@example.com
+URGENT: Demo request,I would like to schedule a product demonstration This is affecting my business.,Sales,High,customer555@example.com
+PRODUCT PRICING INQUIRY,Please help! What are the pricing options for enterprise plans?,Sales,Medium,customer556@example.com
+FEATURE COMPARISON,Can you compare your product with competitors?,Sales,Low,customer557@example.com
+REFUND REQUEST,I want to request a refund for unused services Thanks in advance.,Billing,High,customer558@example.com
+PRODUCT PRICING INQUIRY,What are the pricing options for enterprise plans? Can someone assist?,Sales,Medium,customer559@example.com
+Issue with billing address change,Please update my billing address This is affecting my business.,Billing,Low,customer560@example.com
+PRODUCT PRICING INQUIRY,Please help! What are the pricing options for enterprise plans?,Sales,Medium,customer561@example.com
+Issue with contract negotiation,Need to discuss contract terms and conditions Can someone assist?,Sales,High,customer562@example.com
+Tax information,Need tax documentation for business expenses Thanks in advance.,Billing,Medium,customer563@example.com
+URGENT: Plan upgrade billing,Questions about pricing for plan upgrade Thanks in advance.,Billing,Medium,customer564@example.com
+Browser compatibility,Site doesn't work properly on Safari browser,Tech Support,Low,customer565@example.com
+Custom solution needed,Please help! We need a custom integration for our business,Sales,High,customer566@example.com
+URGENT: Partnership opportunity,Please help! Interested in becoming a reseller partner,Sales,Urgent,customer567@example.com
+TRIAL EXTENSION,Can we extend our trial period? Can someone assist?,Sales,Medium,customer568@example.com
+Help needed: Incorrect billing amount,I was charged twice for my subscription this month,Billing,High,customer569@example.com
+INVOICE MISSING,I haven't received my invoice for last month This is affecting my business.,Billing,Low,customer570@example.com
+Server down,"Unable to connect to the server, getting timeout errors Thanks in advance.",Tech Support,Urgent,customer571@example.com
+Help needed: Login problems,"Cannot log into my account, shows invalid credentials",Tech Support,Urgent,customer572@example.com
+Help needed: Refund request,I want to request a refund for unused services,Billing,Medium,customer573@example.com
+URGENT: Server down,"Unable to connect to the server, getting timeout errors Can someone assist?",Tech Support,Urgent,customer574@example.com
+Help needed: Incorrect billing amount,I was charged twice for my subscription this month This is affecting my business.,Billing,High,customer575@example.com
+URGENT: Partnership opportunity,Interested in becoming a reseller partner Thanks in advance.,Sales,Medium,customer576@example.com
+URGENT: Server down,"Unable to connect to the server, getting timeout errors Can someone assist?",Tech Support,Urgent,customer577@example.com
+Billing address change,Please update my billing address,Billing,Low,customer578@example.com
+Help needed: Password reset issue,"I can't reset my password, the email is not coming through",Tech Support,Medium,customer579@example.com
+Slow loading times,"The dashboard takes forever to load, it's affecting my productivity",Tech Support,Medium,customer580@example.com
+URGENT: Enterprise inquiry,Please help! Interested in enterprise licensing and support,Sales,High,customer581@example.com
+Help needed: Product pricing inquiry,Please help! What are the pricing options for enterprise plans?,Sales,Medium,customer582@example.com
+Issue with demo request,Please help! I would like to schedule a product demonstration,Sales,High,customer583@example.com
+URGENT: Incorrect billing amount,I was charged twice for my subscription this month,Billing,Urgent,customer584@example.com
+Issue with enterprise inquiry,Please help! Interested in enterprise licensing and support,Sales,High,customer585@example.com
+Issue with enterprise inquiry,Interested in enterprise licensing and support Can someone assist?,Sales,High,customer586@example.com
+Help needed: Product pricing inquiry,What are the pricing options for enterprise plans?,Sales,Medium,customer587@example.com
+URGENT: Custom solution needed,We need a custom integration for our business,Sales,High,customer588@example.com
+URGENT: Payment failed,My credit card payment was declined but money was deducted Thanks in advance.,Billing,High,customer589@example.com
+Issue with refund request,I want to request a refund for unused services This is affecting my business.,Billing,Medium,customer590@example.com
+Demo request,I would like to schedule a product demonstration Can someone assist?,Sales,High,customer591@example.com
+URGENT: Product roadmap,What new features are planned for next year? Thanks in advance.,Sales,Low,customer592@example.com
+Help needed: Product pricing inquiry,Please help! What are the pricing options for enterprise plans?,Sales,Medium,customer593@example.com
+Issue with invoice missing,I haven't received my invoice for last month Thanks in advance.,Billing,Low,customer594@example.com
+DEMO REQUEST,I would like to schedule a product demonstration,Sales,High,customer595@example.com
+Help needed: Custom solution needed,We need a custom integration for our business Thanks in advance.,Sales,High,customer596@example.com
+Contract negotiation,Need to discuss contract terms and conditions Thanks in advance.,Sales,High,customer597@example.com
+URGENT: Invoice missing,I haven't received my invoice for last month,Billing,Low,customer598@example.com
+Payment failed,My credit card payment was declined but money was deducted Can someone assist?,Billing,High,customer599@example.com
+URGENT: Login problems,"Please help! Cannot log into my account, shows invalid credentials",Tech Support,High,customer600@example.com
+INCORRECT BILLING AMOUNT,I was charged twice for my subscription this month This is affecting my business.,Billing,High,customer601@example.com
+VOLUME DISCOUNT,Do you offer discounts for bulk purchases?,Sales,Medium,customer602@example.com
+URGENT: Plan upgrade billing,Please help! Questions about pricing for plan upgrade,Billing,Medium,customer603@example.com
+Trial extension,Please help! Can we extend our trial period?,Sales,Urgent,customer604@example.com
+Help needed: Product pricing inquiry,What are the pricing options for enterprise plans? This is affecting my business.,Sales,Medium,customer605@example.com
+Help needed: Feature comparison,Can you compare your product with competitors? Thanks in advance.,Sales,Low,customer606@example.com
+TRIAL EXTENSION,Can we extend our trial period? Can someone assist?,Sales,Medium,customer607@example.com
+Help needed: Plan upgrade billing,Please help! Questions about pricing for plan upgrade,Billing,Medium,customer608@example.com
+SERVER DOWN,"Please help! Unable to connect to the server, getting timeout errors",Tech Support,Urgent,customer609@example.com
+Issue with api not responding,Getting 500 internal server error when making API calls,Tech Support,Urgent,customer610@example.com
+Issue with refund request,I want to request a refund for unused services Thanks in advance.,Billing,Medium,customer611@example.com
+SUBSCRIPTION CANCELLATION,Please help! I need to cancel my subscription immediately,Billing,Medium,customer612@example.com
+URGENT: Feature comparison,Please help! Can you compare your product with competitors?,Sales,Low,customer613@example.com
+Issue with overcharged account,My account shows charges I didn't authorize This is affecting my business.,Billing,Urgent,customer614@example.com
+Help needed: Billing address change,Please update my billing address Thanks in advance.,Billing,Low,customer615@example.com
+PAYMENT FAILED,My credit card payment was declined but money was deducted Can someone assist?,Billing,High,customer616@example.com
+Issue with overcharged account,My account shows charges I didn't authorize,Billing,Urgent,customer617@example.com
+Issue with feature comparison,Can you compare your product with competitors?,Sales,Low,customer618@example.com
+Help needed: Volume discount,Do you offer discounts for bulk purchases?,Sales,Medium,customer619@example.com
+Partnership opportunity,Interested in becoming a reseller partner,Sales,Medium,customer620@example.com
+Help needed: API not responding,Getting 500 internal server error when making API calls Can someone assist?,Tech Support,Urgent,customer621@example.com
+URGENT: Incorrect billing amount,I was charged twice for my subscription this month Thanks in advance.,Billing,High,customer622@example.com
+URGENT: Enterprise inquiry,Please help! Interested in enterprise licensing and support,Sales,High,customer623@example.com
+APP CRASHES FREQUENTLY,The mobile app keeps crashing when I try to upload files,Tech Support,Urgent,customer624@example.com
+VOLUME DISCOUNT,Do you offer discounts for bulk purchases? This is affecting my business.,Sales,Medium,customer625@example.com
+URGENT: Browser compatibility,Site doesn't work properly on Safari browser This is affecting my business.,Tech Support,Low,customer626@example.com
+SERVER DOWN,"Unable to connect to the server, getting timeout errors Can someone assist?",Tech Support,Urgent,customer627@example.com
+BILLING ADDRESS CHANGE,Please update my billing address Can someone assist?,Billing,Low,customer628@example.com
+URGENT: API not responding,Getting 500 internal server error when making API calls This is affecting my business.,Tech Support,Urgent,customer629@example.com
+Issue with website not loading,The website shows a 404 error when I try to access my account,Tech Support,High,customer630@example.com
+Issue with demo request,I would like to schedule a product demonstration Can someone assist?,Sales,High,customer631@example.com
+Enterprise inquiry,Interested in enterprise licensing and support Can someone assist?,Sales,High,customer632@example.com
+URGENT: Product pricing inquiry,What are the pricing options for enterprise plans? Can someone assist?,Sales,Low,customer633@example.com
+Issue with database connection error,"Please help! Cannot connect to database, all services are affected",Tech Support,Urgent,customer634@example.com
+URGENT: Payment method update,Need to update my credit card information,Billing,Low,customer635@example.com
+Refund request,I want to request a refund for unused services Thanks in advance.,Billing,Medium,customer636@example.com
+URGENT: Slow loading times,"Please help! The dashboard takes forever to load, it's affecting my productivity",Tech Support,Low,customer637@example.com
+Issue with incorrect billing amount,Please help! I was charged twice for my subscription this month,Billing,High,customer638@example.com
+URGENT: Website not loading,The website shows a 404 error when I try to access my account This is affecting my business.,Tech Support,High,customer639@example.com
+PLAN UPGRADE BILLING,Please help! Questions about pricing for plan upgrade,Billing,Medium,customer640@example.com
+Trial extension,Can we extend our trial period? Thanks in advance.,Sales,Medium,customer641@example.com
+TRIAL EXTENSION,Can we extend our trial period? This is affecting my business.,Sales,Medium,customer642@example.com
+Feature comparison,Can you compare your product with competitors? This is affecting my business.,Sales,Low,customer643@example.com
+Issue with overcharged account,My account shows charges I didn't authorize,Billing,Urgent,customer644@example.com
+URGENT: Product roadmap,What new features are planned for next year? Thanks in advance.,Sales,Low,customer645@example.com
+Slow loading times,"The dashboard takes forever to load, it's affecting my productivity",Tech Support,Medium,customer646@example.com
+BILLING ADDRESS CHANGE,Please help! Please update my billing address,Billing,Low,customer647@example.com
+Partnership opportunity,Interested in becoming a reseller partner,Sales,Medium,customer648@example.com
+URGENT: Billing address change,Please update my billing address,Billing,Low,customer649@example.com
+URGENT: Browser compatibility,Site doesn't work properly on Safari browser,Tech Support,Low,customer650@example.com
+Help needed: Password reset issue,"I can't reset my password, the email is not coming through Thanks in advance.",Tech Support,Low,customer651@example.com
+Issue with database connection error,"Cannot connect to database, all services are affected This is affecting my business.",Tech Support,Urgent,customer652@example.com
+Help needed: Browser compatibility,Site doesn't work properly on Safari browser,Tech Support,Low,customer653@example.com
+URGENT: Database connection error,"Cannot connect to database, all services are affected Can someone assist?",Tech Support,Urgent,customer654@example.com
+SUBSCRIPTION CANCELLATION,I need to cancel my subscription immediately Can someone assist?,Billing,Medium,customer655@example.com
+PARTNERSHIP OPPORTUNITY,Interested in becoming a reseller partner,Sales,Medium,customer656@example.com
+URGENT: Login problems,"Cannot log into my account, shows invalid credentials",Tech Support,High,customer657@example.com
+Help needed: Password reset issue,"I can't reset my password, the email is not coming through Can someone assist?",Tech Support,High,customer658@example.com
+Help needed: Website not loading,The website shows a 404 error when I try to access my account Can someone assist?,Tech Support,High,customer659@example.com
+URGENT: Feature comparison,Can you compare your product with competitors? This is affecting my business.,Sales,Low,customer660@example.com
+Help needed: Overcharged account,My account shows charges I didn't authorize Can someone assist?,Billing,Urgent,customer661@example.com
+Issue with browser compatibility,Site doesn't work properly on Safari browser,Tech Support,Low,customer662@example.com
+Slow loading times,"Please help! The dashboard takes forever to load, it's affecting my productivity",Tech Support,Medium,customer663@example.com
+Issue with browser compatibility,Please help! Site doesn't work properly on Safari browser,Tech Support,Low,customer664@example.com
+DATABASE CONNECTION ERROR,"Cannot connect to database, all services are affected This is affecting my business.",Tech Support,Urgent,customer665@example.com
+Volume discount,Do you offer discounts for bulk purchases? Can someone assist?,Sales,Medium,customer666@example.com
+WEBSITE NOT LOADING,The website shows a 404 error when I try to access my account Can someone assist?,Tech Support,Low,customer667@example.com
+Issue with payment method update,Need to update my credit card information This is affecting my business.,Billing,Low,customer668@example.com
+Feature not working,The export function is not working properly Thanks in advance.,Tech Support,Low,customer669@example.com
+FEATURE COMPARISON,Please help! Can you compare your product with competitors?,Sales,Low,customer670@example.com
+URGENT: Slow loading times,"The dashboard takes forever to load, it's affecting my productivity This is affecting my business.",Tech Support,Medium,customer671@example.com
+FEATURE COMPARISON,Can you compare your product with competitors?,Sales,Low,customer672@example.com
+App crashes frequently,The mobile app keeps crashing when I try to upload files Can someone assist?,Tech Support,High,customer673@example.com
+PASSWORD RESET ISSUE,"I can't reset my password, the email is not coming through This is affecting my business.",Tech Support,Medium,customer674@example.com
+Product roadmap,What new features are planned for next year? Can someone assist?,Sales,Low,customer675@example.com
+Help needed: API not responding,Getting 500 internal server error when making API calls Can someone assist?,Tech Support,Urgent,customer676@example.com
+URGENT: Payment failed,My credit card payment was declined but money was deducted Can someone assist?,Billing,High,customer677@example.com
+URGENT: Payment failed,My credit card payment was declined but money was deducted This is affecting my business.,Billing,High,customer678@example.com
+URGENT: Payment failed,My credit card payment was declined but money was deducted Thanks in advance.,Billing,High,customer679@example.com
+Partnership opportunity,Interested in becoming a reseller partner Thanks in advance.,Sales,Medium,customer680@example.com
+App crashes frequently,The mobile app keeps crashing when I try to upload files This is affecting my business.,Tech Support,High,customer681@example.com
+Help needed: Invoice missing,I haven't received my invoice for last month,Billing,Low,customer682@example.com
+Feature comparison,Can you compare your product with competitors? Thanks in advance.,Sales,Low,customer683@example.com
+Help needed: Payment failed,My credit card payment was declined but money was deducted This is affecting my business.,Billing,High,customer684@example.com
+URGENT: Website not loading,Please help! The website shows a 404 error when I try to access my account,Tech Support,High,customer685@example.com
+Issue with app crashes frequently,The mobile app keeps crashing when I try to upload files,Tech Support,High,customer686@example.com
+Help needed: Plan upgrade billing,Questions about pricing for plan upgrade Can someone assist?,Billing,Medium,customer687@example.com
+TRIAL EXTENSION,Can we extend our trial period? This is affecting my business.,Sales,Medium,customer688@example.com
+Issue with enterprise inquiry,Interested in enterprise licensing and support Can someone assist?,Sales,High,customer689@example.com
+Payment failed,My credit card payment was declined but money was deducted This is affecting my business.,Billing,High,customer690@example.com
+URGENT: Partnership opportunity,Interested in becoming a reseller partner This is affecting my business.,Sales,Medium,customer691@example.com
+Help needed: Website not loading,The website shows a 404 error when I try to access my account This is affecting my business.,Tech Support,High,customer692@example.com
+Issue with volume discount,Do you offer discounts for bulk purchases? Thanks in advance.,Sales,Medium,customer693@example.com
+Help needed: Login problems,"Cannot log into my account, shows invalid credentials This is affecting my business.",Tech Support,High,customer694@example.com
+URGENT: Plan upgrade billing,Questions about pricing for plan upgrade,Billing,Low,customer695@example.com
+Help needed: Overcharged account,Please help! My account shows charges I didn't authorize,Billing,Urgent,customer696@example.com
+Issue with overcharged account,My account shows charges I didn't authorize Thanks in advance.,Billing,Urgent,customer697@example.com
+Database connection error,"Cannot connect to database, all services are affected This is affecting my business.",Tech Support,Urgent,customer698@example.com
+Issue with partnership opportunity,Interested in becoming a reseller partner This is affecting my business.,Sales,Medium,customer699@example.com
+INVOICE MISSING,I haven't received my invoice for last month Thanks in advance.,Billing,Low,customer700@example.com
+Slow loading times,"The dashboard takes forever to load, it's affecting my productivity",Tech Support,High,customer701@example.com
+Help needed: Custom solution needed,We need a custom integration for our business Thanks in advance.,Sales,High,customer702@example.com
+App crashes frequently,The mobile app keeps crashing when I try to upload files Can someone assist?,Tech Support,High,customer703@example.com
+URGENT: Volume discount,Do you offer discounts for bulk purchases?,Sales,Medium,customer704@example.com
+Product roadmap,What new features are planned for next year? Thanks in advance.,Sales,Low,customer705@example.com
+Issue with contract negotiation,Need to discuss contract terms and conditions This is affecting my business.,Sales,High,customer706@example.com
+URGENT: Incorrect billing amount,I was charged twice for my subscription this month Thanks in advance.,Billing,High,customer707@example.com
+PRODUCT PRICING INQUIRY,What are the pricing options for enterprise plans? This is affecting my business.,Sales,Low,customer708@example.com
+PAYMENT FAILED,My credit card payment was declined but money was deducted,Billing,High,customer709@example.com
+Product roadmap,Please help! What new features are planned for next year?,Sales,Medium,customer710@example.com
+CUSTOM SOLUTION NEEDED,We need a custom integration for our business Can someone assist?,Sales,High,customer711@example.com
+Demo request,I would like to schedule a product demonstration This is affecting my business.,Sales,High,customer712@example.com
+TRIAL EXTENSION,Can we extend our trial period? This is affecting my business.,Sales,Medium,customer713@example.com
+API NOT RESPONDING,Getting 500 internal server error when making API calls This is affecting my business.,Tech Support,Urgent,customer714@example.com
+Issue with slow loading times,"The dashboard takes forever to load, it's affecting my productivity Can someone assist?",Tech Support,Medium,customer715@example.com
+SLOW LOADING TIMES,"The dashboard takes forever to load, it's affecting my productivity This is affecting my business.",Tech Support,Medium,customer716@example.com
+URGENT: Demo request,I would like to schedule a product demonstration This is affecting my business.,Sales,High,customer717@example.com
+Feature comparison,Please help! Can you compare your product with competitors?,Sales,Low,customer718@example.com
+URGENT: Billing address change,Please update my billing address This is affecting my business.,Billing,High,customer719@example.com
+URGENT: Login problems,"Cannot log into my account, shows invalid credentials",Tech Support,High,customer720@example.com
+Enterprise inquiry,Interested in enterprise licensing and support This is affecting my business.,Sales,High,customer721@example.com
+LOGIN PROBLEMS,"Cannot log into my account, shows invalid credentials Can someone assist?",Tech Support,High,customer722@example.com
+CUSTOM SOLUTION NEEDED,We need a custom integration for our business,Sales,High,customer723@example.com
+Help needed: Subscription cancellation,I need to cancel my subscription immediately Can someone assist?,Billing,Low,customer724@example.com
+PARTNERSHIP OPPORTUNITY,Interested in becoming a reseller partner Thanks in advance.,Sales,Medium,customer725@example.com
+URGENT: Billing address change,Please update my billing address This is affecting my business.,Billing,Low,customer726@example.com
+Demo request,I would like to schedule a product demonstration Thanks in advance.,Sales,High,customer727@example.com
+BILLING ADDRESS CHANGE,Please update my billing address This is affecting my business.,Billing,Low,customer728@example.com
+Volume discount,Do you offer discounts for bulk purchases? Thanks in advance.,Sales,Medium,customer729@example.com
+INCORRECT BILLING AMOUNT,I was charged twice for my subscription this month Thanks in advance.,Billing,Medium,customer730@example.com
+Help needed: Website not loading,The website shows a 404 error when I try to access my account Can someone assist?,Tech Support,High,customer731@example.com
+LOGIN PROBLEMS,"Cannot log into my account, shows invalid credentials Thanks in advance.",Tech Support,High,customer732@example.com
+Payment failed,My credit card payment was declined but money was deducted Thanks in advance.,Billing,High,customer733@example.com
+URGENT: Trial extension,Can we extend our trial period? Thanks in advance.,Sales,Medium,customer734@example.com
+LOGIN PROBLEMS,"Cannot log into my account, shows invalid credentials",Tech Support,High,customer735@example.com
+URGENT: Invoice missing,Please help! I haven't received my invoice for last month,Billing,Low,customer736@example.com
+Issue with slow loading times,"Please help! The dashboard takes forever to load, it's affecting my productivity",Tech Support,Medium,customer737@example.com
+Issue with server down,"Unable to connect to the server, getting timeout errors Can someone assist?",Tech Support,Urgent,customer738@example.com
+Help needed: Billing address change,Please update my billing address,Billing,High,customer739@example.com
+DATABASE CONNECTION ERROR,"Cannot connect to database, all services are affected",Tech Support,Urgent,customer740@example.com
+Help needed: Browser compatibility,Site doesn't work properly on Safari browser Thanks in advance.,Tech Support,Low,customer741@example.com
+Help needed: Browser compatibility,Site doesn't work properly on Safari browser,Tech Support,Low,customer742@example.com
+Help needed: Enterprise inquiry,Interested in enterprise licensing and support Can someone assist?,Sales,High,customer743@example.com
+URGENT: API not responding,Getting 500 internal server error when making API calls Thanks in advance.,Tech Support,Urgent,customer744@example.com
+URGENT: API not responding,Getting 500 internal server error when making API calls,Tech Support,Urgent,customer745@example.com
+Help needed: Feature not working,The export function is not working properly This is affecting my business.,Tech Support,Low,customer746@example.com
+URGENT: Website not loading,The website shows a 404 error when I try to access my account Thanks in advance.,Tech Support,Medium,customer747@example.com
+Product pricing inquiry,What are the pricing options for enterprise plans?,Sales,Medium,customer748@example.com
+Help needed: API not responding,Please help! Getting 500 internal server error when making API calls,Tech Support,Urgent,customer749@example.com
+Slow loading times,"The dashboard takes forever to load, it's affecting my productivity Thanks in advance.",Tech Support,Medium,customer750@example.com
+Issue with api not responding,Getting 500 internal server error when making API calls Can someone assist?,Tech Support,Urgent,customer751@example.com
+Help needed: Password reset issue,"I can't reset my password, the email is not coming through Can someone assist?",Tech Support,Medium,customer752@example.com
+Help needed: Payment failed,Please help! My credit card payment was declined but money was deducted,Billing,High,customer753@example.com
+Issue with volume discount,Do you offer discounts for bulk purchases? Can someone assist?,Sales,Medium,customer754@example.com
+URGENT: Website not loading,The website shows a 404 error when I try to access my account Can someone assist?,Tech Support,High,customer755@example.com
+SERVER DOWN,"Unable to connect to the server, getting timeout errors",Tech Support,Urgent,customer756@example.com
+Help needed: Website not loading,The website shows a 404 error when I try to access my account Thanks in advance.,Tech Support,High,customer757@example.com
+Issue with browser compatibility,Site doesn't work properly on Safari browser This is affecting my business.,Tech Support,Low,customer758@example.com
+Help needed: Incorrect billing amount,I was charged twice for my subscription this month This is affecting my business.,Billing,High,customer759@example.com
+BILLING ADDRESS CHANGE,Please help! Please update my billing address,Billing,Low,customer760@example.com
+Issue with payment method update,Need to update my credit card information,Billing,Low,customer761@example.com
+URGENT: Slow loading times,"The dashboard takes forever to load, it's affecting my productivity Thanks in advance.",Tech Support,Medium,customer762@example.com
+Help needed: Contract negotiation,Need to discuss contract terms and conditions This is affecting my business.,Sales,Medium,customer763@example.com
+Help needed: Refund request,I want to request a refund for unused services This is affecting my business.,Billing,Medium,customer764@example.com
+URGENT: Volume discount,Do you offer discounts for bulk purchases? This is affecting my business.,Sales,Medium,customer765@example.com
+URGENT: Product roadmap,What new features are planned for next year? Thanks in advance.,Sales,Low,customer766@example.com
+URGENT: Trial extension,Can we extend our trial period? Can someone assist?,Sales,Medium,customer767@example.com
+Issue with server down,"Please help! Unable to connect to the server, getting timeout errors",Tech Support,Urgent,customer768@example.com
+PARTNERSHIP OPPORTUNITY,Interested in becoming a reseller partner Thanks in advance.,Sales,Medium,customer769@example.com
+Issue with volume discount,Do you offer discounts for bulk purchases?,Sales,Medium,customer770@example.com
+Issue with refund request,I want to request a refund for unused services Thanks in advance.,Billing,Medium,customer771@example.com
+SERVER DOWN,"Please help! Unable to connect to the server, getting timeout errors",Tech Support,Urgent,customer772@example.com
+Help needed: Refund request,I want to request a refund for unused services This is affecting my business.,Billing,Medium,customer773@example.com
+APP CRASHES FREQUENTLY,The mobile app keeps crashing when I try to upload files This is affecting my business.,Tech Support,High,customer774@example.com
+Issue with trial extension,Can we extend our trial period? Thanks in advance.,Sales,High,customer775@example.com
+Issue with payment failed,My credit card payment was declined but money was deducted This is affecting my business.,Billing,High,customer776@example.com
+WEBSITE NOT LOADING,The website shows a 404 error when I try to access my account This is affecting my business.,Tech Support,High,customer777@example.com
+Help needed: Refund request,I want to request a refund for unused services Can someone assist?,Billing,Medium,customer778@example.com
+Help needed: Overcharged account,My account shows charges I didn't authorize Can someone assist?,Billing,Urgent,customer779@example.com
+Tax information,Please help! Need tax documentation for business expenses,Billing,Medium,customer780@example.com
+OVERCHARGED ACCOUNT,My account shows charges I didn't authorize Can someone assist?,Billing,Urgent,customer781@example.com
+Issue with server down,"Unable to connect to the server, getting timeout errors This is affecting my business.",Tech Support,Urgent,customer782@example.com
+Help needed: Volume discount,Do you offer discounts for bulk purchases? Thanks in advance.,Sales,Medium,customer783@example.com
+INVOICE MISSING,I haven't received my invoice for last month This is affecting my business.,Billing,Low,customer784@example.com
+Database connection error,"Cannot connect to database, all services are affected Can someone assist?",Tech Support,Urgent,customer785@example.com
+Issue with feature not working,The export function is not working properly,Tech Support,Low,customer786@example.com
+Issue with overcharged account,My account shows charges I didn't authorize Can someone assist?,Billing,Urgent,customer787@example.com
+URGENT: Plan upgrade billing,Questions about pricing for plan upgrade Can someone assist?,Billing,Medium,customer788@example.com
+Help needed: API not responding,Getting 500 internal server error when making API calls This is affecting my business.,Tech Support,Urgent,customer789@example.com
+Enterprise inquiry,Interested in enterprise licensing and support This is affecting my business.,Sales,High,customer790@example.com
+URGENT: Product pricing inquiry,What are the pricing options for enterprise plans? Can someone assist?,Sales,Medium,customer791@example.com
+Issue with overcharged account,My account shows charges I didn't authorize Thanks in advance.,Billing,Urgent,customer792@example.com
+App crashes frequently,The mobile app keeps crashing when I try to upload files Can someone assist?,Tech Support,High,customer793@example.com
+Refund request,I want to request a refund for unused services,Billing,Medium,customer794@example.com
+Help needed: Login problems,"Cannot log into my account, shows invalid credentials This is affecting my business.",Tech Support,High,customer795@example.com
+SERVER DOWN,"Please help! Unable to connect to the server, getting timeout errors",Tech Support,Urgent,customer796@example.com
+Help needed: Demo request,I would like to schedule a product demonstration This is affecting my business.,Sales,High,customer797@example.com
+DEMO REQUEST,I would like to schedule a product demonstration Can someone assist?,Sales,High,customer798@example.com
+Help needed: Password reset issue,"I can't reset my password, the email is not coming through",Tech Support,Medium,customer799@example.com
+URGENT: Contract negotiation,Please help! Need to discuss contract terms and conditions,Sales,Medium,customer800@example.com
+Help needed: Billing address change,Please update my billing address,Billing,High,customer801@example.com
+Slow loading times,"The dashboard takes forever to load, it's affecting my productivity Thanks in advance.",Tech Support,Medium,customer802@example.com
+REFUND REQUEST,I want to request a refund for unused services Can someone assist?,Billing,Medium,customer803@example.com
+Issue with feature not working,The export function is not working properly This is affecting my business.,Tech Support,Low,customer804@example.com
+Password reset issue,"Please help! I can't reset my password, the email is not coming through",Tech Support,Medium,customer805@example.com
+Issue with subscription cancellation,I need to cancel my subscription immediately This is affecting my business.,Billing,Medium,customer806@example.com
+Issue with app crashes frequently,The mobile app keeps crashing when I try to upload files Thanks in advance.,Tech Support,High,customer807@example.com
+REFUND REQUEST,I want to request a refund for unused services Thanks in advance.,Billing,Medium,customer808@example.com
+URGENT: Overcharged account,My account shows charges I didn't authorize,Billing,Urgent,customer809@example.com
+Issue with feature comparison,Can you compare your product with competitors? Can someone assist?,Sales,Low,customer810@example.com
+Issue with password reset issue,"Please help! I can't reset my password, the email is not coming through",Tech Support,Urgent,customer811@example.com
+Help needed: Database connection error,"Cannot connect to database, all services are affected Thanks in advance.",Tech Support,Urgent,customer812@example.com
+Database connection error,"Cannot connect to database, all services are affected",Tech Support,Urgent,customer813@example.com
+FEATURE NOT WORKING,The export function is not working properly Thanks in advance.,Tech Support,Low,customer814@example.com
+Overcharged account,My account shows charges I didn't authorize,Billing,Urgent,customer815@example.com
+URGENT: Demo request,Please help! I would like to schedule a product demonstration,Sales,High,customer816@example.com
+Issue with slow loading times,"The dashboard takes forever to load, it's affecting my productivity Can someone assist?",Tech Support,Medium,customer817@example.com
+Issue with tax information,Need tax documentation for business expenses Can someone assist?,Billing,Medium,customer818@example.com
+Issue with product pricing inquiry,What are the pricing options for enterprise plans? Thanks in advance.,Sales,Medium,customer819@example.com
+URGENT: Volume discount,Do you offer discounts for bulk purchases? Can someone assist?,Sales,Medium,customer820@example.com
+URGENT: Feature comparison,Please help! Can you compare your product with competitors?,Sales,Low,customer821@example.com
+Help needed: Custom solution needed,We need a custom integration for our business,Sales,High,customer822@example.com
+Payment failed,My credit card payment was declined but money was deducted,Billing,High,customer823@example.com
+URGENT: Trial extension,Can we extend our trial period?,Sales,Medium,customer824@example.com
+Feature comparison,Can you compare your product with competitors? Thanks in advance.,Sales,Low,customer825@example.com
+PAYMENT FAILED,My credit card payment was declined but money was deducted Can someone assist?,Billing,High,customer826@example.com
+Help needed: Incorrect billing amount,I was charged twice for my subscription this month This is affecting my business.,Billing,High,customer827@example.com
+Issue with feature not working,The export function is not working properly Can someone assist?,Tech Support,Low,customer828@example.com
+Help needed: Slow loading times,"The dashboard takes forever to load, it's affecting my productivity Thanks in advance.",Tech Support,Medium,customer829@example.com
+Issue with overcharged account,My account shows charges I didn't authorize This is affecting my business.,Billing,Urgent,customer830@example.com
+URGENT: Server down,"Unable to connect to the server, getting timeout errors Thanks in advance.",Tech Support,Urgent,customer831@example.com
+Website not loading,Please help! The website shows a 404 error when I try to access my account,Tech Support,High,customer832@example.com
+INVOICE MISSING,I haven't received my invoice for last month This is affecting my business.,Billing,Low,customer833@example.com
+Issue with refund request,I want to request a refund for unused services This is affecting my business.,Billing,Medium,customer834@example.com
+Billing address change,Please update my billing address,Billing,Low,customer835@example.com
+Help needed: Product pricing inquiry,What are the pricing options for enterprise plans? Can someone assist?,Sales,Medium,customer836@example.com
+Issue with server down,"Unable to connect to the server, getting timeout errors",Tech Support,Urgent,customer837@example.com
+URGENT: App crashes frequently,The mobile app keeps crashing when I try to upload files This is affecting my business.,Tech Support,High,customer838@example.com
+Payment failed,My credit card payment was declined but money was deducted Thanks in advance.,Billing,Medium,customer839@example.com
+Issue with tax information,Please help! Need tax documentation for business expenses,Billing,Medium,customer840@example.com
+Help needed: Payment method update,Need to update my credit card information,Billing,Low,customer841@example.com
+SLOW LOADING TIMES,"The dashboard takes forever to load, it's affecting my productivity Thanks in advance.",Tech Support,Medium,customer842@example.com
+Issue with password reset issue,"Please help! I can't reset my password, the email is not coming through",Tech Support,Medium,customer843@example.com
+Issue with app crashes frequently,The mobile app keeps crashing when I try to upload files Can someone assist?,Tech Support,High,customer844@example.com
+Product pricing inquiry,What are the pricing options for enterprise plans? Can someone assist?,Sales,Medium,customer845@example.com
+Help needed: Product pricing inquiry,What are the pricing options for enterprise plans? Thanks in advance.,Sales,Medium,customer846@example.com
+URGENT: Enterprise inquiry,Interested in enterprise licensing and support Thanks in advance.,Sales,High,customer847@example.com
+PAYMENT FAILED,My credit card payment was declined but money was deducted Thanks in advance.,Billing,High,customer848@example.com
+API not responding,Getting 500 internal server error when making API calls Can someone assist?,Tech Support,Urgent,customer849@example.com
+Subscription cancellation,I need to cancel my subscription immediately This is affecting my business.,Billing,Medium,customer850@example.com
+Issue with invoice missing,I haven't received my invoice for last month Can someone assist?,Billing,Low,customer851@example.com
+Custom solution needed,We need a custom integration for our business Can someone assist?,Sales,High,customer852@example.com
+Trial extension,Can we extend our trial period? Can someone assist?,Sales,Medium,customer853@example.com
+Feature comparison,Can you compare your product with competitors? Can someone assist?,Sales,Low,customer854@example.com
+TRIAL EXTENSION,Please help! Can we extend our trial period?,Sales,Medium,customer855@example.com
+Volume discount,Please help! Do you offer discounts for bulk purchases?,Sales,Medium,customer856@example.com
+SERVER DOWN,"Unable to connect to the server, getting timeout errors",Tech Support,Urgent,customer857@example.com
+Issue with website not loading,The website shows a 404 error when I try to access my account,Tech Support,High,customer858@example.com
+Help needed: Contract negotiation,Need to discuss contract terms and conditions Thanks in advance.,Sales,High,customer859@example.com
+Issue with slow loading times,"The dashboard takes forever to load, it's affecting my productivity This is affecting my business.",Tech Support,Medium,customer860@example.com
+Feature not working,The export function is not working properly,Tech Support,Low,customer861@example.com
+Help needed: Custom solution needed,We need a custom integration for our business Can someone assist?,Sales,High,customer862@example.com
+LOGIN PROBLEMS,"Please help! Cannot log into my account, shows invalid credentials",Tech Support,Urgent,customer863@example.com
+Issue with password reset issue,"I can't reset my password, the email is not coming through Can someone assist?",Tech Support,Medium,customer864@example.com
+Trial extension,Can we extend our trial period? Thanks in advance.,Sales,Medium,customer865@example.com
+URGENT: Custom solution needed,We need a custom integration for our business This is affecting my business.,Sales,High,customer866@example.com
+Invoice missing,I haven't received my invoice for last month,Billing,Low,customer867@example.com
+URGENT: Volume discount,Do you offer discounts for bulk purchases?,Sales,Medium,customer868@example.com
+Help needed: Trial extension,Can we extend our trial period? Thanks in advance.,Sales,Medium,customer869@example.com
+OVERCHARGED ACCOUNT,My account shows charges I didn't authorize Can someone assist?,Billing,Urgent,customer870@example.com
+Help needed: Invoice missing,I haven't received my invoice for last month This is affecting my business.,Billing,Low,customer871@example.com
+Issue with website not loading,The website shows a 404 error when I try to access my account Can someone assist?,Tech Support,High,customer872@example.com
+Enterprise inquiry,Please help! Interested in enterprise licensing and support,Sales,High,customer873@example.com
+TRIAL EXTENSION,Can we extend our trial period? Can someone assist?,Sales,Medium,customer874@example.com
+Plan upgrade billing,Please help! Questions about pricing for plan upgrade,Billing,Medium,customer875@example.com
+API NOT RESPONDING,Please help! Getting 500 internal server error when making API calls,Tech Support,Urgent,customer876@example.com
+URGENT: Product pricing inquiry,Please help! What are the pricing options for enterprise plans?,Sales,Medium,customer877@example.com
+Help needed: Subscription cancellation,I need to cancel my subscription immediately Thanks in advance.,Billing,Medium,customer878@example.com
+Help needed: Login problems,"Cannot log into my account, shows invalid credentials Can someone assist?",Tech Support,High,customer879@example.com
+Help needed: Website not loading,The website shows a 404 error when I try to access my account Thanks in advance.,Tech Support,High,customer880@example.com
+Issue with tax information,Need tax documentation for business expenses Can someone assist?,Billing,Medium,customer881@example.com
+Issue with api not responding,Getting 500 internal server error when making API calls This is affecting my business.,Tech Support,Urgent,customer882@example.com
+Help needed: Partnership opportunity,Please help! Interested in becoming a reseller partner,Sales,Medium,customer883@example.com
+Help needed: Contract negotiation,Need to discuss contract terms and conditions Thanks in advance.,Sales,High,customer884@example.com
+URGENT: Enterprise inquiry,Please help! Interested in enterprise licensing and support,Sales,High,customer885@example.com
+Help needed: API not responding,Getting 500 internal server error when making API calls Thanks in advance.,Tech Support,Urgent,customer886@example.com
+Volume discount,Do you offer discounts for bulk purchases? This is affecting my business.,Sales,Medium,customer887@example.com
+URGENT: Incorrect billing amount,Please help! I was charged twice for my subscription this month,Billing,High,customer888@example.com
+URGENT: Feature comparison,Can you compare your product with competitors? Can someone assist?,Sales,Low,customer889@example.com
+Help needed: Invoice missing,I haven't received my invoice for last month,Billing,Low,customer890@example.com
+URGENT: Volume discount,Do you offer discounts for bulk purchases? Thanks in advance.,Sales,Medium,customer891@example.com
+DEMO REQUEST,Please help! I would like to schedule a product demonstration,Sales,High,customer892@example.com
+Issue with slow loading times,"Please help! The dashboard takes forever to load, it's affecting my productivity",Tech Support,Medium,customer893@example.com
+Issue with incorrect billing amount,Please help! I was charged twice for my subscription this month,Billing,High,customer894@example.com
+Help needed: Feature comparison,Can you compare your product with competitors? Thanks in advance.,Sales,Low,customer895@example.com
+Issue with volume discount,Do you offer discounts for bulk purchases? Thanks in advance.,Sales,Medium,customer896@example.com
+Refund request,I want to request a refund for unused services This is affecting my business.,Billing,Medium,customer897@example.com
+Password reset issue,"I can't reset my password, the email is not coming through Thanks in advance.",Tech Support,Medium,customer898@example.com
+Issue with database connection error,"Cannot connect to database, all services are affected Can someone assist?",Tech Support,Urgent,customer899@example.com
+Product pricing inquiry,What are the pricing options for enterprise plans? This is affecting my business.,Sales,Medium,customer900@example.com
+URGENT: Trial extension,Can we extend our trial period? Thanks in advance.,Sales,Medium,customer901@example.com
+PLAN UPGRADE BILLING,Questions about pricing for plan upgrade This is affecting my business.,Billing,Medium,customer902@example.com
+URGENT: Tax information,Need tax documentation for business expenses,Billing,Medium,customer903@example.com
+Issue with trial extension,Can we extend our trial period? Can someone assist?,Sales,Medium,customer904@example.com
+Help needed: Feature comparison,Can you compare your product with competitors?,Sales,Low,customer905@example.com
+Feature not working,The export function is not working properly,Tech Support,Low,customer906@example.com
+DEMO REQUEST,I would like to schedule a product demonstration,Sales,High,customer907@example.com
+Help needed: Product roadmap,What new features are planned for next year? This is affecting my business.,Sales,Low,customer908@example.com
+URGENT: Product pricing inquiry,What are the pricing options for enterprise plans? This is affecting my business.,Sales,Medium,customer909@example.com
+URGENT: Overcharged account,My account shows charges I didn't authorize Thanks in advance.,Billing,Urgent,customer910@example.com
+URGENT: Product pricing inquiry,What are the pricing options for enterprise plans? Can someone assist?,Sales,Medium,customer911@example.com
+INVOICE MISSING,I haven't received my invoice for last month Thanks in advance.,Billing,Low,customer912@example.com
+Help needed: Login problems,"Cannot log into my account, shows invalid credentials Can someone assist?",Tech Support,High,customer913@example.com
+URGENT: Subscription cancellation,I need to cancel my subscription immediately This is affecting my business.,Billing,Low,customer914@example.com
+Help needed: Server down,"Unable to connect to the server, getting timeout errors Thanks in advance.",Tech Support,Urgent,customer915@example.com
+URGENT: Slow loading times,"The dashboard takes forever to load, it's affecting my productivity Can someone assist?",Tech Support,Medium,customer916@example.com
+App crashes frequently,The mobile app keeps crashing when I try to upload files Thanks in advance.,Tech Support,High,customer917@example.com
+CUSTOM SOLUTION NEEDED,We need a custom integration for our business Thanks in advance.,Sales,High,customer918@example.com
+Contract negotiation,Need to discuss contract terms and conditions,Sales,High,customer919@example.com
+PRODUCT ROADMAP,What new features are planned for next year?,Sales,Low,customer920@example.com
+BROWSER COMPATIBILITY,Site doesn't work properly on Safari browser Thanks in advance.,Tech Support,Low,customer921@example.com
+Help needed: Plan upgrade billing,Questions about pricing for plan upgrade Can someone assist?,Billing,Medium,customer922@example.com
+Help needed: Partnership opportunity,Interested in becoming a reseller partner Can someone assist?,Sales,Medium,customer923@example.com
+INVOICE MISSING,Please help! I haven't received my invoice for last month,Billing,Low,customer924@example.com
+TAX INFORMATION,Need tax documentation for business expenses,Billing,Medium,customer925@example.com
+Payment method update,Need to update my credit card information This is affecting my business.,Billing,Low,customer926@example.com
+INVOICE MISSING,I haven't received my invoice for last month Thanks in advance.,Billing,Low,customer927@example.com
+Help needed: Login problems,"Please help! Cannot log into my account, shows invalid credentials",Tech Support,High,customer928@example.com
+Browser compatibility,Site doesn't work properly on Safari browser,Tech Support,High,customer929@example.com
+Incorrect billing amount,I was charged twice for my subscription this month,Billing,High,customer930@example.com
+Slow loading times,"The dashboard takes forever to load, it's affecting my productivity This is affecting my business.",Tech Support,Medium,customer931@example.com
+Product pricing inquiry,What are the pricing options for enterprise plans?,Sales,Medium,customer932@example.com
+Enterprise inquiry,Interested in enterprise licensing and support,Sales,High,customer933@example.com
+Help needed: Custom solution needed,We need a custom integration for our business,Sales,High,customer934@example.com
+INVOICE MISSING,I haven't received my invoice for last month,Billing,Low,customer935@example.com
+BILLING ADDRESS CHANGE,Please update my billing address,Billing,Urgent,customer936@example.com
+Issue with refund request,I want to request a refund for unused services Can someone assist?,Billing,Medium,customer937@example.com
+Product pricing inquiry,What are the pricing options for enterprise plans? Can someone assist?,Sales,Medium,customer938@example.com
+Payment method update,Need to update my credit card information,Billing,Low,customer939@example.com
+Issue with app crashes frequently,The mobile app keeps crashing when I try to upload files Can someone assist?,Tech Support,High,customer940@example.com
+Issue with tax information,Need tax documentation for business expenses This is affecting my business.,Billing,Medium,customer941@example.com
+Login problems,"Please help! Cannot log into my account, shows invalid credentials",Tech Support,High,customer942@example.com
+Help needed: Product roadmap,What new features are planned for next year? Thanks in advance.,Sales,Low,customer943@example.com
+Overcharged account,My account shows charges I didn't authorize,Billing,Urgent,customer944@example.com
+LOGIN PROBLEMS,"Cannot log into my account, shows invalid credentials This is affecting my business.",Tech Support,Urgent,customer945@example.com
+PAYMENT METHOD UPDATE,Need to update my credit card information This is affecting my business.,Billing,Low,customer946@example.com
+Help needed: Overcharged account,My account shows charges I didn't authorize This is affecting my business.,Billing,Urgent,customer947@example.com
+Issue with browser compatibility,Site doesn't work properly on Safari browser Can someone assist?,Tech Support,Low,customer948@example.com
+Help needed: Feature comparison,Can you compare your product with competitors?,Sales,Low,customer949@example.com
+Help needed: Server down,"Please help! Unable to connect to the server, getting timeout errors",Tech Support,High,customer950@example.com
+Help needed: Payment method update,Please help! Need to update my credit card information,Billing,Low,customer951@example.com
+Issue with plan upgrade billing,Questions about pricing for plan upgrade,Billing,Medium,customer952@example.com
+Help needed: Billing address change,Please update my billing address Thanks in advance.,Billing,Urgent,customer953@example.com
+Volume discount,Do you offer discounts for bulk purchases? Thanks in advance.,Sales,Medium,customer954@example.com
+ENTERPRISE INQUIRY,Interested in enterprise licensing and support This is affecting my business.,Sales,High,customer955@example.com
+Website not loading,The website shows a 404 error when I try to access my account This is affecting my business.,Tech Support,High,customer956@example.com
+URGENT: Demo request,I would like to schedule a product demonstration Can someone assist?,Sales,High,customer957@example.com
+Help needed: Website not loading,The website shows a 404 error when I try to access my account Thanks in advance.,Tech Support,High,customer958@example.com
+URGENT: Custom solution needed,Please help! We need a custom integration for our business,Sales,High,customer959@example.com
+URGENT: Feature not working,The export function is not working properly Thanks in advance.,Tech Support,Low,customer960@example.com
+URGENT: Browser compatibility,Site doesn't work properly on Safari browser Thanks in advance.,Tech Support,Low,customer961@example.com
+PARTNERSHIP OPPORTUNITY,Please help! Interested in becoming a reseller partner,Sales,Medium,customer962@example.com
+Trial extension,Can we extend our trial period? This is affecting my business.,Sales,Medium,customer963@example.com
+Help needed: Billing address change,Please update my billing address This is affecting my business.,Billing,Low,customer964@example.com
+Help needed: Browser compatibility,Please help! Site doesn't work properly on Safari browser,Tech Support,Low,customer965@example.com
+URGENT: Partnership opportunity,Interested in becoming a reseller partner This is affecting my business.,Sales,Medium,customer966@example.com
+Issue with feature comparison,Can you compare your product with competitors? This is affecting my business.,Sales,Urgent,customer967@example.com
+Help needed: Feature not working,The export function is not working properly Can someone assist?,Tech Support,Low,customer968@example.com
+APP CRASHES FREQUENTLY,Please help! The mobile app keeps crashing when I try to upload files,Tech Support,High,customer969@example.com
+Help needed: Demo request,Please help! I would like to schedule a product demonstration,Sales,High,customer970@example.com
+Feature not working,The export function is not working properly This is affecting my business.,Tech Support,Low,customer971@example.com
+URGENT: Slow loading times,"The dashboard takes forever to load, it's affecting my productivity Thanks in advance.",Tech Support,Medium,customer972@example.com
+URGENT: Slow loading times,"The dashboard takes forever to load, it's affecting my productivity",Tech Support,Medium,customer973@example.com
+Help needed: Browser compatibility,Site doesn't work properly on Safari browser This is affecting my business.,Tech Support,Low,customer974@example.com
+Issue with payment method update,Please help! Need to update my credit card information,Billing,Low,customer975@example.com
+Issue with contract negotiation,Need to discuss contract terms and conditions,Sales,High,customer976@example.com
+Billing address change,Please update my billing address,Billing,Low,customer977@example.com
+URGENT: Slow loading times,"The dashboard takes forever to load, it's affecting my productivity Can someone assist?",Tech Support,Medium,customer978@example.com
+URGENT: Feature not working,The export function is not working properly,Tech Support,Low,customer979@example.com
+URGENT: Browser compatibility,Site doesn't work properly on Safari browser This is affecting my business.,Tech Support,High,customer980@example.com
+Plan upgrade billing,Questions about pricing for plan upgrade Can someone assist?,Billing,Medium,customer981@example.com
+INVOICE MISSING,I haven't received my invoice for last month This is affecting my business.,Billing,Low,customer982@example.com
+Help needed: Feature not working,The export function is not working properly Can someone assist?,Tech Support,Low,customer983@example.com
+Billing address change,Please help! Please update my billing address,Billing,Low,customer984@example.com
+Tax information,Need tax documentation for business expenses Thanks in advance.,Billing,Medium,customer985@example.com
+Feature comparison,Can you compare your product with competitors?,Sales,Low,customer986@example.com
+URGENT: Subscription cancellation,I need to cancel my subscription immediately This is affecting my business.,Billing,Medium,customer987@example.com
+URGENT: Product roadmap,What new features are planned for next year?,Sales,Low,customer988@example.com
+URGENT: Incorrect billing amount,Please help! I was charged twice for my subscription this month,Billing,High,customer989@example.com
+Issue with api not responding,Getting 500 internal server error when making API calls This is affecting my business.,Tech Support,Urgent,customer990@example.com
+Help needed: Refund request,Please help! I want to request a refund for unused services,Billing,Medium,customer991@example.com
+Help needed: API not responding,Getting 500 internal server error when making API calls This is affecting my business.,Tech Support,Urgent,customer992@example.com
+Subscription cancellation,I need to cancel my subscription immediately Thanks in advance.,Billing,Medium,customer993@example.com
+API not responding,Getting 500 internal server error when making API calls Can someone assist?,Tech Support,Urgent,customer994@example.com
+PARTNERSHIP OPPORTUNITY,Interested in becoming a reseller partner,Sales,Medium,customer995@example.com
+TAX INFORMATION,Please help! Need tax documentation for business expenses,Billing,Medium,customer996@example.com
+Help needed: Product roadmap,What new features are planned for next year? Can someone assist?,Sales,Low,customer997@example.com
+Issue with api not responding,Please help! Getting 500 internal server error when making API calls,Tech Support,Urgent,customer998@example.com
+Issue with partnership opportunity,Please help! Interested in becoming a reseller partner,Sales,Medium,customer999@example.com
