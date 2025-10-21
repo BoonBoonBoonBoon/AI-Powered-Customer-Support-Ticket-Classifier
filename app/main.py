@@ -1,6 +1,7 @@
 from fastapi import FastAPI, HTTPException, Depends
 from fastapi import FastAPI, HTTPException, Depends
 from .models.runtime_loader import ensure_model_ready
+from .models.inference_transformer import TransformerInference
 from .models.schemas import HealthResponse
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
@@ -25,6 +26,7 @@ logger = logging.getLogger(__name__)
 
 classifier: Optional[TicketClassifier] = None
 model_metadata: Optional[dict] = None
+transformer_runtime: Optional[TransformerInference] = None
 
 
 def _find_latest_version_dir(base_dir: str) -> Optional[Path]:
@@ -107,6 +109,23 @@ def get_classifier() -> TicketClassifier:
     return classifier
 
 
+def get_transformer_runtime(env: str | None = None) -> TransformerInference:
+    """Lazy-load a transformer runtime from the model registry.
+
+    By default loads the staging pointer for canary testing; set SERVE_MODEL_ENV=production
+    to load production instead.
+    """
+    global transformer_runtime
+    if transformer_runtime is not None:
+        return transformer_runtime
+    env = env or os.getenv("SERVE_MODEL_ENV", "staging")
+    loaded = ensure_model_ready(env)
+    manifest = loaded["manifest"]
+    artifacts = {k: str(v) for k, v in loaded["artifacts"].items()}
+    transformer_runtime = TransformerInference(manifest, artifacts)
+    return transformer_runtime
+
+
 @app.get("/version")
 async def version():
     return {
@@ -181,6 +200,28 @@ async def classify_ticket(
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
         logger.error(f"Error classifying ticket: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
+
+
+@app.post("/classify/transformer", response_model=TicketResponse, responses={429: {"model": ErrorResponse}, 503: {"model": ErrorResponse}}, tags=["inference"])
+async def classify_ticket_transformer(ticket: TicketRequest):
+    """Classify using the transformer model loaded from the registry (staging by default)."""
+    try:
+        rt = get_transformer_runtime()
+        out = rt.predict(ticket.title, ticket.description)
+        return TicketResponse(
+            title=ticket.title,
+            description=ticket.description,
+            predicted_priority=PriorityLevel(out["priority"]),
+            predicted_department=Department(out["department"]),
+            priority_confidence=out["priority_conf"],
+            department_confidence=out["department_conf"],
+            customer_email=ticket.customer_email,
+        )
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        logger.error(f"Error in transformer classify: {e}")
         raise HTTPException(status_code=500, detail="Internal server error")
 
 
