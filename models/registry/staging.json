@@ -1,4 +1,4 @@
 {
-  "model_id": "sklearn:v1.0.14",
-  "manifest_uri": "file://models/v1.0.14/manifest.json"
+  "model_id": "transformer:t1.0.0",
+  "manifest_uri": "file://models/transformers/t1.0.0/manifest.json"
 }

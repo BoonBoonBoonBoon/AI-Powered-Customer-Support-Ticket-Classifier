@@ -1,0 +1,17 @@
+{
+  "model_id": "transformer:t1.0.0",
+  "framework": "transformers",
+  "format": "torch",
+  "created_at": "2025-10-21T00:00:00Z",
+  "artifacts": {
+    "weights_uri": "file://models/transformers/t1.0.0/pytorch_model.bin",
+    "tokenizer_uri": "file://models/transformers/t1.0.0/tokenizer",
+    "label_map_uri": "file://models/transformers/t1.0.0/label_mappings.json",
+    "onnx_uri": ""
+  },
+  "metrics": {
+    "validation": {
+      "priority": {"accuracy": 0.0, "macro_f1": 0.1559}
+    }
+  }
+}
