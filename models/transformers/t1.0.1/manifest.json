@@ -1,0 +1,24 @@
+{
+  "model_id": "transformer:t1.0.1",
+  "framework": "transformers",
+  "format": "torch",
+  "created_at": "2025-10-21T00:00:00Z",
+  "training": {
+    "base_model": "distilbert-base-uncased",
+    "max_length": 256,
+    "epochs": 3,
+    "batch_size": 16
+  },
+  "artifacts": {
+    "weights_uri": "file://models/transformers/t1.0.1/pytorch_model.bin",
+    "tokenizer_uri": "file://models/transformers/t1.0.1/tokenizer",
+    "label_map_uri": "file://models/transformers/t1.0.1/label_mappings.json",
+    "onnx_uri": ""
+  },
+  "metrics": {
+    "validation": {
+      "priority": {"accuracy": 0.2355, "macro_f1": 0.2203},
+      "department": {"accuracy": 1.0, "macro_f1": 1.0}
+    }
+  }
+}
