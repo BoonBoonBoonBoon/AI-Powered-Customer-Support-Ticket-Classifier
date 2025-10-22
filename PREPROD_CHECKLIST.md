@@ -2,32 +2,34 @@
 
 Use this checklist to get the project to a clean, portfolio-ready pre-production state. Keep it light, reproducible, and standards-aligned.
 
-## 1) Transformer Baseline (t1.0.1)
-- [ ] Train DistilBERT baseline (3–5 epochs, max_len=256)
-  - [ ] Run: `scripts/train_transformer.py --data data/enriched_customer_tickets.csv --epochs 3 --batch-size 16 --max-len 256 --output-version t1.0.1`
-  - [ ] Confirm artifacts in `models/transformers/t1.0.1/` (`pytorch_model.bin`, `tokenizer/`, `label_mappings.json`, `metrics.json`)
-  - [ ] Write/update `models/transformers/t1.0.1/manifest.json` (URIs, base_model, max_length)
-  - [ ] Compare metrics vs sklearn v1.0.10
+## 1) Transformer Baselines (t1.0.1 • t1.0.2)
+- [x] Train initial DistilBERT baseline (t1.0.1)
+  - [x] 3 epochs, max_len=256 (baseline); observed suspicious department metrics → leakage
+  - [x] Document anomaly and add leak guard (`--exclude-pattern "__type_[a-z0-9_]+"`)
+- [x] Train fast canary with leak guard (t1.0.2)
+  - [x] 1 epoch, max_len=128 for speed; artifacts present (`pytorch_model.bin`, `tokenizer/`, `label_mappings.json`, `metrics.json`)
+  - [x] `models/transformers/t1.0.2/manifest.json` created (URIs, base_model, max_length, exclude_patterns)
+  - [x] Compare metrics vs sklearn v1.0.10 using `scripts/compare_models.py`
 
 ## 2) Registry Pointers
-- [ ] Update `models/registry/staging.json` → `transformer:t1.0.1`
-- [ ] Keep `models/registry/production.json` → `sklearn:v1.0.10` (for now)
-- [ ] `/health/ready` passes (registry + manifest accessible)
+- [x] Update `models/registry/staging.json` → `transformer:t1.0.2`
+- [x] Keep `models/registry/production.json` → `sklearn:v1.0.10` (for now)
+- [x] `/health/ready` passes (registry + manifest accessible)
 
 ## 3) Model Selection Flag
-- [ ] Add `SERVE_MODEL_TYPE` env (values: `sklearn`|`transformer`)
-- [ ] Route `/classify` to selected backend
-- [ ] Keep `/classify/transformer` for explicit canary testing
+- [x] Add `SERVE_MODEL_TYPE` env (values: `sklearn`|`transformer`)
+- [x] Route `/classify` to selected backend
+- [x] Keep `/classify/transformer` for explicit canary testing
 
 ## 4) Tests (API + Contracts)
-- [ ] Unit tests for `/classify` (sklearn) and `/classify/transformer` (transformer)
-  - [ ] Happy path returns `TicketResponse`
-  - [ ] 400 on bad input, 503 when model not ready
-- [ ] Snapshot minimal JSON shape (keys + types) for responses
+- [x] Unit tests for `/classify` (sklearn) and `/classify/transformer` (transformer)
+  - [x] Happy path returns `TicketResponse`
+  - [x] 400 on bad input, 503 when model not ready
+- [x] Snapshot minimal JSON shape (keys + types) for responses (basic)
 
 ## 5) Manifest Validation
 - [ ] Script validates `manifest.json` against `models/specs/model_manifest.schema.json`
-- [ ] Verifies referenced files exist locally
+- [x] Verifies referenced files exist locally (runtime loader used as a check)
 - [ ] (Optional) Computes SHA256 and writes checksum into manifest
 
 ## 6) Publish/Promote Scripts (local-first)
@@ -46,9 +48,9 @@ Use this checklist to get the project to a clean, portfolio-ready pre-production
 - [ ] Fail CI on regressions
 
 ## 9) Docs Refresh
-- [ ] README quickstart (sklearn + transformer)
-- [ ] Training guide and registry overview
-- [ ] Endpoints table (`/classify`, `/classify/transformer`, health endpoints)
+- [x] README quickstart (sklearn + transformer)
+- [x] Training guide and registry overview
+- [x] Endpoints table (`/classify`, `/classify/transformer`, health endpoints)
 - [ ] Update `MODEL_CARD.md` with latest metrics
 - [ ] Update `CHANGELOG.md`
 
@@ -73,6 +75,26 @@ Use this checklist to get the project to a clean, portfolio-ready pre-production
 - [ ] Short demo GIF of classify flows
 - [ ] Small architecture diagram (training ↔ registry ↔ API)
 - [ ] Performance table (date, dataset, metrics for sklearn vs transformer)
+
+---
+
+### Results Snapshot (Validation)
+
+| Model | Priority Macro-F1 | Priority Acc | Dept Macro-F1 | Dept Acc |
+|-------|-------------------:|-------------:|--------------:|---------:|
+| sklearn v1.0.10 | 0.2570 | 0.2574 | 0.3179 | 0.3926 |
+| transformer t1.0.1 | 0.2203 | 0.2355 | 1.0000 | 1.0000 |
+| transformer t1.0.2 | 0.0996 | 0.2420 | 0.2506 | 0.6021 |
+
+How to re-run the comparison:
+```powershell
+$env:PYTHONPATH=(Get-Location)
+.\.venv\Scripts\python.exe scripts\compare_models.py
+```
+
+Notes:
+- t1.0.1 shows leakage (perfect department) and should not be promoted.
+- t1.0.2 confirms leak guard; it’s a fast canary (1 epoch @ 128) for wiring validation, not a production candidate.
 
 ---
 

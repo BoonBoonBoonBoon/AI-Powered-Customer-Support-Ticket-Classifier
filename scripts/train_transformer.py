@@ -19,7 +19,7 @@ Usage (basic):
 Note: This is an initial prototype for experimentation; not yet wired into FastAPI app.
 """
 from __future__ import annotations
-import argparse, json, os, math, random, time
+import argparse, json, os, math, random, time, re
 from dataclasses import dataclass
 from typing import Dict, Any
 import pandas as pd
@@ -42,21 +42,32 @@ def load_data(path: str) -> pd.DataFrame:
         raise ValueError(f"Missing columns: {missing}")
     return df
 
-def preprocess_text(title: str, description: str, max_len: int = 512):
-    # Basic formatting; actual truncation handled by tokenizer.
-    return f"[TITLE] {title.strip()} [DESC] {description.strip()}"[:2000]
+def _apply_exclusions(text: str, compiled_patterns: list[re.Pattern[str]] | None) -> str:
+    if not compiled_patterns:
+        return text
+    for cre in compiled_patterns:
+        text = cre.sub(" ", text)
+    return re.sub(r"\s+", " ", text).strip()
+
+
+def preprocess_text(title: str, description: str, max_len: int = 512, compiled_patterns: list[re.Pattern[str]] | None = None):
+    # Remove leakage-like enrichment tokens if configured; truncation handled by tokenizer.
+    title = title.strip()
+    description = _apply_exclusions(description.strip(), compiled_patterns)
+    return f"[TITLE] {title} [DESC] {description}"[:2000]
 
 class TicketDataset(Dataset):
-    def __init__(self, df: pd.DataFrame, tokenizer, max_len: int, pri2id: Dict[str,int], dep2id: Dict[str,int]):
+    def __init__(self, df: pd.DataFrame, tokenizer, max_len: int, pri2id: Dict[str,int], dep2id: Dict[str,int], compiled_patterns: list[re.Pattern[str]] | None = None):
         self.df = df.reset_index(drop=True)
         self.tok = tokenizer
         self.max_len = max_len
         self.pri2id = pri2id
         self.dep2id = dep2id
+        self._compiled_patterns = compiled_patterns or []
     def __len__(self): return len(self.df)
     def __getitem__(self, idx):
         row = self.df.iloc[idx]
-        text = preprocess_text(str(row.title), str(row.description))
+        text = preprocess_text(str(row.title), str(row.description), self.max_len, self._compiled_patterns)
         enc = self.tok(text, truncation=True, max_length=self.max_len, padding='max_length', return_tensors='pt')
         item = {k: v.squeeze(0) for k,v in enc.items()}
         item['priority_label'] = torch.tensor(self.pri2id[row.priority])
@@ -185,6 +196,7 @@ def main():
     ap.add_argument('--max-len', type=int, default=256)
     ap.add_argument('--val-split', type=float, default=0.2)
     ap.add_argument('--output-version', required=True, help='Version tag (e.g., t1.0.0)')
+    ap.add_argument('--exclude-pattern', action='append', default=[], help='Regex patterns to exclude from text (applied to description)')
     args = ap.parse_args()
 
     df = load_data(args.data)
@@ -197,8 +209,17 @@ def main():
     dep2id = {l:i for i,l in enumerate(dep_labels)}
 
     tokenizer = AutoTokenizer.from_pretrained(args.model_name)
-    train_ds = TicketDataset(train_df, tokenizer, args.max_len, pri2id, dep2id)
-    val_ds = TicketDataset(val_df, tokenizer, args.max_len, pri2id, dep2id)
+    # Default exclusions to mitigate department leakage via enrichment tokens
+    # Include common patterns observed in enriched datasets
+    default_exclusions = [
+        r"__department_[a-z0-9_]+",
+        r"__dept_[a-z0-9_]+",
+        r"__type_[a-z0-9_]+",
+    ]
+    patterns = args.exclude_pattern if args.exclude_pattern else default_exclusions
+    compiled = [re.compile(p, flags=re.IGNORECASE) for p in patterns]
+    train_ds = TicketDataset(train_df, tokenizer, args.max_len, pri2id, dep2id, compiled)
+    val_ds = TicketDataset(val_df, tokenizer, args.max_len, pri2id, dep2id, compiled)
     device = 'cuda' if torch.cuda.is_available() else 'cpu'
     cfg = TrainConfig(model_name=args.model_name, epochs=args.epochs, batch_size=args.batch_size, lr=args.lr, weight_decay=args.weight_decay, warmup_ratio=args.warmup_ratio, max_len=args.max_len, grad_accum=args.grad_accum, device=device)
     model = DualHeadModel(args.model_name, len(pri2id), len(dep2id))

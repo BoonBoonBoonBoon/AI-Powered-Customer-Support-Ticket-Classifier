@@ -163,6 +163,57 @@ $env:PYTHONPATH=(Get-Location)
 ```
 and re-run uvicorn.
 
+## Transformer models (canary) and model registry
+
+This repo now includes an experimental transformer-based dual-head model (DistilBERT encoder with two classification heads) and a simple manifest-first model registry for staged promotion.
+
+### Train a transformer baseline
+
+Use the enriched dataset and write artifacts under `models/transformers/<tag>`:
+
+```powershell
+# 1-3 epochs are fine for a baseline on CPU; adjust as needed
+python scripts/train_transformer.py `
+  --data data/enriched_customer_tickets.csv `
+  --model-name distilbert-base-uncased `
+  --epochs 3 --batch-size 16 --max-len 256 `
+  --output-version t1.0.2 `
+  --exclude-pattern "__type_[a-z0-9_]+"
+```
+
+Outputs in `models/transformers/t1.0.2/`:
+- `pytorch_model.bin`, `tokenizer/`, `label_mappings.json`, `metrics.json`
+
+Leakage guard note: Pass one or more `--exclude-pattern` flags to strip enrichment tokens that correlate directly with the department label (e.g., `__type_*`). This avoids artificially perfect department scores.
+
+### Model registry pointers
+
+Registry pointers live under `models/registry/` and resolve to a manifest that describes the model and its artifacts:
+
+```
+models/registry/production.json  # production pointer
+models/registry/staging.json     # staging pointer (canaries)
+```
+
+Each pointer has a `manifest_uri` (currently `file://` in local dev). A typical transformer manifest is at `models/transformers/<tag>/manifest.json` and includes training params, artifact URIs, and validation metrics.
+
+### Serving and routing
+
+The `/classify` endpoint defaults to the classic sklearn model. You can route it to the transformer by setting an environment variable. The transformer runtime is also exposed directly via a dedicated endpoint.
+
+- Route `/classify` to transformer:
+  - `SERVE_MODEL_TYPE=transformer`
+  - Optional: `SERVE_MODEL_ENV=staging` or `production` (defaults to `staging`)
+- Direct transformer endpoint: `POST /classify/transformer`
+
+Example (PowerShell):
+```powershell
+$env:SERVE_MODEL_TYPE = "transformer"; $env:SERVE_MODEL_ENV = "staging"
+python -m uvicorn app.main:app --host 0.0.0.0 --port 8000
+```
+
+Readiness now verifies that the production registry pointer and manifest are accessible locally: `/health/ready` returns `ready` if so.
+
 ## API Endpoints
 
 | Method | Path | Description |
@@ -172,7 +223,8 @@ and re-run uvicorn.
 | GET | `/health/live` | Liveness probe |
 | GET | `/health/ready` | Readiness (model loaded) |
 | GET | `/health` | Backward-compatible health (combined) |
-| POST | `/classify` | Classify ticket (returns predictions + confidences) |
+| POST | `/classify` | Classify ticket (sklearn by default; set `SERVE_MODEL_TYPE=transformer` to route) |
+| POST | `/classify/transformer` | Classify using transformer model from registry (staging by default) |
 | GET | `/model/status` | Basic training/load status |
 
 ### Classification Response (Example)

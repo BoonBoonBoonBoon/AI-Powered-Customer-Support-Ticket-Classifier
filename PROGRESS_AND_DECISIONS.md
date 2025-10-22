@@ -46,17 +46,29 @@ Results (high level):
 - Reason: allow canary testing of transformer without disrupting the main sklearn path.
 
 ## Current state
-- Serving: sklearn remains the default for `/classify`; transformer available at `/classify/transformer`.
+- Serving: sklearn remains the default for `/classify`; transformer available at `/classify/transformer`. You can route `/classify` to transformer via `SERVE_MODEL_TYPE=transformer`.
 - Registry pointers:
   - production → sklearn v1.0.10
-  - staging → transformer t1.0.0
-- Infra: manifests, schema, gates config in place; heavy artifacts kept out of git.
+  - staging → transformer t1.0.2 (canary)
+- Infra: manifests, schema, gates config in place; loader supports directory artifacts (tokenizer). Inference path can apply exclusion patterns for leakage parity.
+
+### Transformer canary results (validation)
+
+| Model | Priority Macro-F1 | Priority Acc | Dept Macro-F1 | Dept Acc | Notes |
+|-------|-------------------:|-------------:|--------------:|---------:|-------|
+| sklearn v1.0.10 | 0.2570 | 0.2574 | 0.3179 | 0.3926 | Best classical baseline (char-only priority) |
+| transformer t1.0.1 | 0.2203 | 0.2355 | 1.0000 | 1.0000 | Invalid (department leakage detected) |
+| transformer t1.0.2 | 0.0996 | 0.2420 | 0.2506 | 0.6021 | 1 epoch @ 128; leak guard applied; majority bias on dept |
+
+Interpretation:
+- t1.0.2 confirms the leakage fix (no more perfect department scores). As a fast, 1‑epoch canary it underperforms sklearn on priority and trades macro‑F1 for higher department accuracy (favoring the majority class). This is expected at low epochs and shorter max_len.
+- Next we should train a stronger transformer baseline (3 epochs @ 256 tokens) and reassess.
 
 ## Next steps (short list)
-1) Train a stronger transformer baseline (t1.0.1: 3–5 epochs, max_len 256) and update staging.
-2) Add SERVE_MODEL_TYPE flag to route `/classify` to sklearn or transformer.
-3) Add tests for both endpoints and a simple manifest validation script.
-4) Optional: ONNX export for CPU latency, publish/promote scripts for cloud storage, and CI gates enforcement.
+1) Train a stronger transformer baseline (t1.0.3: 3 epochs, max_len 256) and update staging if it beats sklearn.
+2) Auto-emit manifest from the trainer (persist `exclude_patterns`, base_model, metrics, URIs) to reduce manual steps.
+3) Add a CI compare step using `scripts/compare_models.py` and enforce transformer gates (avoid regressions and leakage).
+4) Optional: ONNX export for CPU latency, publish/promote scripts for cloud storage.
 
 ## Acceptance targets (suggested)
 - Priority: accuracy ≥ 0.50, macro‑F1 ≥ 0.45

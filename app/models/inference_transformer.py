@@ -5,10 +5,21 @@ import os
 import torch
 import torch.nn as nn
 from transformers import AutoModel, AutoTokenizer
+import re
 
 
-def preprocess_text(title: str, description: str, max_len: int = 512) -> str:
-    return f"[TITLE] {title.strip()} [DESC] {description.strip()}"[:2000]
+def _apply_exclusions(text: str, compiled_patterns: list[re.Pattern[str]] | None) -> str:
+    if not compiled_patterns:
+        return text
+    for cre in compiled_patterns:
+        text = cre.sub(" ", text)
+    return re.sub(r"\s+", " ", text).strip()
+
+
+def preprocess_text(title: str, description: str, max_len: int = 512, compiled_patterns: list[re.Pattern[str]] | None = None) -> str:
+    title = title.strip()
+    description = _apply_exclusions(description.strip(), compiled_patterns)
+    return f"[TITLE] {title} [DESC] {description}"[:2000]
 
 
 class DualHeadModel(nn.Module):
@@ -51,6 +62,9 @@ class TransformerInference:
 
         base_model = manifest.get("training", {}).get("base_model", "distilbert-base-uncased")
         self.max_len = int(manifest.get("training", {}).get("max_length", 256))
+        # Optional exclusion patterns (to prevent leakage); if not present, no exclusions are applied
+        exclude_patterns = manifest.get("training", {}).get("exclude_patterns", [])
+        self._compiled_patterns = [re.compile(p, flags=re.IGNORECASE) for p in exclude_patterns]
 
         # Tokenizer
         tok_uri = artifacts.get("tokenizer_uri")
@@ -73,7 +87,7 @@ class TransformerInference:
         self.softmax = nn.Softmax(dim=-1)
 
     def predict(self, title: str, description: str) -> Dict[str, Any]:
-        text = preprocess_text(title, description, self.max_len)
+        text = preprocess_text(title, description, self.max_len, self._compiled_patterns)
         enc = self.tok(text, truncation=True, max_length=self.max_len, padding="max_length", return_tensors="pt")
         enc = {k: v.to(self.device) for k, v in enc.items()}
         with torch.inference_mode():

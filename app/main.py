@@ -173,19 +173,34 @@ async def classify_ticket(
     ticket: TicketRequest,
     classifier: TicketClassifier = Depends(get_classifier)
 ):
-    """Classify a customer support ticket"""
+    """Classify a customer support ticket.
+
+    If SERVE_MODEL_TYPE=transformer, route to transformer runtime; otherwise use sklearn.
+    """
     try:
+        serve_type = os.getenv("SERVE_MODEL_TYPE", "sklearn").lower()
+        if serve_type == "transformer":
+            rt = get_transformer_runtime(os.getenv("SERVE_MODEL_ENV"))
+            out = rt.predict(ticket.title, ticket.description)
+            return TicketResponse(
+                title=ticket.title,
+                description=ticket.description,
+                predicted_priority=PriorityLevel(out["priority"]),
+                predicted_department=Department(out["department"]),
+                priority_confidence=out["priority_conf"],
+                department_confidence=out["department_conf"],
+                customer_email=ticket.customer_email,
+            )
+
+        # sklearn path (default)
         if not classifier.is_trained:
             raise HTTPException(
                 status_code=503,
                 detail="Classifier not trained. Please train the model first."
             )
-        
-        # Get predictions
         priority, department, priority_conf, dept_conf = classifier.predict(
             ticket.title, ticket.description
         )
-        
         return TicketResponse(
             title=ticket.title,
             description=ticket.description,
@@ -195,7 +210,6 @@ async def classify_ticket(
             department_confidence=dept_conf,
             customer_email=ticket.customer_email
         )
-        
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:

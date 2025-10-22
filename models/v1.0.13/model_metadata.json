@@ -1,0 +1,41 @@
+{
+  "model_version": "1.0.13",
+  "created_at": "2025-10-08T09:36:30.284923+00:00",
+  "data_path": "data/enriched_customer_tickets_dedup.csv",
+  "data_sha256": "a3164f085dfaddd8621edc417737135f3f5880dbd5fe9e26ac1e8bd5531fd8be",
+  "n_samples_total": 8421,
+  "n_train_samples": 6736,
+  "n_val_samples": 1685,
+  "n_holdout_samples": 0,
+  "priority_distribution": {
+    "Medium": 2180,
+    "Urgent": 2116,
+    "High": 2072,
+    "Low": 2053
+  },
+  "department_distribution": {
+    "Billing": 5052,
+    "Tech Support": 1729,
+    "Sales": 1640
+  },
+  "metrics_file": "metrics.json",
+  "priority_macro_f1": 0.2542099403176545,
+  "department_macro_f1": 0.3055208940024661,
+  "class_weight": "balanced",
+  "augment_length_buckets": true,
+  "department_exclude_regex": [
+    "__type_[a-z0-9_]+"
+  ],
+  "priority_extra": false,
+  "priority_interactions": false,
+  "priority_char": true,
+  "department_char": false,
+  "priority_C": 5.0,
+  "department_C": 2.0,
+  "calibrate_probabilities": false,
+  "calibration_metrics_file": "calibration_metrics.json",
+  "priority_cost_weights": null,
+  "avg_description_length_tokens": 49.480255344418055,
+  "priority_vocab_size": 14813,
+  "department_vocab_size": 14766
+}

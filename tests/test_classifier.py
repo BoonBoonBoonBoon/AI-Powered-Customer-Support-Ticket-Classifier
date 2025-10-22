@@ -36,8 +36,8 @@ def trained_classifier(sample_data):
 def test_classifier_initialization():
     """Test classifier initialization"""
     classifier = TicketClassifier()
-    assert classifier.priority_model is None
-    assert classifier.department_model is None
+    assert classifier.priority_bundle is None
+    assert classifier.department_bundle is None
     assert not classifier.is_trained
 
 
@@ -46,8 +46,8 @@ def test_classifier_training(sample_data):
     classifier = TicketClassifier()
     classifier.train(sample_data)
     
-    assert classifier.priority_model is not None
-    assert classifier.department_model is not None
+    assert classifier.priority_bundle is not None
+    assert classifier.department_bundle is not None
     assert classifier.is_trained
 
 
@@ -71,8 +71,8 @@ def test_classifier_save_load(trained_classifier, tmp_path):
     trained_classifier.save_models(str(models_dir))
     
     # Check files exist
-    assert (models_dir / "priority_model.pkl").exists()
-    assert (models_dir / "department_model.pkl").exists()
+    assert (models_dir / "priority_model.joblib").exists()
+    assert (models_dir / "department_model.joblib").exists()
     
     # Load models
     new_classifier = TicketClassifier()
@@ -92,20 +92,20 @@ def test_prediction_without_training():
     """Test that prediction fails without training"""
     classifier = TicketClassifier()
     
-    with pytest.raises(ValueError, match="Model not trained yet!"):
+    with pytest.raises(RuntimeError, match="Model not trained"):
         classifier.predict("Test", "Test")
 
 
 def test_text_preprocessing(trained_classifier):
     """Test text preprocessing"""
     # Test with various inputs
-    processed = trained_classifier._preprocess_text("  UPPERCASE TEXT  ")
+    processed = trained_classifier._preprocess("  UPPERCASE TEXT  ")
     assert processed == "uppercase text"
     
-    processed = trained_classifier._preprocess_text("")
+    processed = trained_classifier._preprocess("")
     assert processed == ""
     
-    processed = trained_classifier._preprocess_text(None)
+    processed = trained_classifier._preprocess(None)
     assert processed == ""
 
 

@@ -1,0 +1,27 @@
+{
+  "class_weight": "balanced",
+  "augment_length_buckets": true,
+  "version": 1,
+  "model_type": "sklearn_logreg_tfidf",
+  "department_exclude_patterns": [
+    "__type_[a-z0-9_]+"
+  ],
+  "enable_priority_extra": false,
+  "enable_priority_interactions": false,
+  "enable_priority_char": true,
+  "enable_department_char": false,
+  "priority_char_ngram_range": [
+    3,
+    5
+  ],
+  "department_char_ngram_range": [
+    3,
+    5
+  ],
+  "priority_cost_weights": null,
+  "priority_C": 5.0,
+  "department_C": 2.0,
+  "calibrate_probabilities": false,
+  "priority_char_max_features": 8000,
+  "department_char_max_features": 10000
+}

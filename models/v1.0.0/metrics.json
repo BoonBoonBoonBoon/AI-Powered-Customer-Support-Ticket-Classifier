@@ -1,0 +1,131 @@
+{
+  "priority": {
+    "report": {
+      "High": {
+        "precision": 0.9152542372881356,
+        "recall": 0.9818181818181818,
+        "f1-score": 0.9473684210526315,
+        "support": 55.0
+      },
+      "Low": {
+        "precision": 0.925,
+        "recall": 0.925,
+        "f1-score": 0.925,
+        "support": 40.0
+      },
+      "Medium": {
+        "precision": 0.95,
+        "recall": 0.9661016949152542,
+        "f1-score": 0.957983193277311,
+        "support": 59.0
+      },
+      "Urgent": {
+        "precision": 1.0,
+        "recall": 0.8076923076923077,
+        "f1-score": 0.8936170212765957,
+        "support": 26.0
+      },
+      "accuracy": 0.9388888888888889,
+      "macro avg": {
+        "precision": 0.947563559322034,
+        "recall": 0.920153046106436,
+        "f1-score": 0.9309921589016346,
+        "support": 180.0
+      },
+      "weighted avg": {
+        "precision": 0.9410499058380414,
+        "recall": 0.9388888888888889,
+        "f1-score": 0.9381128561913755,
+        "support": 180.0
+      }
+    },
+    "confusion_matrix": [
+      [
+        54,
+        1,
+        0,
+        0
+      ],
+      [
+        2,
+        37,
+        1,
+        0
+      ],
+      [
+        1,
+        1,
+        57,
+        0
+      ],
+      [
+        2,
+        1,
+        2,
+        21
+      ]
+    ],
+    "summary": {
+      "macro_f1": 0.9309921589016346,
+      "weighted_f1": 0.9381128561913755,
+      "accuracy": 0.9388888888888889
+    }
+  },
+  "department": {
+    "report": {
+      "Billing": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 57.0
+      },
+      "Sales": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 67.0
+      },
+      "Tech Support": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 56.0
+      },
+      "accuracy": 1.0,
+      "macro avg": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 180.0
+      },
+      "weighted avg": {
+        "precision": 1.0,
+        "recall": 1.0,
+        "f1-score": 1.0,
+        "support": 180.0
+      }
+    },
+    "confusion_matrix": [
+      [
+        57,
+        0,
+        0
+      ],
+      [
+        0,
+        67,
+        0
+      ],
+      [
+        0,
+        0,
+        56
+      ]
+    ],
+    "summary": {
+      "macro_f1": 1.0,
+      "weighted_f1": 1.0,
+      "accuracy": 1.0
+    }
+  }
+}

@@ -19,9 +19,20 @@ def _copy_from_file_uri(uri: str, dest: pathlib.Path) -> pathlib.Path:
     parsed = urllib.parse.urlparse(uri)
     if parsed.scheme != "file":
         raise ValueError(f"Only file:// URIs supported in local mode, got: {uri}")
-    src_path = pathlib.Path(parsed.path.lstrip("/")) if os.name == "nt" else pathlib.Path(parsed.path)
+    # Support forms like file:///absolute/path and file://relative_base/relpath
+    if parsed.netloc:
+        combined = f"{parsed.netloc}{parsed.path}"
+    else:
+        combined = parsed.path
+    src_path = pathlib.Path(combined.lstrip("/")) if os.name == "nt" else pathlib.Path(combined)
     dest.parent.mkdir(parents=True, exist_ok=True)
-    shutil.copy2(src_path, dest)
+    if src_path.is_dir():
+        # Copy directory recursively into a directory named after the basename
+        if dest.exists():
+            shutil.rmtree(dest)
+        shutil.copytree(src_path, dest)
+    else:
+        shutil.copy2(src_path, dest)
     return dest
 
 
@@ -44,8 +55,10 @@ def fetch_artifacts(artifacts: Dict[str, str]) -> Dict[str, pathlib.Path]:
     for k, uri in artifacts.items():
         if not uri:
             continue
-        filename = os.path.basename(urllib.parse.urlparse(uri).path)
-        dest = RUNTIME_CACHE / filename
+        parsed = urllib.parse.urlparse(uri)
+        path_part = parsed.path
+        name = os.path.basename(path_part.rstrip("/"))
+        dest = RUNTIME_CACHE / name
         _copy_from_file_uri(uri, dest)
         local_paths[k] = dest
     return local_paths

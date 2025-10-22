@@ -1,0 +1,9 @@
+{
+  "class_weight": "balanced",
+  "augment_length_buckets": true,
+  "version": 1,
+  "model_type": "sklearn_logreg_tfidf",
+  "department_exclude_patterns": [
+    "__type_[a-z0-9_]+"
+  ]
+}

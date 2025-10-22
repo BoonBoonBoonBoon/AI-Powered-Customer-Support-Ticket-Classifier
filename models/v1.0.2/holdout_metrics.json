@@ -1,0 +1,11 @@
+{
+  "priority": {
+    "macro_f1": 0.26622154426574385,
+    "accuracy": 0.26614173228346455
+  },
+  "department": {
+    "macro_f1": 1.0,
+    "accuracy": 1.0
+  },
+  "n_holdout_samples": 1270
+}

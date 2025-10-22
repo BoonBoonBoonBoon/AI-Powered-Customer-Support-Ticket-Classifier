@@ -1,0 +1,24 @@
+{
+  "priority_id2label": {
+    "0": "High",
+    "1": "Low",
+    "2": "Medium",
+    "3": "Urgent"
+  },
+  "priority_label2id": {
+    "High": 0,
+    "Low": 1,
+    "Medium": 2,
+    "Urgent": 3
+  },
+  "department_id2label": {
+    "0": "Billing",
+    "1": "Sales",
+    "2": "Tech Support"
+  },
+  "department_label2id": {
+    "Billing": 0,
+    "Sales": 1,
+    "Tech Support": 2
+  }
+}
