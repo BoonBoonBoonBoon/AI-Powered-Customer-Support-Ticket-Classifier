@@ -13,12 +13,23 @@ def read_metrics(path: Path) -> Dict:
 
 
 def main():
-    # Predefined comparisons: production sklearn v1.0.10 vs transformer t1.0.1 and t1.0.2
+    # Start with the production sklearn baseline
     pairs = [
         ("sklearn:v1.0.10", ROOT / "models" / "v1.0.10" / "metrics.json"),
-        ("transformer:t1.0.1", ROOT / "models" / "transformers" / "t1.0.1" / "metrics.json"),
-        ("transformer:t1.0.2", ROOT / "models" / "transformers" / "t1.0.2" / "metrics.json"),
     ]
+
+    # Dynamically include all transformer versions that have metrics.json
+    t_dir = ROOT / "models" / "transformers"
+    if t_dir.exists():
+        for child in sorted(t_dir.iterdir()):
+            if not child.is_dir():
+                continue
+            name = child.name
+            if not name.startswith("t"):
+                continue
+            metrics_path = child / "metrics.json"
+            if metrics_path.exists():
+                pairs.append((f"transformer:{name}", metrics_path))
 
     rows = []
     for name, path in pairs:

@@ -1,0 +1,36 @@
+{
+  "model_id": "transformer:t1.0.3",
+  "framework": "transformers",
+  "format": "torch",
+  "created_at": "2025-10-22T23:18:38Z",
+  "training": {
+    "base_model": "distilbert-base-uncased",
+    "max_length": 256,
+    "epochs": 3,
+    "batch_size": 16,
+    "exclude_patterns": [
+      "__department_[a-z0-9_]+",
+      "__dept_[a-z0-9_]+",
+      "__type_[a-z0-9_]+",
+      "__type_[a-z0-9_]+"
+    ]
+  },
+  "artifacts": {
+    "weights_uri": "file://models/transformers/t1.0.3/pytorch_model.bin",
+    "tokenizer_uri": "file://models/transformers/t1.0.3/tokenizer",
+    "label_map_uri": "file://models/transformers/t1.0.3/label_mappings.json",
+    "onnx_uri": ""
+  },
+  "metrics": {
+    "validation": {
+      "priority": {
+        "accuracy": 0.2461629279811098,
+        "macro_f1": 0.23480403305919498
+      },
+      "department": {
+        "accuracy": 0.602125147579693,
+        "macro_f1": 0.2505526897568165
+      }
+    }
+  }
+}

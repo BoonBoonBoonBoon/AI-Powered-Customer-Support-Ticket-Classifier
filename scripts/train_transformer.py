@@ -51,10 +51,15 @@ def _apply_exclusions(text: str, compiled_patterns: list[re.Pattern[str]] | None
 
 
 def preprocess_text(title: str, description: str, max_len: int = 512, compiled_patterns: list[re.Pattern[str]] | None = None):
-    # Remove leakage-like enrichment tokens if configured; truncation handled by tokenizer.
+    """Clean and return title+description as separate sequences.
+
+    We apply exclusion patterns to the description only to mitigate leakage tokens.
+    The tokenizer will handle special tokens (e.g., [CLS]/[SEP]) when passed a text_pair.
+    """
     title = title.strip()
     description = _apply_exclusions(description.strip(), compiled_patterns)
-    return f"[TITLE] {title} [DESC] {description}"[:2000]
+    # Return as a pair; truncation occurs inside the tokenizer.
+    return title, description
 
 class TicketDataset(Dataset):
     def __init__(self, df: pd.DataFrame, tokenizer, max_len: int, pri2id: Dict[str,int], dep2id: Dict[str,int], compiled_patterns: list[re.Pattern[str]] | None = None):
@@ -67,8 +72,9 @@ class TicketDataset(Dataset):
     def __len__(self): return len(self.df)
     def __getitem__(self, idx):
         row = self.df.iloc[idx]
-        text = preprocess_text(str(row.title), str(row.description), self.max_len, self._compiled_patterns)
-        enc = self.tok(text, truncation=True, max_length=self.max_len, padding='max_length', return_tensors='pt')
+        t, d = preprocess_text(str(row.title), str(row.description), self.max_len, self._compiled_patterns)
+        # Provide title as text and description as text_pair so tokenizer can insert [SEP]
+        enc = self.tok(t, d, truncation=True, max_length=self.max_len, padding='max_length', return_tensors='pt')
         item = {k: v.squeeze(0) for k,v in enc.items()}
         item['priority_label'] = torch.tensor(self.pri2id[row.priority])
         item['department_label'] = torch.tensor(self.dep2id[row.department])
@@ -117,7 +123,16 @@ def compute_metrics(preds_p, labels_p, preds_d, labels_d):
         }
     }
 
-def train_loop(cfg: TrainConfig, model, tokenizer, train_ds, val_ds, pri2id, dep2id, output_dir: str):
+def _compute_class_weights(labels: list[int], num_classes: int) -> torch.Tensor:
+    import numpy as np
+    counts = np.bincount(labels, minlength=num_classes).astype(float)
+    # Avoid division by zero
+    counts[counts == 0] = 1.0
+    weights = (counts.sum() / (len(counts) * counts))
+    return torch.tensor(weights, dtype=torch.float32)
+
+
+def train_loop(cfg: TrainConfig, model, tokenizer, train_ds, val_ds, pri2id, dep2id, output_dir: str, class_weight_priority: str = 'none', class_weight_department: str = 'auto', label_smoothing: float = 0.0, select_metric: str = 'priority', loss_weight_priority: float = 1.0, loss_weight_department: float = 1.0, priority_labels_for_weights: list[int] | None = None, department_labels_for_weights: list[int] | None = None):
     train_loader = DataLoader(train_ds, batch_size=cfg.batch_size, shuffle=True)
     val_loader = DataLoader(val_ds, batch_size=cfg.batch_size)
     model.to(cfg.device)
@@ -130,9 +145,26 @@ def train_loop(cfg: TrainConfig, model, tokenizer, train_ds, val_ds, pri2id, dep
     ]
     optimizer = torch.optim.AdamW(grouped, lr=cfg.lr)
     scheduler = get_linear_schedule_with_warmup(optimizer, warmup_steps, total_steps)
-    loss_fn_p = nn.CrossEntropyLoss()
-    loss_fn_d = nn.CrossEntropyLoss()
-    best_macro = -1.0
+    # Prepare (optional) class weights
+    cw_p = None
+    cw_d = None
+    if class_weight_priority == 'auto':
+        if priority_labels_for_weights is None:
+            # Fallback (slower): iterate dataset
+            pri_labels = [train_ds[i]['priority_label'].item() for i in range(len(train_ds))]
+        else:
+            pri_labels = priority_labels_for_weights
+        cw_p = _compute_class_weights(pri_labels, len(pri2id)).to(cfg.device)
+    if class_weight_department == 'auto':
+        if department_labels_for_weights is None:
+            dep_labels = [train_ds[i]['department_label'].item() for i in range(len(train_ds))]
+        else:
+            dep_labels = department_labels_for_weights
+        cw_d = _compute_class_weights(dep_labels, len(dep2id)).to(cfg.device)
+
+    loss_fn_p = nn.CrossEntropyLoss(weight=cw_p, label_smoothing=label_smoothing)
+    loss_fn_d = nn.CrossEntropyLoss(weight=cw_d, label_smoothing=label_smoothing)
+    best_score = -1.0
     os.makedirs(output_dir, exist_ok=True)
 
     for epoch in range(1, cfg.epochs+1):
@@ -144,7 +176,7 @@ def train_loop(cfg: TrainConfig, model, tokenizer, train_ds, val_ds, pri2id, dep
             logits_p, logits_d = model(batch['input_ids'], batch['attention_mask'])
             loss_p = loss_fn_p(logits_p, batch['priority_label'])
             loss_d = loss_fn_d(logits_d, batch['department_label'])
-            loss = loss_p + loss_d
+            loss = loss_weight_priority * loss_p + loss_weight_department * loss_d
             loss.backward()
             if step % cfg.grad_accum == 0:
                 optimizer.step(); scheduler.step(); optimizer.zero_grad()
@@ -163,14 +195,20 @@ def train_loop(cfg: TrainConfig, model, tokenizer, train_ds, val_ds, pri2id, dep
                 all_d_pred.extend(torch.argmax(ld, dim=1).cpu().tolist())
                 all_d_true.extend(batch['department_label'].cpu().tolist())
         metrics = compute_metrics(all_p_pred, all_p_true, all_d_pred, all_d_true)
-        macro = metrics['priority']['macro_f1']
+        # Model selection criterion
+        if select_metric == 'priority':
+            score = metrics['priority']['macro_f1']
+        elif select_metric == 'department':
+            score = metrics['department']['macro_f1']
+        else:
+            score = metrics['priority']['macro_f1'] + metrics['department']['macro_f1']
         # Save best
-        if macro > best_macro:
-            best_macro = macro
+        if score > best_score:
+            best_score = score
             torch.save(model.state_dict(), os.path.join(output_dir, 'pytorch_model.bin'))
             with open(os.path.join(output_dir,'metrics.json'),'w',encoding='utf-8') as f:
                 json.dump(metrics, f, indent=2)
-            print(f"Saved new best (priority macro_f1={macro:.4f})")
+            print(f"Saved new best ({select_metric} score={best_score:.4f})")
 
     # Persist label mappings & config
     mappings = {
@@ -197,6 +235,12 @@ def main():
     ap.add_argument('--val-split', type=float, default=0.2)
     ap.add_argument('--output-version', required=True, help='Version tag (e.g., t1.0.0)')
     ap.add_argument('--exclude-pattern', action='append', default=[], help='Regex patterns to exclude from text (applied to description)')
+    ap.add_argument('--class-weight-priority', choices=['none','auto'], default='none', help='Apply automatic inverse-frequency class weights for priority head')
+    ap.add_argument('--class-weight-department', choices=['none','auto'], default='auto', help='Apply automatic inverse-frequency class weights for department head')
+    ap.add_argument('--label-smoothing', type=float, default=0.0, help='Label smoothing for CrossEntropyLoss (e.g., 0.05)')
+    ap.add_argument('--select-metric', choices=['priority','department','sum'], default='priority', help='Model selection criterion on validation')
+    ap.add_argument('--loss-weight-priority', type=float, default=1.0, help='Weight for priority loss in multi-task sum')
+    ap.add_argument('--loss-weight-department', type=float, default=1.0, help='Weight for department loss in multi-task sum')
     args = ap.parse_args()
 
     df = load_data(args.data)
@@ -224,7 +268,21 @@ def main():
     cfg = TrainConfig(model_name=args.model_name, epochs=args.epochs, batch_size=args.batch_size, lr=args.lr, weight_decay=args.weight_decay, warmup_ratio=args.warmup_ratio, max_len=args.max_len, grad_accum=args.grad_accum, device=device)
     model = DualHeadModel(args.model_name, len(pri2id), len(dep2id))
     out_dir = os.path.join('models','transformers', args.output_version)
-    train_loop(cfg, model, tokenizer, train_ds, val_ds, pri2id, dep2id, out_dir)
+    # Precompute label ids for fast class weights
+    pri_label_ids_train = [pri2id[l] for l in train_df['priority'].tolist()]
+    dep_label_ids_train = [dep2id[l] for l in train_df['department'].tolist()]
+
+    train_loop(
+        cfg, model, tokenizer, train_ds, val_ds, pri2id, dep2id, out_dir,
+        class_weight_priority=args.class_weight_priority,
+        class_weight_department=args.class_weight_department,
+        label_smoothing=args.label_smoothing,
+        select_metric=args.select_metric,
+        loss_weight_priority=args.loss_weight_priority,
+        loss_weight_department=args.loss_weight_department,
+        priority_labels_for_weights=pri_label_ids_train,
+        department_labels_for_weights=dep_label_ids_train,
+    )
     print(f"Training complete. Artifacts in {out_dir}")
 
 if __name__ == '__main__':
