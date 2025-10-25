@@ -25,7 +25,7 @@ from typing import Dict, Any
 import pandas as pd
 import torch
 from torch import nn
-from torch.utils.data import Dataset, DataLoader
+from torch.utils.data import Dataset, DataLoader, WeightedRandomSampler
 from transformers import AutoModel, AutoTokenizer, get_linear_schedule_with_warmup
 from tqdm import tqdm
 
@@ -132,8 +132,39 @@ def _compute_class_weights(labels: list[int], num_classes: int) -> torch.Tensor:
     return torch.tensor(weights, dtype=torch.float32)
 
 
-def train_loop(cfg: TrainConfig, model, tokenizer, train_ds, val_ds, pri2id, dep2id, output_dir: str, class_weight_priority: str = 'none', class_weight_department: str = 'auto', label_smoothing: float = 0.0, select_metric: str = 'priority', loss_weight_priority: float = 1.0, loss_weight_department: float = 1.0, priority_labels_for_weights: list[int] | None = None, department_labels_for_weights: list[int] | None = None):
-    train_loader = DataLoader(train_ds, batch_size=cfg.batch_size, shuffle=True)
+class FocalLoss(nn.Module):
+    def __init__(self, weight: torch.Tensor | None = None, gamma: float = 2.0, reduction: str = 'mean'):
+        super().__init__()
+        self.weight = weight
+        self.gamma = gamma
+        self.reduction = reduction
+        self.ce = nn.CrossEntropyLoss(weight=weight, reduction='none')
+
+    def forward(self, logits: torch.Tensor, target: torch.Tensor) -> torch.Tensor:
+        # Cross-entropy per-sample
+        ce_loss = self.ce(logits, target)
+        # Convert CE to pt = exp(-ce)
+        pt = torch.exp(-ce_loss)
+        focal = ((1 - pt) ** self.gamma) * ce_loss
+        if self.reduction == 'mean':
+            return focal.mean()
+        elif self.reduction == 'sum':
+            return focal.sum()
+        return focal
+
+
+def train_loop(cfg: TrainConfig, model, tokenizer, train_ds, val_ds, pri2id, dep2id, output_dir: str, class_weight_priority: str = 'none', class_weight_department: str = 'auto', label_smoothing: float = 0.0, select_metric: str = 'priority', loss_weight_priority: float = 1.0, loss_weight_department: float = 1.0, priority_labels_for_weights: list[int] | None = None, department_labels_for_weights: list[int] | None = None, weighted_sampler: str = 'none', dept_loss_warmup_epochs: int = 0, focal_priority_gamma: float = 0.0):
+    # Build train loader (optionally with weighted sampler by priority)
+    if weighted_sampler == 'priority' and priority_labels_for_weights is not None:
+        import numpy as np
+        counts = np.bincount(priority_labels_for_weights, minlength=len(pri2id)).astype(float)
+        counts[counts == 0] = 1.0
+        class_w = (counts.sum() / (len(counts) * counts))
+        sample_weights = [class_w[y] for y in priority_labels_for_weights]
+        sampler = WeightedRandomSampler(sample_weights, num_samples=len(sample_weights), replacement=True)
+        train_loader = DataLoader(train_ds, batch_size=cfg.batch_size, sampler=sampler)
+    else:
+        train_loader = DataLoader(train_ds, batch_size=cfg.batch_size, shuffle=True)
     val_loader = DataLoader(val_ds, batch_size=cfg.batch_size)
     model.to(cfg.device)
     total_steps = cfg.epochs * math.ceil(len(train_loader)/cfg.grad_accum)
@@ -162,7 +193,8 @@ def train_loop(cfg: TrainConfig, model, tokenizer, train_ds, val_ds, pri2id, dep
             dep_labels = department_labels_for_weights
         cw_d = _compute_class_weights(dep_labels, len(dep2id)).to(cfg.device)
 
-    loss_fn_p = nn.CrossEntropyLoss(weight=cw_p, label_smoothing=label_smoothing)
+    # Priority loss: optional focal; if focal used, ignore label smoothing
+    loss_fn_p = FocalLoss(weight=cw_p, gamma=focal_priority_gamma) if focal_priority_gamma and focal_priority_gamma > 0 else nn.CrossEntropyLoss(weight=cw_p, label_smoothing=label_smoothing)
     loss_fn_d = nn.CrossEntropyLoss(weight=cw_d, label_smoothing=label_smoothing)
     best_score = -1.0
     os.makedirs(output_dir, exist_ok=True)
@@ -176,7 +208,9 @@ def train_loop(cfg: TrainConfig, model, tokenizer, train_ds, val_ds, pri2id, dep
             logits_p, logits_d = model(batch['input_ids'], batch['attention_mask'])
             loss_p = loss_fn_p(logits_p, batch['priority_label'])
             loss_d = loss_fn_d(logits_d, batch['department_label'])
-            loss = loss_weight_priority * loss_p + loss_weight_department * loss_d
+            # Warmup: optionally suppress department loss for initial epochs
+            dept_w = 0.0 if epoch <= dept_loss_warmup_epochs else loss_weight_department
+            loss = loss_weight_priority * loss_p + dept_w * loss_d
             loss.backward()
             if step % cfg.grad_accum == 0:
                 optimizer.step(); scheduler.step(); optimizer.zero_grad()
@@ -241,6 +275,11 @@ def main():
     ap.add_argument('--select-metric', choices=['priority','department','sum'], default='priority', help='Model selection criterion on validation')
     ap.add_argument('--loss-weight-priority', type=float, default=1.0, help='Weight for priority loss in multi-task sum')
     ap.add_argument('--loss-weight-department', type=float, default=1.0, help='Weight for department loss in multi-task sum')
+    ap.add_argument('--weighted-sampler', choices=['none','priority'], default='none', help='Use WeightedRandomSampler by priority on the training set')
+    ap.add_argument('--dept-loss-warmup-epochs', type=int, default=0, help='Number of initial epochs to suppress department loss (set weight=0)')
+    ap.add_argument('--focal-priority-gamma', type=float, default=0.0, help='Enable focal loss for priority with given gamma (0 disables)')
+    ap.add_argument('--device', choices=['auto','cuda','cpu','dml'], default='auto', help="Compute device: 'auto' (prefer CUDA, then DirectML, else CPU), or force 'cuda'/'cpu'/'dml'")
+    ap.add_argument('--init-weights', type=str, default='', help='Optional path to a state_dict (.bin) to initialize model weights from a prior run')
     args = ap.parse_args()
 
     df = load_data(args.data)
@@ -264,9 +303,45 @@ def main():
     compiled = [re.compile(p, flags=re.IGNORECASE) for p in patterns]
     train_ds = TicketDataset(train_df, tokenizer, args.max_len, pri2id, dep2id, compiled)
     val_ds = TicketDataset(val_df, tokenizer, args.max_len, pri2id, dep2id, compiled)
-    device = 'cuda' if torch.cuda.is_available() else 'cpu'
+
+    # Select device per user choice
+    def select_device(choice: str):
+        if choice == 'cuda':
+            if torch.cuda.is_available():
+                return 'cuda', "CUDA GPU"
+            raise RuntimeError("--device cuda requested but CUDA is not available in this environment")
+        if choice == 'cpu':
+            return 'cpu', "CPU"
+        if choice == 'dml':
+            try:
+                import torch_directml
+                return torch_directml.device(), "DirectML"
+            except Exception as e:
+                raise RuntimeError(f"--device dml requested but torch-directml is not available: {e}")
+        # auto: prefer CUDA, then DirectML, else CPU
+        if torch.cuda.is_available():
+            return 'cuda', "CUDA GPU"
+        try:
+            import torch_directml
+            return torch_directml.device(), "DirectML"
+        except Exception:
+            return 'cpu', "CPU"
+
+    device, device_name = select_device(args.device)
+    print(f"Using device: {device_name}")
     cfg = TrainConfig(model_name=args.model_name, epochs=args.epochs, batch_size=args.batch_size, lr=args.lr, weight_decay=args.weight_decay, warmup_ratio=args.warmup_ratio, max_len=args.max_len, grad_accum=args.grad_accum, device=device)
     model = DualHeadModel(args.model_name, len(pri2id), len(dep2id))
+    # Optionally initialize from a previous checkpoint's state_dict
+    if args.init_weights:
+        try:
+            if os.path.isfile(args.init_weights):
+                state = torch.load(args.init_weights, map_location='cpu')
+                missing_unexpected = model.load_state_dict(state, strict=False)
+                print(f"Initialized weights from {args.init_weights}. Load result: {missing_unexpected}")
+            else:
+                print(f"--init-weights path not found: {args.init_weights}")
+        except Exception as e:
+            print(f"Warning: failed to load init weights from {args.init_weights}: {e}")
     out_dir = os.path.join('models','transformers', args.output_version)
     # Precompute label ids for fast class weights
     pri_label_ids_train = [pri2id[l] for l in train_df['priority'].tolist()]
@@ -282,6 +357,9 @@ def main():
         loss_weight_department=args.loss_weight_department,
         priority_labels_for_weights=pri_label_ids_train,
         department_labels_for_weights=dep_label_ids_train,
+        weighted_sampler=args.weighted_sampler,
+        dept_loss_warmup_epochs=args.dept_loss_warmup_epochs,
+        focal_priority_gamma=args.focal_priority_gamma,
     )
     print(f"Training complete. Artifacts in {out_dir}")
 

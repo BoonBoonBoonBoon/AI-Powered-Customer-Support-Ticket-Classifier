@@ -7,12 +7,23 @@ __pycache__/
 venv/
 env/
 .env
+.venv*/
 
-# Ignore large/binary model artifacts by type; allow manifests and metadata
+# Ignore all models artifacts by default; re-allow selected small JSONs below
+models/**
+
+# Ignore large/binary model artifacts by type
 *.pkl
 *.joblib
 *.pt
 *.onnx
+*.safetensors
+models/**/model.safetensors
+models/**/pytorch_model.bin
+models/**/pytorch_model.bin.index.json
+models/**/optimizer.pt
+models/**/scheduler.pt
+models/transformers/**/tokenizer/**
 
 !models/**/model_metadata.json
 !models/**/metrics.json

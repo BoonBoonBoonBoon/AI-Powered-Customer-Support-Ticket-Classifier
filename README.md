@@ -730,3 +730,19 @@ Recommended next steps:
 - Run `scripts/error_analysis.py` against `models/v1.0.3` to surface hardest confusions.
 - Introduce heuristic leakage guard: warn if any per-target macro F1 == 1.0 with >50 validation samples.
 - Explore per-target hyperparameter tuning (e.g., higher `C` for department, class-weight adjustments, or linear SVM comparison).
+
+---
+
+## Train on a GPU (Google Colab) – Quickstart
+
+If you want faster transformer iteration, use our Colab guide to run on a free GPU.
+
+- See: `docs/colab_quickstart.md`
+
+Highlights of the recommended stable recipe:
+- Loss: Cross-Entropy with label smoothing 0.05 (no focal loss)
+- Sampling: no weighted sampler (use class weights = auto)
+- Loss weights: priority 1.5, department 1.0; department loss warmup = 1 epoch
+- Base encoder: `distilroberta-base` (suggested) with LR=3e-5, epochs=5, max_len=256
+
+The guide includes copy-paste cells for installs, dataset upload, training, and metric/artifact downloads.

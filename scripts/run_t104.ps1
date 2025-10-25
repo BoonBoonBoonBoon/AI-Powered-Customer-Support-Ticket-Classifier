@@ -37,7 +37,10 @@ $trainArgs = @(
   "--label-smoothing", "0.05",
   "--select-metric", "priority",
   "--loss-weight-priority", "2.0",
-  "--loss-weight-department", "0.5"
+  "--loss-weight-department", "0.5",
+  "--weighted-sampler", "priority",
+  "--dept-loss-warmup-epochs", "1",
+  "--focal-priority-gamma", "1.5"
 )
 
 # Train and capture logs reliably
