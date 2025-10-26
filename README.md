@@ -192,6 +192,17 @@ For a step-by-step anti-collapse recipe (priority sampler + focal), a department
 
 - `docs/recipes/anti_collapse_training.md`
 
+Leakage audit helper (detect suspicious tokens highly associated with department/priority):
+
+```powershell
+.\.venv312\Scripts\python.exe scripts\leakage_audit.py `
+  --data data\enriched_customer_tickets.csv `
+  --target department --topk 30 `
+  --exclude-pattern "__department_[a-z0-9_]+" `
+  --exclude-pattern "__dept_[a-z0-9_]+" `
+  --exclude-pattern "__type_[a-z0-9_]+"
+```
+
 ### Model registry pointers
 
 Registry pointers live under `models/registry/` and resolve to a manifest that describes the model and its artifacts:

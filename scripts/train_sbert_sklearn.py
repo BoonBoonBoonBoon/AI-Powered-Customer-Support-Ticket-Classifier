@@ -1,7 +1,8 @@
 import argparse
 import json
 import os
-from typing import Dict, Any
+import re
+from typing import Dict, Any, List
 
 import numpy as np
 import pandas as pd
@@ -26,9 +27,20 @@ def load_data(path: str) -> pd.DataFrame:
     return df
 
 
-def build_texts(df: pd.DataFrame) -> np.ndarray:
+def _apply_exclusions(text: str, compiled_patterns: List[re.Pattern] | None) -> str:
+    if not compiled_patterns:
+        return text
+    for cre in compiled_patterns:
+        text = cre.sub(" ", text)
+    return re.sub(r"\s+", " ", text).strip()
+
+
+def build_texts(df: pd.DataFrame, compiled_patterns: List[re.Pattern] | None = None) -> np.ndarray:
     # Concatenate title and description with a separator for better signal
-    return (df["title"].astype(str).str.strip() + " \n\n" + df["description"].astype(str).str.strip()).values
+    # Apply exclusions to the description only, mirroring transformer recipe
+    titles = df["title"].astype(str).str.strip().tolist()
+    descs = [ _apply_exclusions(str(d).strip(), compiled_patterns) for d in df["description"].tolist() ]
+    return np.array([f"{t} \n\n{d}" for t,d in zip(titles, descs)], dtype=object)
 
 
 def encode_texts(model: SentenceTransformer, texts: np.ndarray, batch_size: int = 64, show_progress: bool = True) -> np.ndarray:
@@ -53,6 +65,7 @@ def main():
     parser.add_argument("--output-dir", default=None, help="Explicit output directory. Overrides version if set.")
     parser.add_argument("--val-size", type=float, default=0.2, help="Validation split size")
     parser.add_argument("--batch-size", type=int, default=64, help="Encoding batch size")
+    parser.add_argument("--exclude-pattern", action="append", default=[], help="Regex patterns to remove from descriptions to prevent leakage (repeatable)")
     args = parser.parse_args()
 
     df = load_data(args.data)
@@ -68,9 +81,18 @@ def main():
         df, test_size=args.val_size, random_state=SEED, stratify=df["priority_id"]
     )
 
+    # Default exclusions to align with transformer leakage guards if none provided
+    default_exclusions = [
+        r"__department_[a-z0-9_]+",
+        r"__dept_[a-z0-9_]+",
+        r"__type_[a-z0-9_]+",
+    ]
+    patts = args.exclude_pattern if args.exclude_pattern else default_exclusions
+    compiled = [re.compile(p, flags=re.IGNORECASE) for p in patts]
+
     # Texts and labels
-    X_train_text = build_texts(train_df)
-    X_val_text = build_texts(val_df)
+    X_train_text = build_texts(train_df, compiled)
+    X_val_text = build_texts(val_df, compiled)
     y_p_train = train_df["priority_id"].values
     y_p_val = val_df["priority_id"].values
     y_d_train = train_df["department_id"].values
