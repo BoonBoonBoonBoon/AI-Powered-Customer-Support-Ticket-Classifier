@@ -186,6 +186,12 @@ Outputs in `models/transformers/t1.0.2/`:
 
 Leakage guard note: Pass one or more `--exclude-pattern` flags to strip enrichment tokens that correlate directly with the department label (e.g., `__type_*`). This avoids artificially perfect department scores.
 
+### Recipes: preventing collapse and balancing heads
+
+For a step-by-step anti-collapse recipe (priority sampler + focal), a department fairness variant (class weights + light focal), and early stopping guidance, see:
+
+- `docs/recipes/anti_collapse_training.md`
+
 ### Model registry pointers
 
 Registry pointers live under `models/registry/` and resolve to a manifest that describes the model and its artifacts:
