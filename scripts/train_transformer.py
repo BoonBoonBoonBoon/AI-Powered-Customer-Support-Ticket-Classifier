@@ -154,7 +154,7 @@ class FocalLoss(nn.Module):
         return focal
 
 
-def train_loop(cfg: TrainConfig, model, tokenizer, train_ds, val_ds, pri2id, dep2id, output_dir: str, class_weight_priority: str = 'none', class_weight_department: str = 'auto', label_smoothing: float = 0.0, select_metric: str = 'priority', loss_weight_priority: float = 1.0, loss_weight_department: float = 1.0, priority_labels_for_weights: list[int] | None = None, department_labels_for_weights: list[int] | None = None, weighted_sampler: str = 'none', dept_loss_warmup_epochs: int = 0, focal_priority_gamma: float = 0.0):
+def train_loop(cfg: TrainConfig, model, tokenizer, train_ds, val_ds, pri2id, dep2id, output_dir: str, class_weight_priority: str = 'none', class_weight_department: str = 'auto', label_smoothing: float = 0.0, select_metric: str = 'priority', loss_weight_priority: float = 1.0, loss_weight_department: float = 1.0, priority_labels_for_weights: list[int] | None = None, department_labels_for_weights: list[int] | None = None, weighted_sampler: str = 'none', dept_loss_warmup_epochs: int = 0, focal_priority_gamma: float = 0.0, focal_department_gamma: float = 0.0, early_stopping_patience: int = 0):
     # Build train loader (optionally with weighted sampler by priority)
     if weighted_sampler == 'priority' and priority_labels_for_weights is not None:
         import numpy as np
@@ -196,8 +196,9 @@ def train_loop(cfg: TrainConfig, model, tokenizer, train_ds, val_ds, pri2id, dep
 
     # Priority loss: optional focal; if focal used, ignore label smoothing
     loss_fn_p = FocalLoss(weight=cw_p, gamma=focal_priority_gamma) if focal_priority_gamma and focal_priority_gamma > 0 else nn.CrossEntropyLoss(weight=cw_p, label_smoothing=label_smoothing)
-    loss_fn_d = nn.CrossEntropyLoss(weight=cw_d, label_smoothing=label_smoothing)
+    loss_fn_d = FocalLoss(weight=cw_d, gamma=focal_department_gamma) if focal_department_gamma and focal_department_gamma > 0 else nn.CrossEntropyLoss(weight=cw_d, label_smoothing=label_smoothing)
     best_score = -1.0
+    epochs_since_improve = 0
     os.makedirs(output_dir, exist_ok=True)
 
     epochlog_path = os.path.join(output_dir, 'epoch_metrics.jsonl')
@@ -263,6 +264,7 @@ def train_loop(cfg: TrainConfig, model, tokenizer, train_ds, val_ds, pri2id, dep
             score = metrics['department']['macro_f1']
         else:
             score = metrics['priority']['macro_f1'] + metrics['department']['macro_f1']
+        print(f"Validation - priority macro_f1={metrics['priority']['macro_f1']:.4f}, department macro_f1={metrics['department']['macro_f1']:.4f}")
         # Save best
         if score > best_score:
             best_score = score
@@ -270,6 +272,12 @@ def train_loop(cfg: TrainConfig, model, tokenizer, train_ds, val_ds, pri2id, dep
             with open(os.path.join(output_dir,'metrics.json'),'w',encoding='utf-8') as f:
                 json.dump(metrics, f, indent=2)
             print(f"Saved new best ({select_metric} score={best_score:.4f})")
+            epochs_since_improve = 0
+        else:
+            epochs_since_improve += 1
+            if early_stopping_patience and epochs_since_improve >= early_stopping_patience:
+                print(f"Early stopping triggered (no improvement in {early_stopping_patience} epochs). Best {select_metric} score={best_score:.4f}")
+                break
 
     # Persist label mappings & config
     mappings = {
@@ -305,6 +313,8 @@ def main():
     ap.add_argument('--weighted-sampler', choices=['none','priority'], default='none', help='Use WeightedRandomSampler by priority on the training set')
     ap.add_argument('--dept-loss-warmup-epochs', type=int, default=0, help='Number of initial epochs to suppress department loss (set weight=0)')
     ap.add_argument('--focal-priority-gamma', type=float, default=0.0, help='Enable focal loss for priority with given gamma (0 disables)')
+    ap.add_argument('--focal-department-gamma', type=float, default=0.0, help='Enable focal loss for department with given gamma (0 disables)')
+    ap.add_argument('--early-stopping-patience', type=int, default=0, help='Stop if no improvement for this many epochs (0 disables)')
     ap.add_argument('--device', choices=['auto','cuda','cpu','dml'], default='auto', help="Compute device: 'auto' (prefer CUDA, then DirectML, else CPU), or force 'cuda'/'cpu'/'dml'")
     ap.add_argument('--init-weights', type=str, default='', help='Optional path to a state_dict (.bin) to initialize model weights from a prior run')
     args = ap.parse_args()
@@ -387,6 +397,8 @@ def main():
         weighted_sampler=args.weighted_sampler,
         dept_loss_warmup_epochs=args.dept_loss_warmup_epochs,
         focal_priority_gamma=args.focal_priority_gamma,
+        focal_department_gamma=args.focal_department_gamma,
+        early_stopping_patience=args.early_stopping_patience,
     )
     print(f"Training complete. Artifacts in {out_dir}")
 
