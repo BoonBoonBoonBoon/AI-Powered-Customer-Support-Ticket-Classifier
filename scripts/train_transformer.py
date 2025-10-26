@@ -22,6 +22,7 @@ from __future__ import annotations
 import argparse, json, os, math, random, time, re
 from dataclasses import dataclass
 from typing import Dict, Any
+from collections import Counter
 import pandas as pd
 import torch
 from torch import nn
@@ -199,6 +200,7 @@ def train_loop(cfg: TrainConfig, model, tokenizer, train_ds, val_ds, pri2id, dep
     best_score = -1.0
     os.makedirs(output_dir, exist_ok=True)
 
+    epochlog_path = os.path.join(output_dir, 'epoch_metrics.jsonl')
     for epoch in range(1, cfg.epochs+1):
         model.train(); total_loss=0.0
         optimizer.zero_grad()
@@ -229,6 +231,31 @@ def train_loop(cfg: TrainConfig, model, tokenizer, train_ds, val_ds, pri2id, dep
                 all_d_pred.extend(torch.argmax(ld, dim=1).cpu().tolist())
                 all_d_true.extend(batch['department_label'].cpu().tolist())
         metrics = compute_metrics(all_p_pred, all_p_true, all_d_pred, all_d_true)
+        # Per-epoch distribution logging to detect collapse
+        p_pred_cnt = Counter(all_p_pred)
+        p_true_cnt = Counter(all_p_true)
+        d_pred_cnt = Counter(all_d_pred)
+        d_true_cnt = Counter(all_d_true)
+        train_loss_avg = total_loss / max(1, len(train_loader))
+        epoch_record = {
+            'epoch': epoch,
+            'train_loss': train_loss_avg,
+            'priority_pred_dist': dict(p_pred_cnt),
+            'priority_true_dist': dict(p_true_cnt),
+            'department_pred_dist': dict(d_pred_cnt),
+            'department_true_dist': dict(d_true_cnt),
+            'priority_macro_f1': metrics['priority']['macro_f1'],
+            'department_macro_f1': metrics['department']['macro_f1']
+        }
+        # Human-readable heads-up in console
+        print(f"Epoch {epoch} priority prediction dist: {p_pred_cnt}")
+        print(f"Epoch {epoch} department prediction dist: {d_pred_cnt}")
+        # Append to JSONL for later analysis
+        try:
+            with open(epochlog_path, 'a', encoding='utf-8') as ef:
+                ef.write(json.dumps(epoch_record) + "\n")
+        except Exception as e:
+            print(f"Warning: failed to write {epochlog_path}: {e}")
         # Model selection criterion
         if select_metric == 'priority':
             score = metrics['priority']['macro_f1']
